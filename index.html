@@ -5,8 +5,9 @@
 <head>
     <title>Antimatter Dimensions</title>
     <link rel="icon" type="image/png" href="icon.png">
-    <meta name="AD | New Game Minus Mod" content="The New Game Minus Mod of AD." charset="utf-8"/>
-    <h1 id="hiddenheader" style="display: none">AD | New Game Minus Mod</h1>
+    <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
+    <h1 id="hiddenheader" style="display: none">Antimatter Dimensions</h1>
+    <script type="text/javascript" src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>
     <script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="javascripts/notify.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
@@ -39,12 +40,12 @@
         <div style="position: relative"><div class="IP" id="infinityPoints2"></div></div>
         <div style="position: relative"><div class="EP" id="eternityPoints2"></div></div>
         <div>
-            <p>You have <span id="coinAmount" style="font-size:25px; color: black">0</span> antimatter.</p>
+            <p>You have <span id="coinAmount" style="font-size:25px; color: black">0</span> prestige layers.</p>
         </div>
         
         <div style="position: relative">
-            <button id="postInfinityButton" class="postinfcrunch">Big Crunch for x Infinity Points</button>
-            <button id="newDimensionButton" class="newdim" onclick="newDimension()">Get x antimatter to unlock a new Dimension.</button>
+            <button id="postInfinityButton" class="postinfcrunch">Supernova for x Transfer Points</button>
+            <button id="newDimensionButton" class="newdim" onclick="newDimension()">Get x prestige layers to unlock a new Dimension.</button>
             <button id="eternitybtn" class="eternitybtn" onclick="eternity()">Other times await.. I need to become Eternal</button>
         </div>
         <div id="coinsPerSec">You are getting 0 antimatter per second.</div>
@@ -67,11 +68,33 @@
             <button id="challengesbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn">Challenges</button>
             <button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn">Infinity</button>
             <button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn">Eternity</button>
+            <button id="shopbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn">Shop</button>
         </div>
         <div id="emptiness" class="tab" style="font-size: 150%">
             <br> The world has collapsed on itself due to excess of antimatter.
             <br>
             <br>
+        </div>
+        <div id="shop" class="tab" style="font-size: 15px" >
+            <div align="center">
+                <br>
+                <span id="kongip"> Double your IP gain from all sources. Forever. </span><br>
+                <button class="greedbtn" onclick="purchaseIP()">40 Kreds</button>
+                <br><br><br>
+                <span id="kongep"> Double your EP gain from all sources. Forever. </span><br>
+                <button class="greedbtn" onclick="purchaseEP()">50 Kreds</button>
+                <br><br><br>
+                <span id="kongdim"> Double all your dimension multipliers (dimensions 1-8). Forever. </span><br>
+                <button class="greedbtn" onclick="purchaseDimMult()">30 Kreds</button>
+                <br><br><br>
+                <span id="kongalldim"> Double ALL the dimension multipliers (Normal, Infinity and Time). Forever. </span><br>
+                <button class="greedbtn" onclick="purchaseAllDimMult()">60 Kreds</button>
+                <br><br><br>
+                <span>Get 6 hours worth of offline production. (Doesn't work for autobuyers)</span><br>
+                <button class="greedbtn" onclick="purchaseTimeSkip()">10 Kreds</button>
+                <br><br><br>
+                <span style="font-size: 12px"><b>Disclaimer: These are not required to progress in the game, they are just to help and support the developer.</b></span>
+            </div>
         </div>
         <div id="eternitystore" class="tab" style="font-size: 15px; width: 60%; margin: 0 auto; display: none" align="center">
             <table class="table" align="center" style="margin: auto">
@@ -91,7 +114,7 @@
                 </tr>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudylocked" id="11" onclick="buyTimeStudy(11, 1)">Tickspeed affects First Time Dimension (With reduced effect)<span>Cost: 1 Time Theorem</button></td>
+                        <td><button class="timestudylocked" id="11" onclick="buyTimeStudy(11, 1)">Tickspeed affects Aarex Time Dimension (With reduced effect)<span>Cost: 1 Time Theorem</button></td>
                     </tr>
                 </table>
                 <br>
@@ -189,7 +212,7 @@
                 <table class="table" id="studytable">
                     <tr>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
-                        <td><button class="eternitychallengestudy" id="ec9unl">Eternity Challenge 9<span>Requirement: 1e6000 infinity power<span>Cost: 100 Time Theorems</button></td>
+                        <td><button class="eternitychallengestudy" id="ec9unl">Eternity Challenge 9<span>Requirement: 1e6000 Aarex's supporters<span>Cost: 100 Time Theorems</button></td>
                         <td><button class="timestudy" id="151" onclick="buyTimeStudy(151, 8)">1e4x multiplier on all Time Dimensions<span>Cost: 8 Time Theorems</button></td>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                         <td><button class="eternitychallengestudy" id="ec4unl">Eternity Challenge 4<span>Requirement: 100,000,000 infinities<span>Cost: 85 Time Theorems</button></td>
@@ -258,7 +281,7 @@
                         <td><button class="timestudy darkstudy" id="231" onclick="buyTimeStudy(231, 500)">Dimensional boosts are more effective based on their amount.<span>Cost: 500 Time Theorems</button></td>
                         <td><button class="timestudy lightstudy" id="232" onclick="buyTimeStudy(232, 500)">Galaxies are more effective based on non-replicated galaxies.<span>Cost: 500 Time Theorems</button></td>
                         <td><button class="timestudy darkstudy" id="233" onclick="buyTimeStudy(233, 500)">Max replicanti galaxy upgrade cost is reduced based on replicanti amount.<span>Cost: 500 Time Theorems</button></td>
-                        <td><button class="timestudy lightstudy" id="234" onclick="buyTimeStudy(234, 500)">Sacrifice boosts First Dimension.<span>Cost: 500 Time Theorems</button></td>
+                        <td><button class="timestudy lightstudy" id="234" onclick="buyTimeStudy(234, 500)">Sacrifice boosts Aarex Dimension.<span>Cost: 500 Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
@@ -274,7 +297,7 @@
                             <td>
                                 <div style="text-align:center">
                                     <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab">About   </a> |
+                                    <a href="about.html" target="_newtab">Donate   </a> |
                                     <a href="changelog.html" target="_newtab">Changelog   </a> |
                                     <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                     <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -328,7 +351,7 @@
                             <td>
                                 <div style="text-align:center">
                                     <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab">About   </a> |
+                                    <a href="about.html" target="_newtab">Donate   </a> |
                                     <a href="changelog.html" target="_newtab">Changelog   </a> |
                                     <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                     <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -377,32 +400,32 @@
                         <td class="milestoneText">12 Eternities:</td>
                     </tr>
                     <tr>
-                        <td><button class="milestonerewardlocked" id="reward8">Unlock autobuyer for First Infinity Dimension</button></td>
-                        <td><button class="milestonerewardlocked" id="reward9">Unlock autobuyer for Second Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward8">Unlock autobuyer for Aarex Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward9">Unlock autobuyer for Aarex Infinity Dimension</button></td>
                     </tr>
                     <tr>
                         <td class="milestoneText">13 Eternities:</td>
                         <td class="milestoneText">14 Eternities:</td>
                     </tr>
                     <tr>
-                        <td><button class="milestonerewardlocked" id="reward10">Unlock autobuyer for Third Infinity Dimension</button></td>
-                        <td><button class="milestonerewardlocked" id="reward11">Unlock autobuyer for Fourth Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward10">Unlock autobuyer for Aarex Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward11">Unlock autobuyer for Aarex Infinity Dimension</button></td>
                     </tr>
                     <tr>
                         <td class="milestoneText">15 Eternities:</td>
                         <td class="milestoneText">16 Eternities:</td>
                     </tr>
                     <tr>
-                        <td><button class="milestonerewardlocked" id="reward12">Unlock autobuyer for Fifth Infinity Dimension</button></td>
-                        <td><button class="milestonerewardlocked" id="reward13">Unlock autobuyer for Sixth Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward12">Unlock autobuyer for Aarex Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward13">Unlock autobuyer for Aarex Infinity Dimension</button></td>
                     </tr>
                     <tr>
                         <td class="milestoneText">17 Eternities:</td>
                         <td class="milestoneText">18 Eternities:</td>
                     </tr>
                     <tr>
-                        <td><button class="milestonerewardlocked" id="reward14">Unlock autobuyer for Seventh Infinity Dimension</button></td>
-                        <td><button class="milestonerewardlocked" id="reward15">Unlock autobuyer for Eighth Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward14">Unlock autobuyer for Aarex Infinity Dimension</button></td>
+                        <td><button class="milestonerewardlocked" id="reward15">Unlock autobuyer for Aarex Infinity Dimension</button></td>
                     </tr>
                     <tr>
                         <td class="milestoneText">20 Eternities:</td>
@@ -443,7 +466,7 @@
                             <td>
                                 <div style="text-align:center">
                                     <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab">About   </a> |
+                                    <a href="about.html" target="_newtab">Donate   </a> |
                                     <a href="changelog.html" target="_newtab">Changelog   </a> |
                                     <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                     <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -475,7 +498,7 @@
                 <tbody id="parent">
                     <tr style="font-size: 15px" id="firstRow">
                         <td id="firstD" width="32%">
-                            First Dimension x1
+                            Aarex Dimension x1
                         </td>
                         <td>
                             <div id="firstAmount">0 (0)</div>
@@ -489,7 +512,7 @@
                     </tr>
                     <tr id="secondRow" style="display: none; font-size: 15px">
                         <td id="secondD">
-                            Second Dimension
+                            Aarex Dimension
                         </td>
                         <td>
                             <div id="secondAmount" align="left">0 (0)</div>
@@ -502,7 +525,7 @@
                     </tr>
                     <tr id="thirdRow" style="display: none; font-size: 15px">
                         <td id="thirdD">
-                            Third Dimension
+                            Aarex Dimension
                         </td>
                         <td>
                             <div id="thirdAmount" align="left">0 (0)</div>
@@ -516,7 +539,7 @@
                     </tr>
                     <tr id="fourthRow" style="display: none; font-size: 15px">
                         <td id="fourthD">
-                            Fourth Dimension
+                            Aarex Dimension
                         </td>
                         <td>
                             <div id="fourthAmount" align="left">0 (0)</div>
@@ -530,7 +553,7 @@
                     </tr>
                     <tr id="fifthRow" style="display: none; font-size: 15px">
                         <td id="fifthD">
-                            Fifth Dimension
+                            Aarex Dimension
                         </td>
                         <td>
                             <div id="fifthAmount" align="left">0 (0)</div>
@@ -544,7 +567,7 @@
                     </tr>
                     <tr id="sixthRow" style="display: none; font-size: 15px">
                         <td id="sixthD">
-                            Sixth Dimension
+                            Aarex Dimension
                         </td>
                         <td>
                             <div id="sixthAmount" align="left">0 (0)</div>
@@ -558,7 +581,7 @@
                     </tr>
                     <tr id="seventhRow" style="display: none; font-size: 15px">
                         <td id="seventhD">
-                            Seventh Dimension
+                            Aarex Dimension
                         </td>
                         <td>
                             <div id="seventhAmount" align="left">0 (0)</div>
@@ -590,7 +613,7 @@
                 <table style="width: 100%">
                     <tr style="font-size: 15px">
                         <td id="resetLabel">
-                            Dimension Shift: requires 20 Fourth Dimension
+                            Dimension Shift: requires 20 Aarex Dimension
                         </td>
                         <td>
                             <button id="softReset" style="color:black; width: 200px; height: 25px; font-size: 9px" class="storebtn">Reset the game for a new Dimension</button>
@@ -610,13 +633,13 @@
             <div id="infinitydimensions" class="dimtab">
                 <span id="EC12Pow"></span>
                 <div>
-                    <p>You have <span id="infPowAmount" style="font-size:35px; color: black">0</span> infinity power. translated to <span id="infDimMultAmount" style="font-size:35px; color: black">0</span>x multiplier on all dimensions</p>
+                    <p>You have <span id="infPowAmount" style="font-size:35px; color: black">0</span> Aarex's supporters. translated to <span id="infDimMultAmount" style="font-size:35px; color: black">0</span>x multiplier on all dimensions</p>
                 </div>
                 <div id="infPowPerSec">You are getting 0 antimatter per second.</div>
                 <table class="table" >
                     <tr style="font-size: 16px" id="infRow1">
                         <td id="infD1" width="41%">
-                            First Infinity Dimension x1
+                            Aarex Infinity Dimension x1
                         </td>
                         <td>
                             <div id="infAmount1">0 (0)</div>
@@ -630,7 +653,7 @@
                     </tr>
                     <tr id="infRow2" style="display: none; font-size: 16px">
                         <td id="infD2">
-                            Second Infinity Dimension x1
+                            Aarex Infinity Dimension x1
                         </td>
                         <td>
                             <div id="infAmount2" align="left">0 (0)</div>
@@ -644,7 +667,7 @@
                     </tr>
                     <tr id="infRow3" style="display: none; font-size: 16px">
                         <td id="infD3">
-                            Third Infinity Dimension x1
+                            Aarex Infinity Dimension x1
                         </td>
                         <td>
                             <div id="infAmount3" align="left">0 (0)</div>
@@ -658,7 +681,7 @@
                     </tr>
                     <tr id="infRow4" style="display: none; font-size: 16px">
                         <td id="infD4">
-                            Fourth Infinity Dimension x1
+                            Aarex Infinity Dimension x1
                         </td>
                         <td>
                             <div id="infAmount4" align="left">0 (0)</div>
@@ -672,7 +695,7 @@
                     </tr>
                     <tr id="infRow5" style="display: none; font-size: 16px">
                         <td id="infD5">
-                            Fourth Infinity Dimension x1
+                            Aarex Infinity Dimension x1
                         </td>
                         <td>
                             <div id="infAmount5" align="left">0 (0)</div>
@@ -686,7 +709,7 @@
                     </tr>
                     <tr id="infRow6" style="display: none; font-size: 16px">
                         <td id="infD6">
-                            Fourth Infinity Dimension x1
+                            Aarex Infinity Dimension x1
                         </td>
                         <td>
                             <div id="infAmount6" align="left">0 (0)</div>
@@ -700,7 +723,7 @@
                     </tr>
                     <tr id="infRow7" style="display: none; font-size: 16px">
                             <td id="infD7">
-                                Fourth Infinity Dimension x1
+                                Aarex Infinity Dimension x1
                             </td>
                             <td>
                                 <div id="infAmount7" align="left">0 (0)</div>
@@ -714,7 +737,7 @@
                         </tr>
                         <tr id="infRow8" style="display: none; font-size: 16px">
                                 <td id="infD8">
-                                    Fourth Infinity Dimension x1
+                                    Aarex Infinity Dimension x1
                                 </td>
                                 <td>
                                     <div id="infAmount8" align="left">0 (0)</div>
@@ -733,7 +756,7 @@
             <div id="timedimensions" class="dimtab">
                     <div>
                         <p id="totaltickgained">You've gained 0 tickspeed upgrades.</p>
-                            <p>You have <span id="timeShardAmount" style="font-size:35px; color: black">0</span> time shards. Next tickspeed upgrade at <span id="tickThreshold" style="font-size:35px; color: black">0</span></p>
+                            <p>You have <span id="timeShardAmount" style="font-size:35px; color: black">0</span> Bugs. Next tickspeed upgrade at <span id="tickThreshold" style="font-size:35px; color: black">0</span></p>
                         </div>
                         
                         <div id="timeShardsPerSec">You are getting 0 Timeshards per second.</div>
@@ -741,7 +764,7 @@
                         <table class="table" >
                             <tr style="font-size: 17px" id="timeRow1">
                                 <td id="timeD1" width="43%">
-                                    First Time Dimension x1
+                                    Aarex Time Dimension x1
                                 </td>
                                 <td>
                                     <div id="timeAmount1">0 (0)</div>
@@ -752,7 +775,7 @@
                             </tr>
                             <tr id="timeRow2" style="font-size: 17px">
                                 <td id="timeD2">
-                                    Second Time Dimension x1
+                                    Aarex Time Dimension x1
                                 </td>
                                 <td>
                                     <div id="timeAmount2" align="left">0 (0)</div>
@@ -762,7 +785,7 @@
                             </tr>
                             <tr id="timeRow3" style="font-size: 17px">
                                 <td id="timeD3">
-                                    Third Time Dimension x1
+                                    Aarex Time Dimension x1
                                 </td>
                                 <td>
                                     <div id="timeAmount3" align="left">0 (0)</div>
@@ -773,7 +796,7 @@
                             </tr>
                             <tr id="timeRow4" style="font-size: 17px">
                                 <td id="timeD4">
-                                    Fourth Time Dimension x1
+                                    Aarex Time Dimension x1
                                 </td>
                                 <td>
                                     <div id="timeAmount4" align="left">0 (0)</div>
@@ -806,7 +829,7 @@
                         <td>
                             <div style="text-align:center">
                                 <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab">About   </a> |
+                                <a href="about.html" target="_newtab">Donate   </a> |
                                 <a href="changelog.html" target="_newtab">Changelog   </a> |
                                 <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                 <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -835,6 +858,11 @@
                     <td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Automatically retry challenges</button></div></td>
                     <td><div><button id="commas" onclick="toggleCommas()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Commas on large exponents ON</button></div></td>
                 </tr>
+                <tr id="cloudOptions">
+                    <td><div><button onclick="playFabSaveCheck()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Cloud save</button></div></td>
+                    <td><div><button onclick="playFabLoadCheck()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Cloud load</button></div></td>
+                    <td><div><button id="cloud" onclick="toggleCloud()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Toggle automatic cloud saving/loading</button></div></td>
+                </tr>
                 <tr>
                     <td><div><button id="hotkeys" onclick="toggleHotkeys()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
                     <td><div><button id="reset" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET THE GAME</button></div></td>
@@ -861,7 +889,7 @@
                         <td>
                             <div style="text-align:center">
                                 <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab">About   </a> |
+                                <a href="about.html" target="_newtab">Donate   </a> |
                                 <a href="changelog.html" target="_newtab">Changelog   </a> |
                                 <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                 <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -964,7 +992,7 @@
                         <td>
                             <div style="text-align:center">
                                 <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab">About   </a> |
+                                <a href="about.html" target="_newtab">Donate   </a> |
                                 <a href="changelog.html" target="_newtab">Changelog   </a> |
                                 <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                 <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -982,28 +1010,28 @@
             <table id="achievementtable" style="margin: auto">
                 <tr id="achRow1">
                     <td>
-                        <div id="You gotta start somewhere" class="achievement achievementlocked" style="background-image: url(images/1.png)" ach-tooltip="Buy a single First Dimension."><br></div>
+                        <div id="You gotta start somewhere" class="achievement achievementlocked" style="background-image: url(images/1.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="100 antimatter is a lot" class="achievement achievementlocked" style="background-image: url(images/2.png)" ach-tooltip="Buy a single Second Dimension."><br></div>
+                        <div id="100 antimatter is a lot" class="achievement achievementlocked" style="background-image: url(images/2.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="Half life 3 confirmed" class="achievement achievementlocked" style="background-image: url(images/3.png)" ach-tooltip="Buy a single Third Dimension."><br></div>
+                        <div id="Half life 3 confirmed" class="achievement achievementlocked" style="background-image: url(images/3.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="L4D: Left 4 Dimensions" class="achievement achievementlocked" style="background-image: url(images/4.png)" ach-tooltip="Buy a single Fourth Dimension."><br></div>
+                        <div id="L4D: Left 4 Dimensions" class="achievement achievementlocked" style="background-image: url(images/4.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="5 Dimension Antimatter Punch" class="achievement achievementlocked" style="background-image: url(images/5.png)" ach-tooltip="Buy a single Fifth Dimension."><br></div>
+                        <div id="5 Dimension Antimatter Punch" class="achievement achievementlocked" style="background-image: url(images/5.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="We couldn't afford 9" class="achievement achievementlocked" style="background-image: url(images/6.png)" ach-tooltip="Buy a single Sixth Dimension."><br></div>
+                        <div id="We couldn't afford 9" class="achievement achievementlocked" style="background-image: url(images/6.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="Not a luck related achievement" class="achievement achievementlocked" style="background-image: url(images/7.png)" ach-tooltip="Buy a single Seventh Dimension."><br></div>
+                        <div id="Not a luck related achievement" class="achievement achievementlocked" style="background-image: url(images/7.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                     <td>
-                        <div id="90 degrees to infinity" class="achievement achievementlocked" style="background-image: url(images/8.png)" ach-tooltip="Buy a single Eighth Dimension."><br></div>
+                        <div id="90 degrees to infinity" class="achievement achievementlocked" style="background-image: url(images/8.png)" ach-tooltip="Buy a single Aarex Dimension."><br></div>
                     </td>
                 </tr>
                 <tr id="achRow2">
@@ -1014,7 +1042,7 @@
                         <div id="Fake News" class="achievement achievementlocked" style="background-image: url(images/25.png)" ach-tooltip="Encounter 50 different news messages."><br></div>                            
                     </td>
                     <td>
-                        <div id="The 9th Dimension is a lie" class="achievement achievementlocked" style="background-image: url(images/11.png)" ach-tooltip="Have exactly 99 Eighth Dimensions. Reward: Eighth Dimensions are 10% stronger."><br></div>
+                        <div id="The 9th Dimension is a lie" class="achievement achievementlocked" style="background-image: url(images/11.png)" ach-tooltip="Have exactly 99 Aarex Dimensions. Reward: Aarex Dimensions are 10% stronger."><br></div>
                     </td>
                     <td>
                         <div id="Antimatter Apocalypse" class="achievement achievementlocked" style="background-image: url(images/12.png)" ach-tooltip="Get over 10 QtVg (10e79) antimatter."><br></div>
@@ -1029,12 +1057,12 @@
                         <div id="Double Galaxy" class="achievement achievementlocked" style="background-image: url(images/15.png)" ach-tooltip="Buy 2 Antimatter Galaxies."><br></div>
                     </td>
                     <td>
-                        <div id="There's no point in doing that" class="achievement achievementlocked" style="background-image: url(images/16.png)" ach-tooltip="Buy a single First Dimension when you have over 1e150 of them. Reward: First Dimensions are 10% stronger."><br></div>
+                        <div id="There's no point in doing that" class="achievement achievementlocked" style="background-image: url(images/16.png)" ach-tooltip="Buy a single Aarex Dimension when you have over 1e150 of them. Reward: Aarex Dimensions are 10% stronger."><br></div>
                     </td>
                 </tr>
                 <tr id="achRow3">
                     <td>
-                        <div id="I forgot to nerf that" class="achievement achievementlocked" style="background-image: url(images/17.png)" ach-tooltip="Get any Dimension multiplier over 10 No (10e30). Reward: First Dimensions are 5% stronger."><br></div>
+                        <div id="I forgot to nerf that" class="achievement achievementlocked" style="background-image: url(images/17.png)" ach-tooltip="Get any Dimension multiplier over 10 No (10e30). Reward: Aarex Dimensions are 5% stronger."><br></div>
                     </td>
                     <td>
                         <div id="The Gods are pleased" class="achievement achievementlocked" style="background-image: url(images/18.png)" ach-tooltip="Get over 600x from Dimension Sacrifice in total. Reward: Sacrifice is slightly stronger."><br></div>
@@ -1060,7 +1088,7 @@
                 </tr>
                 <tr id="achRow4">
                     <td>
-                        <div id="Spreading Cancer" class="achievement achievementlocked" style="background-image: url(images/46.png)" ach-tooltip="Buy 1,000 Galaxies in total while using cancer notation."><br></div>                            
+                        <div id="Spreading Cancer" class="achievement achievementlocked" style="background-image: url(images/46.png)" ach-tooltip="Buy ten Galaxies in total while using cancer notation."><br></div>                            
                     </td>
                     <td>
                         <div id="Supersanic" class="achievement achievementlocked" style="background-image: url(images/26.png)" ach-tooltip="Have antimatter/sec exceed your current antimatter above 1 Tg (1e63)."><br></div>
@@ -1101,10 +1129,10 @@
                         <div id="Forever isn't that long" class="achievement achievementlocked" style="background-image: url(images/37.png)" ach-tooltip="Infinity in 1 minute or less. Reward: Start with 1e10 antimatter."><br></div>
                     </td>
                     <td>
-                        <div id="Many Deaths" class="achievement achievementlocked" style="background-image: url(images/38.png)" ach-tooltip="Complete the Second Dimension Autobuyer challenge in 3 minutes or less. Reward: All dimensions are stronger in first 3 minutes of infinity."><br></div>
+                        <div id="Many Deaths" class="achievement achievementlocked" style="background-image: url(images/38.png)" ach-tooltip="Complete the Aarex Dimension Autobuyer challenge in 3 minutes or less. Reward: All dimensions are stronger in first 3 minutes of infinity."><br></div>
                     </td>
                     <td>
-                        <div id="Gift from the Gods" class="achievement achievementlocked" style="background-image: url(images/39.png)" ach-tooltip="Complete the Eighth Dimension Autobuyer challenge in 3 minutes or less. Reward: Dimensional sacrifices are a lot stronger."><br></div>
+                        <div id="Gift from the Gods" class="achievement achievementlocked" style="background-image: url(images/39.png)" ach-tooltip="Complete the Aarex Dimension Autobuyer challenge in 3 minutes or less. Reward: Dimensional sacrifices are a lot stronger."><br></div>
                     </td>
                     <td>
                         <div id="Is this hell?" class="achievement achievementlocked" style="background-image: url(images/40.png)" ach-tooltip="Complete the Tickspeed Autobuyer challenge in 3 minutes or less. Reward: Boost per 10 dimensions +1%."><br></div>
@@ -1118,10 +1146,10 @@
                         <div id="Oh hey, you're still here" class="achievement achievementlocked" style="background-image: url(images/402.png)" ach-tooltip="Reach 1e8 IP per minute."><br></div>
                     </td>
                     <td>
-                        <div id="A new beginning." class="achievement achievementlocked" style="background-image: url(images/403.png)" ach-tooltip="Begin generation of infinity power."><br></div>
+                        <div id="A new beginning." class="achievement achievementlocked" style="background-image: url(images/403.png)" ach-tooltip="Begin generation of Aarex's supporters."><br></div>
                     </td>
                     <td>
-                        <div id="1 million is a lot" class="achievement achievementlocked" style="background-image: url(images/404.png)" ach-tooltip="Reach 1e6 infinity power."><br></div>
+                        <div id="1 million is a lot" class="achievement achievementlocked" style="background-image: url(images/404.png)" ach-tooltip="Reach 1e6 Aarex's supporters."><br></div>
                     </td>
                     <td>
                         <div id="Not-so-challenging" class="achievement achievementlocked" style="background-image: url(images/405.png)" ach-tooltip="Get the sum of all of your challenge times under 3 minutes. Reward: All dimensions are stronger in first 3 minutes of infinity, but only in challenges."><br></div>
@@ -1133,12 +1161,12 @@
                         <div id="Infinitely Challenging" class="achievement achievementlocked" style="background-image: url(images/407.png)" ach-tooltip="Complete an infinity challenge."><br></div>
                     </td>
                     <td>
-                        <div id="You did this again just for the achievement right?" class="achievement achievementlocked" style="background-image: url(images/408.png)" ach-tooltip="Complete the Third Dimension Autobuyer challenge in 10 seconds or less. Reward: First dimensions are 50% stronger."><br></div>
+                        <div id="You did this again just for the achievement right?" class="achievement achievementlocked" style="background-image: url(images/408.png)" ach-tooltip="Complete the Aarex Dimension Autobuyer challenge in 10 seconds or less. Reward: Aarex dimensions are 50% stronger."><br></div>
                     </td>
                 </tr>
                 <tr id="achRow7">
                         <td>
-                            <div id="ERROR 909: Dimension not found" class="achievement achievementlocked" style="background-image: url(images/41.png)" ach-tooltip="Get to infinity with only a single first Dimension without Dimension Boosts, Shifts or Galaxies while in Automatic Galaxies Challenge. Reward: First Dimensions are 3 times stronger."><br></div>
+                            <div id="ERROR 909: Dimension not found" class="achievement achievementlocked" style="background-image: url(images/41.png)" ach-tooltip="Get to infinity with only a single first Dimension without Dimension Boosts, Shifts or Galaxies while in Automatic Galaxies Challenge. Reward: Aarex Dimensions are 3 times stronger."><br></div>
                         </td>
                         <td>
                             <div id="Can't hold all these infinities" class="achievement achievementlocked" style="background-image: url(images/42.png)" ach-tooltip="Get all Dimension multipliers over 1e308. Reward: All dimensions 10% stronger."><br></div>
@@ -1176,7 +1204,7 @@
                             <div id="I got a few to spare" class="achievement achievementlocked" style="background-image: url(images/52.png)" ach-tooltip="Reach 1e35000 antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have."><br></div>
                         </td>
                         <td>
-                            <div id="All your IP are belong to us" class="achievement achievementlocked" style="background-image: url(images/53.png)" ach-tooltip="This is already awarded but however you get no reward!"><br></div>
+                            <div id="All your IP are belong to us" class="achievement achievementlocked" style="background-image: url(images/53.png)" ach-tooltip="Big Crunch for 1e150 IP. Reward: Additional 4x multiplier to IP."><br></div>
                         </td>
                         <td>
                             <div id="Do you even bend time bro?" class="achievement achievementlocked" style="background-image: url(images/54.png)" ach-tooltip="Reach -99.9% tickspeed per upgrade. Reward: Galaxies are 1% more powerful."><br></div>
@@ -1199,7 +1227,7 @@
                             <div id="MAXIMUM OVERDRIVE" class="achievement achievementlocked" style="background-image: url(images/59.png)" ach-tooltip="Reach 1e300 IP/min. Reward: Additional 4x multiplier to IP."><br></div>
                         </td>
                         <td>
-                            <div id="Minute of infinity" class="achievement achievementlocked" style="background-image: url(images/60.png)" ach-tooltip="Reach 1e260 infinity power. Reward: Double infinity power gain."><br></div>
+                            <div id="Minute of infinity" class="achievement achievementlocked" style="background-image: url(images/60.png)" ach-tooltip="Reach 1e260 Aarex's supporters. Reward: Double Aarex's supporters gain."><br></div>
                         </td>
                         <td>
                             <div id="Is this safe?" class="achievement achievementlocked" style="background-image: url(images/61.png)" ach-tooltip="Gain Infinite replicanti in 30 minutes. Reward: Infinity doesn't reset your replicanti amount."><br></div>
@@ -1248,7 +1276,7 @@
                             <div id="Never again" class="achievement achievementlocked" style="background-image: url(images/74.png)" ach-tooltip="Max out your third Eternity upgrade. Reward: The limit is a bit higher."><br></div>
                         </td>
                         <td>
-                            <div id="Long lasting relationship" class="achievement achievementlocked" style="background-image: url(images/75.png)" ach-tooltip="Have your Infinity power per second exceed your infinity power for 60 consecutive seconds during a single infinity."><br></div>
+                            <div id="Long lasting relationship" class="achievement achievementlocked" style="background-image: url(images/75.png)" ach-tooltip="Have your Aarex's supporters per second exceed your Aarex's supporters for 60 consecutive seconds during a single infinity."><br></div>
                         </td>
                         <td>
                             <div id="You're a mistake" class="achievement achievementlocked" style="background-image: url(images/76.png)" ach-tooltip="Fail an Eternity challenge. Reward: A fading sense of accomplishment"><br></div>
@@ -1299,7 +1327,7 @@
                         <td>
                             <div style="text-align:center">
                                 <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab">About   </a> |
+                                <a href="about.html" target="_newtab">Donate   </a> |
                                 <a href="changelog.html" target="_newtab">Changelog   </a> |
                                 <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                 <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -1335,7 +1363,7 @@
                                 <div class="outer">
                                     <button id="challenge1" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: First Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1349,7 +1377,7 @@
                                     
                                     <button id="challenge2" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Second Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1357,7 +1385,7 @@
                     <tr>
                         <td>
                             <div class= "challengediv">
-                                <span style="font-size: 110%">First dimension is heavily weakened but gets an exponentially increasing bonus that resets on reset.</span>
+                                <span style="font-size: 110%">Aarex dimension is heavily weakened but gets an exponentially increasing bonus that resets on reset.</span>
                                 <br>
                                 <br>
                                 
@@ -1365,7 +1393,7 @@
                                     
                                     <button id="challenge3" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Third Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1379,7 +1407,7 @@
                                 
                                     <button id="challenge8" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Fourth Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1395,7 +1423,7 @@
                                 
                                     <button id="challenge6" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Fifth Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1409,7 +1437,7 @@
                                 
                                     <button id="challenge10" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Sixth Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1425,7 +1453,7 @@
                                 
                                     <button id="challenge9" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Seventh Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1439,7 +1467,7 @@
                                     
                                     <button id="challenge11" class="challengesbtn">Start</button>
                                     <br>
-                                    <span>Reward: Eighth Dimension autobuyer</span>
+                                    <span>Reward: Aarex Dimension autobuyer</span>
                                 </div>
                             </div>
                         </td>
@@ -1721,7 +1749,7 @@
                     <tr>
                         <td>
                             <div class="eterchallengediv" id="eterc7div" style="height: 140px; display: none">
-                                <span>First Time Dimension produces Eighth Infinity Dimension, and First Infinity Dimension produces Seventh Dimensions. Tickspeed affects all dimensions normally.</span>
+                                <span>Aarex Time Dimension produces Aarex Infinity Dimension, and Aarex Infinity Dimension produces Aarex Dimensions. Tickspeed affects all dimensions normally.</span>
                                 <br>
                                 <br>
                                 <div class="outer">
@@ -1729,7 +1757,7 @@
                                     <br>
                                     <span id="eterc7completed">Completed 0 Times.</span><br>
                                     <span id="eterc7goal" >Goal: 1e2700 IP</span><br>
-                                    <span id="ec7reward">Reward: Infinity Dimension multiplier based on time shards, Current: 0x</span>
+                                    <span id="ec7reward">Reward: Infinity Dimension multiplier based on Bugs, Current: 0x</span>
                                 </div>
                             </div>
                         </td>
@@ -1752,7 +1780,7 @@
                     <tr>
                         <td>
                             <div class="eterchallengediv" id="eterc9div" style="height: 140px; display: none">
-                                <span>You can't buy tickspeed upgrades. Infinity power instead multiplies time dimensions with greatly reduced effect.</span>
+                                <span>You can't buy tickspeed upgrades. Aarex's supporters instead multiplies time dimensions with greatly reduced effect.</span>
                                 <br>
                                 <br>
                                 <div class="outer">
@@ -1784,7 +1812,7 @@
                     <tr>
                         <td>
                             <div class="eterchallengediv" id="eterc11div" style="height: 140px; display: none">
-                                <span>All dimension multipliers are disabled except for the multipliers from Infinity power and dimension boosts (to normal dimensions)</span>
+                                <span>All dimension multipliers are disabled except for the multipliers from Aarex's supporters and dimension boosts (to normal dimensions)</span>
                                 <br>
                                 <br>
                                 <div class="outer">
@@ -1802,7 +1830,7 @@
                                 <br>
                                 <br>
                                 <div class="outer">
-                                    <button id="eterc12" class="challengesbtn" onclick="startEternityChallenge('eterc12', new Decimal('1e110000'), new Decimal('1e10000'))">Start</button>
+                                    <button id="eterc12" class="challengesbtn" onclick="startEternityChallenge('eterc12', new Decimal('1e110000'), new Decimal('1e12000'))">Start</button>
                                     <br>
                                     <span id="eterc12completed">Completed 0 Times.</span><br>
                                     <span id="eterc12goal" >Goal: 1e110000 in 0.5 seconds or less.</span><br>
@@ -1818,7 +1846,7 @@
                     <td>
                         <div style="text-align:center">
                             <a href="howto.html" target="_newtab">How to play  </a> |
-                            <a href="about.html" target="_newtab">About   </a> |
+                            <a href="about.html" target="_newtab">Donate   </a> |
                             <a href="changelog.html" target="_newtab">Changelog   </a> |
                             <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                             <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -1855,35 +1883,35 @@
                         <button id="infi31" class="infinistorebtn3">Production increase over time in current infinity<br>Cost: 3 IP</button>
                     </td>
                     <td>
-                        <button id="infi41" class="infinistorebtn4">You start with 5th dimension<br>Cost: 20 IP</button>
+                        <button id="infi41" class="infinistorebtn4">You start with Aarex dimension<br>Cost: 20 IP</button>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <button id="infi12" class="infinistorebtn1">First and Eighth Dimension power <br>xx</button>
+                        <button id="infi12" class="infinistorebtn1">Aarex and Aarex Dimension power <br>xx</button>
                     </td>
                     <td>
-                        <button id="infi22" class="infinistorebtn2">Second and Seventh Dimension power <br>xx</button>
+                        <button id="infi22" class="infinistorebtn2">Aarex and Aarex Dimension power <br>xx</button>
                     </td>
                     <td>
                         <button id="infi32" class="infinistorebtn3">Bonus per unspent Infinity Point <br>xx</button>
                     </td>
                     <td>
-                        <button id="infi42" class="infinistorebtn4">You start with 6th dimension<br>Cost: 40 IP</button>
+                        <button id="infi42" class="infinistorebtn4">You start with Aarex dimension<br>Cost: 40 IP</button>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <button id="infi13" class="infinistorebtn1">Third and Sixth Dimension power <br>xx</button>
+                        <button id="infi13" class="infinistorebtn1">Aarex and Aarex Dimension power <br>xx</button>
                     </td>
                     <td>
-                        <button id="infi23" class="infinistorebtn2">Fourth and Fifth Dimension power <br>xx</button>
+                        <button id="infi23" class="infinistorebtn2">Aarex and Aarex Dimension power <br>xx</button>
                     </td>
                     <td>
                         <button id="infi33" class="infinistorebtn3">Dimension Boost power <br>2x -> 2.5x<br>Cost: 7 IP</button>
                     </td>
                     <td>
-                        <button id="infi43" class="infinistorebtn4">You start with 7th dimension<br>Cost: 80 IP</button>
+                        <button id="infi43" class="infinistorebtn4">You start with Aarex dimension<br>Cost: 80 IP</button>
                     </td>
                 </tr>
                 <tr>
@@ -1897,7 +1925,7 @@
                         <button id="infi34" class="infinistorebtn3">Infinity Point generation (based on fastest infinity) <br>xx</button>
                     </td>
                     <td>
-                        <button id="infi44" class="infinistorebtn4">You start with 8th dimension and a Galaxy<br>Cost: 500 IP</button>
+                        <button id="infi44" class="infinistorebtn4">You start with Aarex dimension and a Galaxy<br>Cost: 500 IP</button>
                     </td>
                 </tr>
                 <tr>
@@ -1913,7 +1941,7 @@
                         <td>
                             <div style="text-align:center">
                                 <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab">About   </a> |
+                                <a href="about.html" target="_newtab">Donate   </a> |
                                 <a href="changelog.html" target="_newtab">Changelog   </a> |
                                 <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                 <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -2224,7 +2252,7 @@
                         <td>
                             <div style="text-align:center">
                                 <a href="howto.html" target="_newtab">How to play  </a> |
-                                <a href="about.html" target="_newtab">About   </a> |
+                                <a href="about.html" target="_newtab">Donate   </a> |
                                 <a href="changelog.html" target="_newtab">Changelog   </a> |
                                 <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                 <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -2303,7 +2331,7 @@
                             <td>
                                 <div style="text-align:center">
                                     <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab">About   </a> |
+                                    <a href="about.html" target="_newtab">Donate   </a> |
                                     <a href="changelog.html" target="_newtab">Changelog   </a> |
                                     <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                     <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -2341,7 +2369,7 @@
                             <td>
                                 <div style="text-align:center">
                                     <a href="howto.html" target="_newtab">How to play  </a> |
-                                    <a href="about.html" target="_newtab">About   </a> |
+                                    <a href="about.html" target="_newtab">Donate   </a> |
                                     <a href="changelog.html" target="_newtab">Changelog   </a> |
                                     <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
                                     <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
@@ -2355,16 +2383,22 @@
         
         </div>
     </div>
+    <div class="popup" id="loadCloud">
+        <div id="loadPopup">You have a cloud save with 69 infinities. Do you want to download it?</div>
+        <button class="storebtn" style="font-size: 15px" onclick="tooltipLoad()" style="display: inline">Yes</button>
+        <button class="storebtn" style="font-size: 15px" onclick="closeToolTip()" style="display: inline">No</button>
+    </div>
+    <div class="popup" id="saveCloud">
+        <div id="savePopup">You have a cloud save with 69 infinities. Do you want to overwrite it?</div>
+        <button class="storebtn" style="font-size: 15px" onclick="tooltipSave()" style="display: inline">Yes</button>
+        <button class="storebtn" style="font-size: 15px" onclick="closeToolTip()" style="display: inline">No</button>
+    </div>
     <div class="popup" id="update">
         <div id="updatePopup">The last test.</div>
         <button class="storebtn" style="font-size: 15px" onclick="closeToolTip()" style="display: inline">Okay</button>
     </div>
     <div class="popup" id="challfail">
         <div id="failPopup">You failed the challenge, you will now exit it.</div>
-        <button class="storebtn" style="font-size: 15px" onclick="closeToolTip()" style="display: inline">Okay</button>
-    </div>
-    <div class="popup" id="welcome">
-        <div><text style='font-size:12px'>Welcome to Antimatter Dimensions: New Game Minus Mod!<br><br>Credits to:<br>Hevipelle for original game<br>slabdrill for NG- idea</text></div>
         <button class="storebtn" style="font-size: 15px" onclick="closeToolTip()" style="display: inline">Okay</button>
     </div>
     <div class="popup" id="offlineprogress" style="width: 450px; height: 200px;">
