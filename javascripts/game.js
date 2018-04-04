@@ -223,7 +223,7 @@ var player = {
     dead: true,
     options: {
         newsHidden: false,
-        notation: "Standard",
+        notation: "Emojis",
         //Standard = normal prefixed numbers, Scientific = standard form, Engineering = powers of 3.
         scientific: false,
         challConf: false,
@@ -232,8 +232,8 @@ var player = {
         bulkOn: true,
         cloud: true,
         hotkeys: true,
-        theme: undefined,
-        secretThemeKey: 0,
+        theme: 'S4',
+        secretThemeKey: "Cancer",
         eternityconfirm: true,
         commas: true,
         chart: {
