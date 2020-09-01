@@ -148,7 +148,7 @@ function getAchBAMMult(){
 
 function getBosonicAMProduction() {
 	let r = player.money.max(1).log10() / 15e15 - 3
-	var add = player.achievements.includes("ng3p98") ? Math.pow(player.ghostify.hb.higgsUnspent, 2) : 0
+	var add = player.achievements.includes("ng3p98") ? Math.pow(tmp.hb.higgsUnspent, 2) : 0
 	var ret = Decimal.pow(10, r).times(tmp.wzb.wbp).times(getAchBAMMult()).plus(add)
 	//maybe softcap at e40 or e50?
 	return ret
@@ -182,7 +182,7 @@ function updateBosonicLimits() {
 
 	//Bosonic Runes / Extractor / Enchants
 	br.limit = br.maxLimit
-	if (tmp.ngp3l || player.ghostify.hb.higgs == 0) br.limit = 3
+	if (tmp.ngp3l || tmp.hb.higgs == 0) br.limit = 3
 	var width = 100 / br.limit
 	for (var r = 1; r <= br.maxLimit; r++) {
 		document.getElementById("bRuneCol" + r).style = "min-width:" + width + "%;width:" + width + "%;max-width:" + width + "%"
@@ -196,12 +196,12 @@ function updateBosonicLimits() {
 
 	//Bosonic Upgrades
 	bu.rows = bu.maxRows
-	if (tmp.ngp3l || player.ghostify.hb.higgs == 0) bu.rows = 2
+	if (tmp.ngp3l || tmp.hb.higgs == 0) bu.rows = 2
 	for (var r = 3; r <= bu.maxRows; r++) document.getElementById("bUpgRow" + r).style.display = bu.rows >= r ? "" : "none"
 
 	//Bosonic Enchants
 	bEn.limit = bEn.maxLimit
-	if (tmp.ngp3l || player.ghostify.hb.higgs == 0) bEn.limit = 2
+	if (tmp.ngp3l || tmp.hb.higgs == 0) bEn.limit = 2
 }
 
 function showBLTab(tabName) {
@@ -243,9 +243,9 @@ function updateBosonicLabTab(){
 	if (document.getElementById("butab").style.display=="block") updateBosonicUpgradeDescs()
 	if (document.getElementById("wzbtab").style.display=="block") updateWZBosonsTab()
 	if (!tmp.ngp3l) {
-		if (player.ghostify.hb.unl) {
+		if (tmp.hb.unl) {
 			var req = getHiggsRequirement()
-			document.getElementById("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
+			document.getElementById("hb").textContent = getFullExpansion(tmp.hb.higgs)
 			document.getElementById("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
 			document.getElementById("hbResetReq").textContent = shorten(req)
 			document.getElementById("hbResetGain").textContent = getFullExpansion(getHiggsGain())
@@ -290,7 +290,7 @@ function updateBosonicLabTemp() {
 	updateBosonicUpgradesTemp()
 	updateWZBosonsTemp()
 	if (!tmp.ngp3l) {
-		if (player.ghostify.hb.unl) updateHiggsTemp()
+		if (tmp.hb.unl) updateHiggsTemp()
 		// if (tmp.gv.unl) updateGravitonsTemp()
 		// if (tmp.x17.unl) updateX17Temp()
 	}
@@ -549,7 +549,7 @@ function buyBosonicUpgrade(id, quick) {
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
 	if (id == 32) tmp.updateLights = true
-	if (!tmp.ngp3l) delete player.ghostify.hb.bosonicSemipowerment
+	if (!tmp.ngp3l) delete tmp.hb.bosonicSemipowerment
 	return true
 }
 
@@ -773,14 +773,14 @@ var bu = {
 		},
 		33: function() {
 			var div = tmp.newNGP3E ? 4 : 6
-			return (Math.sqrt(player.ghostify.hb.higgs + 1) - 1) / div + 1
+			return (Math.sqrt(tmp.hb.higgs + 1) - 1) / div + 1
 		},
 		34: function() {
-			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRG() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
+			var galPart = Math.log10(initialGalaxies() / 1e4 + 10) * Math.log10(getTotalRG() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
 			var exp = tmp.newNGP3E ? 1/6 : 1/8
 			var ret = Math.pow(galPart, exp) - 1
-			for (var i = 2; i < 10; i++){
-				if (ret > i / 10) ret = i / 10 + Math.log10(ret - i/10 + 1)
+			for (var i = 2; i < 10; i++) {
+				if (ret > i / 10) ret = i / 10 + Math.log10(ret - i / 10 + 1)
 				else break
 			}
 			return ret / 5 + 1
@@ -864,9 +864,10 @@ var bu = {
 }
 
 function updateBosonicUpgradesTemp(){
+	tmp.blu[14] = bu.effects[14]()
 	for (var r = bu.rows; r >= 1; r--) for (var c = 1; c < 6; c++) {
 		var id = r * 10 + c
-		if (bu.effects[id] !== undefined) tmp.blu[id] = bu.effects[id]()
+		if (id != 14 && bu.effects[id] !== undefined) tmp.blu[id] = bu.effects[id]()
 	}
 }
 

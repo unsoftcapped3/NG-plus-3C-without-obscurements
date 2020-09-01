@@ -233,7 +233,7 @@ function getTreeUpgradeEffect(upg) {
 function getTreeUpgradeEffectDesc(upg) {
 	if (upg == 1) return getFullExpansion(getTreeUpgradeEffect(upg))
 	if (upg == 2) return getDilExp("TU3").toFixed(2) + " -> " + getDilExp().toFixed(2)
-	if (upg == 4) return "^" + getFullExpansion(Math.round(getElectronBoost("noTree"))) + " -> ^" + getFullExpansion(Math.round(tmp.mpte))
+	if (upg == 4) return "^" + getFullExpansion(Math.round(getElectronBoostToNDs("noTree"))) + " -> ^" + getFullExpansion(Math.round(tmp.mpte))
 	if (upg == 8) return getTreeUpgradeEffect(8).toFixed(2)
 	return shortenMoney(getTreeUpgradeEffect(upg))
 }

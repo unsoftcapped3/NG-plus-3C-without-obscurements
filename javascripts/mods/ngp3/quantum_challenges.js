@@ -131,10 +131,10 @@ function updateQCTimes() {
 var ranking=0
 function updatePCCompletions() {
 	var shownormal = false
-	document.getElementById("pccompletionsbtn").style.display = "none"
-	if (!player.masterystudies) return
-	var ranking = 0
 	tmp.pcc = {} //PC Completion counters
+	document.getElementById("pccompletionsbtn").style.display = "none"
+	if (!tmp.ngp3) return
+	var ranking = 0
 	for (var c1 = 2; c1 < 9; c1++) for (var c2 = 1; c2 < c1; c2++) {
 		var rankingPart = 0
 		if (tmp.qu.pairedChallenges.completions[c2 * 10 + c1]) {

@@ -6,14 +6,14 @@ function getTickSpeedMultiplier() {
 }
 
 function initialGalaxies() {
-	let g=player.galaxies
+	let g = player.galaxies
 	if (tmp.ngp3 && !tmp.be) {
-		g = Math.max(g-player.quantum.electrons.sacGals,0)
-		g *= Math.max(Math.min(10-(player.quantum.electrons.amount+g*getElectronGainFinalMult())/16857,1),0)
-		if (hasBosonicUpg(14)) g=Math.max(Math.min(player.galaxies,tmp.blu[14]),g)
+		g = Math.max(g - Math.ceil(tmp.qu.electrons.sacGals), 0)
+		if (tmp.ngp3l) g *= Math.max(Math.min(10 - (player.quantum.electrons.amount + g * getElectronGainFinalMult()) / 16857, 1), 0)
+		if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
+		if (!tmp.ngp3l && tmp.rg4) g *= 0.4
 	}
-	if (tmp.rg4) g*=0.4
-	if ((inNC(15) || player.currentChallenge=="postc1") && player.aarexModifications.ngmX == 3) g=0
+	if ((inNC(15) || player.currentChallenge=="postc1") && player.aarexModifications.ngmX == 3) g = 0
 	return g
 }
 
@@ -34,16 +34,19 @@ function getGalaxyPower(ng, bi, noDil) {
 	let otherGalPower = player.replicanti.galaxies
 	if (player.masterystudies ? player.masterystudies.includes("t342") : false) otherGalPower = (otherGalPower + extraReplGalPower) * replGalEff
 	else otherGalPower += Math.min(player.replicanti.galaxies, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
-	if (!noDil) {
-		let dilGals = Math.floor(player.dilation.freeGalaxies)
-		if (hasBosonicUpg(34)) dilGals *= tmp.blu[34]
-		otherGalPower += dilGals * ((player.masterystudies ? player.masterystudies.includes("t343") : false) ? replGalEff : 1)
-	}
-	otherGalPower += tmp.effAeg
+
+	if (tmp.ngp3) {
+		let dilGalEff = 1
+		if (player.masterystudies.includes("t343")) dilGalEff = replGalEff
+		if (hasBosonicUpg(34)) dilGalEff *= tmp.blu[34]
+
+		if (!noDil) otherGalPower += Math.floor(player.dilation.freeGalaxies) * dilGalEff
+		otherGalPower += tmp.effAeg * (tmp.ngp3l ? 1 : dilGalEff)
+	} else if (!noDil) otherGalPower += player.dilation.freeGalaxies
 
 	let galaxyPower = ng
 	if (!tmp.be) galaxyPower = Math.max(ng - (bi ? 2 : 0), 0) + otherGalPower
-	if ((inNC(7) || inQC(4) ) && player.galacticSacrifice) galaxyPower *= galaxyPower
+	if ((inNC(7) || inQC(4)) && player.galacticSacrifice) galaxyPower *= galaxyPower
 	return galaxyPower
 }
 
@@ -73,7 +76,7 @@ function getGalaxyEff(bi) {
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.ngp3) eff *= colorBoosts.r
-	if (GUBought("rg2")) eff *= Math.pow(player.dilation.freeGalaxies/5e3+1,0.25)
+	if (GUBought("rg2")) eff *= Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25)
 	if (tmp.rg4) eff *= 1.5
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff

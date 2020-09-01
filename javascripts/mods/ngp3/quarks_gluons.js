@@ -171,7 +171,10 @@ function updateColorCharge() {
 
 function getColorPowerProduction(color) {
 	let ret = new Decimal(colorCharge[color])
-	if (!tmp.ngp3l) ret = ret.add(colorCharge.qwBonus)
+	if (!tmp.ngp3l) {
+		ret = ret.add(colorCharge.qwBonus)
+		if (player.masterystudies.includes("d7")) ret = ret.times(getElectronBoostToCQs())
+	}
 	return ret
 }
 

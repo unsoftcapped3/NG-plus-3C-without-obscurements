@@ -425,7 +425,7 @@ strong { color: #0072e5 }
 	animation: none !important
 }
 #dilstudy7.dilationupg:hover, #electronstabbtn button:hover, #dilstudy7.dilationupgbought, #electrons .gluonupgrade.storebtn:hover { background-color: #d2e500 !important }
-#electronsAmount, #electronsTranslation { color: #d2e500 !important }
+#electrons_amount_legacy, #electrons_amount, #electronsTranslation { color: #d2e500 !important }
 #electronsEffect { color: #00e500 !important }
 .quantumchallengediv {
     background-color: #191919 !important;

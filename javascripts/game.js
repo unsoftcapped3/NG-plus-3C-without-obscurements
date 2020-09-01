@@ -1438,7 +1438,6 @@ function updateRedLightBoostTemp(){
 
 function updateOrangeLightBoostTemp(){
 	tmp.le[1] = tmp.effL[1] > 64 ? Math.log10(tmp.effL[1] / 64) + 14 : tmp.effL[1] > 8 ? Math.sqrt(tmp.effL[1]) + 6 : tmp.effL[1] + 1
-	tmp.ppti /= tmp.le[1]
 }
 
 function updateYellowLightBoostTemp(){
@@ -1586,8 +1585,9 @@ function updateAntiElectronGalaxiesTemp(){
 
 function updateTS232Temp() {
 	var exp = 0.2
-	if (tmp.ngp3 && player.galaxies >= 1e4 && !tmp.be) exp *= Math.max(6 - player.galaxies / 2e3,0)
+	if (tmp.ngp3 && tmp.ngp3l && !tmp.be && player.galaxies >= 1e4) exp *= Math.max(6 - player.galaxies / 2e3, 0)
 	tmp.ts232 = Math.pow(1 + initialGalaxies() / 1000, exp)
+	if (tmp.ngp3 && !tmp.ngp3l && tmp.ts232 > 1.5) tmp.ts232 = Math.log2(tmp.ts232 / 2 + 0.25) / 2 + 1.5
 }
 
 function updateTS431ExtraGalTemp() {
@@ -1665,6 +1665,7 @@ function updateTemp() {
 			updatePhotonsUnlockedBRUpgrades()
 			updateNU14Temp()
 			updateNU15Temp()
+			tmp.ppti /= tmp.le[1]
 		}
 		if (ghostified) {
 			updateNeutrinoUpgradesTemp()
@@ -1824,7 +1825,7 @@ function getInfinitiedGain() {
 function getEternitied() {
 	let banked = player.eternitiesBank
 	let total = player.eternities
-	if (banked !== undefined && (inQC(0) || hasNU(10))) total = nA(total, player.eternitiesBank)
+	if (banked !== undefined && (!tmp.ngp3l || inQC(0) || hasNU(10))) total = nA(total, player.eternitiesBank)
 	return total
 }
 
@@ -1875,7 +1876,7 @@ function galaxyReset(bulk) {
 	if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
 	if (!player.achievements.includes("ngpp18")) checkUniversalHarmony()
 	if (tmp.ngp3 && bulk) {
-		if (tmp.qu.autoOptions.sacrifice) sacrificeGalaxy(6, true)
+		if (!tmp.ngp3l || tmp.qu.autoOptions.sacrifice) sacrificeGalaxy(true)
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
 		if (ghostified && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	}
@@ -1916,7 +1917,7 @@ function getGalaxyRequirement(offset = 0, display) {
 		if (over >= 1) {
 			if (over >= 3) {
 				div /= Math.pow(over, 6) / 729
-				scaling = 6
+				scaling = Math.max(scaling, 6)
 			}
 			if (isLEBoostUnlocked(2) && tmp.be) div *= tmp.leBonus[2]
 			tmp.grd.speed = Math.pow(2, (tmp.grd.galaxies + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)
@@ -3349,7 +3350,7 @@ function mainTimeStudyDisplay(){
 		document.getElementById("221desc").textContent = "Currently: "+shorten(Decimal.pow(1.0025, player.resets))+"x"
 		document.getElementById("227desc").textContent = "Currently: "+shorten(Math.pow(tmp.sacPow.max(10).log10(), 10))+"x"
 		document.getElementById("231desc").textContent = "Currently: "+shorten(Decimal.pow(Math.max(player.resets, 1), 0.3))+"x more power"
-		document.getElementById("232desc").textContent = "Currently: "+(ts232display>=999.95?getFullExpansion(Math.floor(ts232display)):ts232display.toFixed(1))+"%"
+		document.getElementById("232desc").textContent = "Currently: "+ts232display.toFixed(1)+"%"
 	}
 }
 
@@ -3391,9 +3392,10 @@ function getReplMult(next) {
 		if (player.achievements.includes('r108')) exp *= 1.09;
 	}
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
-    	if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
-    	if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
-	return replmult;
+	if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
+	if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
+	if (tmp.ngp3 && !tmp.ngp3l && player.masterystudies.includes("t311")) replmult = replmult.pow(getMTSMult(311))
+	return replmult
 }
 
 function upgradeReplicantiChance() {
@@ -7650,7 +7652,7 @@ function ngP3AchieveCheck(){
 	if (!tmp.ngp3l) {
 		if (player.ghostify.another && tmp.qu.quarks.gte(1/0)) giveAchievement("Is these another...")
 		if (player.ghostify.reference && minUQ.decays >= 2) giveAchievement("... reference to EC8?")
-		if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
+		if (tmp.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 		if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 		if (player.money.e >= 1e18) giveAchievement("Meta-Quintillion")
 	}
@@ -8981,7 +8983,7 @@ function challengeOverallDisplayUpdating(){
 	if (document.getElementById("challenges").style.display == "block") {
 		if (document.getElementById("eternitychallenges").style.display == "block") ECRewardDisplayUpdating()
 		if (document.getElementById("quantumchallenges").style.display == "block") {
-		    if (tmp.qu.autoOptions.sacrifice) document.getElementById("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
+		    if (!tmp.ngp3l || tmp.qu.autoOptions.sacrifice) document.getElementById("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 			for (var c=1;c<7;c++) {
 				if (c==5) document.getElementById("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
 				else if (c!=2) document.getElementById("qc"+c+"reward").textContent = shorten(tmp.qcRewards[c])

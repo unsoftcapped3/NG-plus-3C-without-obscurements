@@ -322,7 +322,7 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	if (player.masterystudies) if (player.masterystudies.includes('t311')) return tmp.rm.pow(17.3)
+	if (tmp.ngp3 && tmp.ngp3l && player.masterystudies.includes("t311")) return tmp.rm.pow(getMTSMult(311))
 	return tmp.rm
 }
 
@@ -342,6 +342,3 @@ function getEU3Mult() {
 	if (player.boughtDims) return player.timeShards.div(1e12).plus(1)
 	return Decimal.pow(2, 300 / Math.max(infchallengeTimes, 6.1))
 }
-
-
-

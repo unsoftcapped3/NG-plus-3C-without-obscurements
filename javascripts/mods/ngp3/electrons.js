@@ -1,10 +1,12 @@
 function updateElectronsTab() {
-	document.getElementById("normalGalaxies").textContent = getFullExpansion(player.galaxies)
-	document.getElementById("sacrificeGal").className = "gluonupgrade " + ((player.galaxies > tmp.qu.electrons.sacGals && inQC(0)) ? "stor" : "unavailabl") + "ebtn"
-	document.getElementById("sacrificeGals").textContent = getFullExpansion(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0))
-	document.getElementById("electronsGain").textContent = getFullExpansion(Math.floor(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0) * getElectronGainFinalMult()))
-	for (var u = 1; u < 5; u++) document.getElementById("electronupg" + u).className = "gluonupgrade " + (canBuyElectronUpg(u) ? "stor" : "unavailabl") + "ebtn"
-	if (tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	document.getElementById("normal_galaxies").textContent = getFullExpansion(player.galaxies)
+	for (var u = 1; u < 5; u++) document.getElementById("electron_upg_" + u).className = "gluonupgrade " + (canBuyElectronUpg(u) ? "stor" : "unavailabl") + "ebtn"
+	if (tmp.ngp3l) {
+		document.getElementById("sacrificeGal").className = "gluonupgrade " + ((player.galaxies > tmp.qu.electrons.sacGals && inQC(0)) ? "stor" : "unavailabl") + "ebtn"
+		document.getElementById("sacrificeGals").textContent = getFullExpansion(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0))
+		document.getElementById("electronsGain").textContent = getFullExpansion(Math.floor(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0) * getElectronGainFinalMult()))
+	}
+	if (!tmp.ngp3l || tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
 }
 
 function updateElectrons(retroactive) {
@@ -13,59 +15,83 @@ function updateElectrons(retroactive) {
 		return
 	} else document.getElementById("electronstabbtn").style.display = ""
 	var mult = getElectronGainFinalMult()
-	document.getElementById("electronsGainMult").textContent = mult.toFixed(2)
-	if (retroactive) tmp.qu.electrons.amount = getElectronGainFinalMult() * tmp.qu.electrons.sacGals
-	if (!tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	document.getElementById("electrons_gain_mult" + (tmp.ngp3l ? "_legacy" : "")).textContent = mult.toFixed(2)
 	for (var u = 1; u < 5; u++) {
 		var cost = getElectronUpgCost(u)
-		document.getElementById("electronupg" + u).innerHTML = "Increase the multiplier by " + (getElectronGainMult() * getElectronUpgIncrease(u)).toFixed(2) + "x.<br>" +
+		document.getElementById("electron_upg_" + u).innerHTML = "Increase the multiplier by " + (getElectronGainMult() * getElectronUpgIncrease(u)).toFixed(2) + "x.<br>" +
 			"Level: " + getFullExpansion(tmp.qu.electrons.rebuyables[u-1]) + "<br>" +
 			"Cost: " + ((u == 4 ? getFullExpansion : shortenCosts)(cost)) + " " + [null, "Time Theorems", "dilated time", "meta-antimatter", "Meta-Dimension Boosts"][u]
 	}
+	if (retroactive) tmp.qu.electrons.amount = getElectronGainFinalMult() * tmp.qu.electrons.sacGals
+	if (tmp.ngp3l && !tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	if (!tmp.ngp3l) document.getElementById("electrons_percentage").textContent = getGalaxySacrificeMult() * 100
 }
 
 function updateElectronsEffect() {
-	if (!tmp.qu.autoOptions.sacrifice) {
-		tmp.mpte = getElectronBoost()
+	if (tmp.ngp3l && !tmp.qu.autoOptions.sacrifice) {
+		tmp.mpte = getElectronBoostToNDs()
 		document.getElementById("electronsAmount2").textContent = "You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 	}
-	document.getElementById("sacrificedGals").textContent = getFullExpansion(tmp.qu.electrons.sacGals)
-	document.getElementById("electronsAmount").textContent = getFullExpansion(Math.round(tmp.qu.electrons.amount))
+	document.getElementById("sacrificed_gals" + (tmp.ngp3l ? "_legacy" : "")).textContent = getFullExpansion(Math.ceil(tmp.qu.electrons.sacGals))
+	document.getElementById("electrons_amount" + (tmp.ngp3l ? "_legacy" : "")).textContent = getFullExpansion(Math.round(tmp.qu.electrons.amount))
 	document.getElementById("electronsTranslation").textContent = getFullExpansion(Math.round(tmp.mpte))
 	document.getElementById("electronsEffect").textContent = shorten(getDimensionPowerMultiplier("non-random"))
 	document.getElementById("linearPerTenMult").textContent = shorten(getDimensionPowerMultiplier("linear"))
+	if (!tmp.ngp3l) document.getElementById("elc_to_cqs_effect").textContent = shorten(getElectronBoostToCQs())
 }
 
 function sacrificeGalaxy(auto = false) {
-	var amount = player.galaxies-tmp.qu.electrons.sacGals
-	if (amount < 1) return
-	if (player.options.sacrificeConfirmation && !auto) if (!confirm("You will perform a galaxy reset, but you will exchange all your galaxies to electrons which will give a boost to multiplier per ten dimensions.")) return
-	tmp.qu.electrons.sacGals = player.galaxies
+	var mult = getGalaxySacrificeMult()
+	var amount = (player.galaxies - tmp.qu.electrons.sacGals / mult) * mult
+	if (amount < 1 || mult == 0) return
+	if (!auto && player.options.sacrificeConfirmation && !confirm("You will perform a galaxy reset, but you will exchange all your galaxies to electrons which will give a boost to multiplier per ten dimensions.")) return
+	tmp.qu.electrons.sacGals += amount
 	tmp.qu.electrons.amount += getElectronGainFinalMult() * amount
 	if (!tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
-	if (!auto) galaxyReset(0)
+	if (tmp.ngp3l && !auto) galaxyReset(0)
 }
 
-function getElectronBoost(mod) {
-	if (!inQC(0)) return 1
+function getGalaxySacrificeMult() {
+	return tmp.ngp3l ? 1 : tmp.qu.electrons.percentage || 0
+}
+
+function changeGalaxySacrificeMult(x) {
+	if (player.options.sacrificeConfirmation && !confirm("This requires a forced quantum reset. Are you sure you want to change?")) return
+	tmp.qu.electrons.percentage = x
+	quantum(false, true)
+}
+
+function normalOrReducedGalaxies() {
+	return tmp.ngp3l ? player.galaxies : initialGalaxies()
+}
+
+function getElectronBoostToNDs(mod) {
+	if (tmp.ngp3l && !inQC(0)) return 1
 	var amount = tmp.qu.electrons.amount
 	var s = 149840
 	if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
 	
 	if (amount > 37460 + s) amount = Math.sqrt((amount-s) * 37460) + s
-	if (tmp.rg4 && mod != "no-rg4") amount *= 0.7
+	if (tmp.ngp3l && tmp.rg4 && mod != "no-rg4") amount *= 0.7
 	if (player.masterystudies !== undefined && player.masterystudies.includes("d13") && mod != "noTree") amount *= getTreeUpgradeEffect(4)
 	return amount + 1
 }
 
+function getElectronBoostToCQs(mod) {
+	var x = 1
+	if (player.masterystudies.includes("d11") && tmp.pcc !== undefined && !tmp.ngp3l) x += tmp.pcc.normal
+	return Decimal.pow(Math.pow(x, 0.75) / 1e3 + 1, Math.pow(tmp.qu.electrons.amount, 0.75))
+}
+
 function getElectronGainMult() {
-	let ret = 1
-	if (hasNU(5)) ret *= 3
-	return ret
+	return hasNU(5) ? 3 : 1
 }
 
 function getElectronGainFinalMult() {
-	return tmp.qu.electrons.mult * getElectronGainMult()
+	var x = tmp.qu.electrons.mult
+	if (player.masterystudies.includes("d11") && tmp.pcc !== undefined && !tmp.ngp3l) x += tmp.pcc.normal * 0.1
+	x *= getElectronGainMult()
+	return x
 }
 
 function getElectronUpgCost(u) {

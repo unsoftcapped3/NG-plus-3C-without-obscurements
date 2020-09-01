@@ -83,7 +83,7 @@ button, div.storebtn {
 	font-family: "Roboto" !important
 }
 
-#coinAmount, #dilatedGalaxies, #normalGalaxies, #sacrificedGals {
+#coinAmount, #dilatedGalaxies, #normalGalaxies, #sacrificed_gals_legacy, #sacrificed_gals, #electrons_percentage {
 	color: #0072e5 !important
 }
 
@@ -406,7 +406,7 @@ button, div.storebtn {
 	background-color: #e5e557 !important
 }
 
-#electronsAmount, #electronsTranslation, #electronsEffect {
+#electrons_amount_legacy, #electrons_amount, #electronsTranslation, #electronsEffect {
 	color: #e5e500
 }
 

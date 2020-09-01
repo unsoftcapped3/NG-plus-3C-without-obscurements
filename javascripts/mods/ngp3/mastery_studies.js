@@ -45,7 +45,8 @@ var masteryStudies = {
 			return QCIntensity(8) >= 1
 		},
 		10: function() {
-			return tmp.qu.pairedChallenges.completed == 4
+			if (tmp.ngp3l) return tmp.qu.pairedChallenges.completed == 4
+			return tmp.pcc !== undefined && tmp.pcc.normal >= 15
 		},
 		11: function() {
 			return tmp.eds[1].perm == 10
@@ -71,7 +72,7 @@ var masteryStudies = {
 			return "Complete Quantum Challenge 8"
 		},
 		10: function() {
-			return "Complete Paired Challenge 4"
+			return "Complete Paired Challenge 4" + (tmp.ngp3l ? "" : " & get 15 unique PC completions")
 		},
 		11: function() {
 			return getFullExpansion(10) + " worker replicants"
@@ -122,42 +123,59 @@ var masteryStudies = {
 		},
 		264: function(){
 			let r = 1
-			if (tmp.ngp3l) r = Math.pow(player.galaxies + 1, 0.25) * 2
-			else r = player.galaxies / 100 + 1
+			let g = normalOrReducedGalaxies()
+			if (tmp.ngp3l) r = Math.pow(g + 1, 0.25) * 2
+			else r = g / 100 + 1
 			if (player.aarexModifications.newGameExpVersion) return Math.pow(r, 2)
 			return r
 		},
 		273: function(uses){
-			var intensity = 5
-			if (ghostified && player.ghostify.neutrinos.boosts > 1 && !uses.includes("pn")) intensity += tmp.nb[2]
-			if (uses.includes("intensity")) return intensity
-			return Decimal.max(Math.log10(player.replicanti.chance + 1), 1).pow(intensity)
+			var x = Math.log10(player.replicanti.chance + 1)
+
+			var exp
+			if (tmp.ngp3l) exp = 5
+			else exp = Math.pow(x / 2 - 0.5, 2)
+			if (ghostified && player.ghostify.neutrinos.boosts > 1 && !uses.includes("pn")) {
+				if (tmp.ngp3l) exp += tmp.nb[2]
+				else exp *= tmp.nb[2]
+			}
+			if (uses.includes("intensity")) return exp
+
+			return Decimal.max(x, 1).pow(exp)
 		},
 		281: function(){
-			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10 * (tmp.newNGP3E ? 2 : 1))
+			if (tmp.ngp3l) return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10)
+			else return Decimal.pow(tmp.newNGP3 ? 1.5 : 1.1, Math.pow(tmp.rm.max(1).log10(), 0.5))
 		},
 		282: function(){
 			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 15 * (tmp.newNGP3E ? 2 : 1))
 		},
 		301: function(){
 			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
-			return Math.floor(extraReplGalaxies / 4.15)
+			if (tmp.ngp3l) return Math.floor(extraReplGalaxies / 4.15)
+			return Math.pow(tmp.rm.log10() / 1e3, 0.75)
 		},
 		303: function(){
-			return Decimal.pow(4.7, Math.pow(Math.log10(Math.max(player.galaxies, 1)), 1.5))
+			return Decimal.pow(4.7, Math.pow(Math.log10(Math.max(normalOrReducedGalaxies(), 1)), 1.5))
+		},
+		311: function(){
+			if (tmp.ngp3l) return 17.3
+			if (tmp.pcc === undefined) return 1
+			return tmp.pcc.normal * 0.02 + 1
 		},
 		322: function(){
-			let log = Math.sqrt(Math.max(3-getTickspeed().log10(),0))/2e4
+			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
 			if (log > 110) log = Math.sqrt(log * 27.5) + 55
 			if (log > 1e3 && player.aarexModifications.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)
 			if (player.aarexModifications.newGameExpVersion) log += Math.pow(Math.log10(log + 10), 4) - 1
 
 			if (!tmp.ngp3l) log = softcap(log, "ms322_log")
 			//these are also required very much--more DT is more tickspeed is more DT
+
 			return Decimal.pow(10, log)
 		},
 		332: function(){
-			return Math.max(player.galaxies, 1)
+			return Math.max(normalOrReducedGalaxies(), 1)
 		},
 		341: function(){
 			var exp = Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())
@@ -188,7 +206,7 @@ var masteryStudies = {
 			return Math.sqrt(player.timeShards.add(1).log10())/20+1
 		},
 		373: function(){
-			return Math.pow(player.galaxies+1,0.55)
+			return Math.pow(normalOrReducedGalaxies() + 1, 0.55)
 		},
 		381: function(){
 			return Decimal.min(tmp.tsReduce, 1).log10() / -135 + 1
@@ -284,10 +302,16 @@ var masteryStudies = {
 		282: "Replicanti multiplier boosts Meta Dimensions at greatly reduced rate.",
 		291: "You gain 1% of your EP gained on eternity each second.",
 		292: "You can gain tachyon particles without disabling dilation.",
-		301: "Remote cost scaling starts 1 galaxy later per 4.15 extra replicated galaxies.",
+		301: function() {
+			if (tmp.ngp3l) "Remote cost scaling starts 1 galaxy later per 4.15 extra replicated galaxies."
+			return "Remote cost scaling starts later based on replicanti multiplier."
+		},
 		302: "You can buy all time studies before mastery portal.",
 		303: "Meta Dimensions are stronger based on your galaxies.",
-		311: "Replicanti boost to all Infinity Dimensions is 17.3x stronger.",
+		311: function() {
+			if (tmp.ngp3l) return "Replicanti boost to all Infinity Dimensions is 17.3x stronger."
+			return "Replicanti multiplier is 2% stronger per 1 unique PC completion."
+		},
 		312: "Meta-dimension boosts are 4.5% stronger and cost scale by 1 less.",
 		321: "Buff multiplier per 10 normal Dimensions to <span id='321effect'></span>x if it is 1x.",
 		322: "Tickspeed boosts DT production at greatly reduced rate.",
@@ -323,7 +347,7 @@ var masteryStudies = {
 		421: "Tickspeed boosts preon energy production.",
 		431: "DT production and branches are faster based on your free galaxies."
 	},
-	hasStudyEffect: [251, 252, 253, 262, 263, 264, 273, 281, 282, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 262, 263, 264, 273, 281, 282, 301, 303, 311, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251: function(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -339,6 +363,9 @@ var masteryStudies = {
 		},
 		301: function(x) {
 			return "+" + getFullExpansion(Math.floor(x))
+		},
+		311: function(x) {
+			return tmp.ngp3l ? "Static effect" : (x * 100 - 100).toFixed(2) + "%"
 		},
 		332: function(x) {
 			return shortenDimensions(x) + "x"

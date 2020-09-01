@@ -272,7 +272,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (tmp.ngp3 && player.masterystudies.includes("d7")) x = getElectronBoost(focusOn)
+	if (tmp.ngp3 && player.masterystudies.includes("d7")) x = getElectronBoostToNDs(focusOn)
 	return x
 }
 

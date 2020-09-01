@@ -1,4 +1,5 @@
 var inflationCheck = false
+var electronsReworked = false
 var betaId = "3.1"
 var prefix = betaId + "ds"
 var savePrefix = prefix + "AM_"
@@ -1033,7 +1034,7 @@ function onLoad(noOffline) {
           tmp.qu.pairedChallenges.completions[Math.min(c1, c2) * 10 + Math.max(c1, c2)] = c
       }
   }
-  var forceToQuantumAndRemove=false
+  var forceToQuantumAndRemove = false
   if (player.masterystudies ? player.aarexModifications.newGame3PlusVersion < 1.999 || (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] == undefined : false) : false) { //temp
       var oldLength=player.masterystudies.length
       var newMS=[]
@@ -1951,6 +1952,9 @@ function onLoad(noOffline) {
       document.getElementById("ratio_b").value = tmp.qu.assignAllRatios.b
       document.getElementById('autoAssign').textContent="Auto: O"+(tmp.qu.autoOptions.assignQK?"N":"FF")
       document.getElementById('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
+      document.getElementById("electrons_legacy").style.display = tmp.ngp3l ? "" : "none"
+      document.getElementById("electrons_new").style.display = tmp.ngp3l ? "none" : ""
+      document.getElementById("elc_to_cqs").style.display = tmp.ngp3l ? "none" : ""
       document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
       document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
       document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
@@ -2076,7 +2080,7 @@ function onLoad(noOffline) {
           simulateTime(diff/1000)
       }
   } else player.lastUpdate = new Date().getTime()
-  if (player.totalTimePlayed < 1 || inflationCheck || forceToQuantumAndRemove) {
+  if (player.totalTimePlayed < 1 || inflationCheck || forceToQuantumAndRemove || electronsReworked) {
       ngModeMessages=[]
       if (player.aarexModifications.ngexV) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. WARNING: This mod is in beta. If you see that something is unbalanced, report it to #other_modifications in the Discord server. Good luck!")
       if (player.aarexModifications.newGameMult) ngModeMessages.push("Welcome to NG Multiplied mode, made by Despacit and Soul147! This mode adds too many overpowerful buffs! This mode may be broken.")
@@ -2116,8 +2120,13 @@ function onLoad(noOffline) {
           player.dilation.bestTP = new Decimal(0)
           document.getElementById('bestTP').textContent = "Your best ever Tachyon particles was 0."
       }
+      if (electronsReworked) {
+          quantum(false, true, 0)
+          ngModeMessages = ["Due to a rework of Electrons, you are forced to do a quantum reset!"]
+      }
       inflationCheck = false
       infiniteCheck = false
+      electronsReworked = false
       closeToolTip()
       showNextModeMessage()
   } else if (player.aarexModifications.popUpId!="STD") showNextModeMessage()
@@ -2127,9 +2136,12 @@ function onLoad(noOffline) {
 
 function setupNGP31Versions() {
 	if (player.aarexModifications.newGame3PlusVersion < 2.3 || player.ghostify.hb.amount !== undefined) {
-		player.ghostify.hb = setupHiggsSave()
-		player.aarexModifications.newGame3PlusVersion = 2.3
+		setupHiggsSave()
 	} else tmp.hb = player.ghostify.hb
+	if (player.aarexModifications.newGame3PlusVersion < 2.3001) {
+		electronsReworked = player.masterystudies.includes("d7")
+	} else electronsReworked = false
+	player.aarexModifications.newGame3PlusVersion = 2.3001
 }
 
 function checkNGM(imported) {

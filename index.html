@@ -1816,7 +1816,7 @@
 				<br>
 				(Update v2.3: The NG+3.1 & Higgs update)
 				<br>
-				<b class="warning">(Test server: Beta A1, Alpha 12)</b>
+				<b class="warning">(Test server: Beta A1, Alpha idk.18)</b>
 			</p>
 			<div id="footercontainer">
 				<table id="footer" style="display: table !important">
@@ -4857,17 +4857,36 @@
 				</table>
 			</div>
 			<div class='quantumtab' id='electrons'>
-				You have <span id="normalGalaxies">0</span> normal galaxies.<br>
-				You sacrificed <span id='sacrificedGals'>0</span> galaxies.<br>
-				<button class='gluonupgrade storebtn' id='sacrificeGal' onclick='sacrificeGalaxy()' style='width:210px; height:90px'>Sacrifice <span id='sacrificeGals'>0</span> galaxies for <span id="electronsGain"></span> electrons.<br>Gain <span id='electronsGainMult'>2</span> electrons for each sacrificed galaxy.</button><br>
-				<button class='storebtn' id='sacrificeAuto' onclick='toggleAutoQuantumContent("sacrifice")' style='width:210px'></button><br>
-				You have <span id="electronsAmount" style="font-size:35px">0</span> electrons.<br>
+				You have <span id="normal_galaxies">0</span> normal galaxies.
+				<div id="electrons_legacy">
+					You sacrificed <span id='sacrificed_gals_legacy'>0</span> galaxies.<br>
+					<button class='gluonupgrade storebtn' id='sacrificeGal' onclick='sacrificeGalaxy()' style='width:210px; height:90px'>Sacrifice <span id='sacrificeGals'>0</span> galaxies for <span id="electronsGain"></span> electrons.<br>Gain <span id='electrons_gain_mult_legacy'>2</span> electrons for each sacrificed galaxy.</button><br>
+					<button class='storebtn' id='sacrificeAuto' onclick='toggleAutoQuantumContent("sacrifice")' style='width:210px'></button><br>
+					You have <span id="electrons_amount_legacy" style="font-size:35px">0</span> electrons.
+				</div>
+				<div id="electrons_new">
+					Galaxy percentage on next Quantum:
+					<br>
+					<button class="storebtn" onclick="changeGalaxySacrificeMult(0)">0%</button>
+					<button class="storebtn" onclick="changeGalaxySacrificeMult(0.5)">50%</button>
+					<button class="storebtn" onclick="changeGalaxySacrificeMult(1)">100%</button>
+					<br>
+					<br>
+					<span id="electrons_percentage" style="font-size:35px">50</span>% of normal galaxies (<span id="sacrificed_gals" style="font-size:25px"></span>) are sacrificed to get <span id="electrons_amount" style="font-size:35px"></span> electrons.
+					<br>
+					You gain <span id='electrons_gain_mult'>2</span> electrons per 1 sacrificed galaxy.
+					<br>
+					<br>
+				</div>
 				Raised to the power of <span id="electronsTranslation" style="font-size:35px">1.00</span>, multiplier per ten dimensions is currently <span id="electronsEffect" style="font-size:35px">2.00</span>x. (from <span id="linearPerTenMult">2.00</span>x)<br>
+				<span id="elc_to_cqs">
+					Electrons boost the production of color powers by <span id="elc_to_cqs_effect" style="font-size:35px">1.00</span>x.
+				</span>
 				<table class="table" align="center" style="margin: auto"><tr>
-					<td><button class='gluonupgrade storebtn' id='electronupg1' onclick='buyElectronUpg(1)'></button></td>
-					<td><button class='gluonupgrade storebtn' id='electronupg2' onclick='buyElectronUpg(2)'></button></td>
-					<td><button class='gluonupgrade storebtn' id='electronupg3' onclick='buyElectronUpg(3)'></button></td>
-					<td><button class='gluonupgrade storebtn' id='electronupg4' onclick='buyElectronUpg(4)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='electron_upg_1' onclick='buyElectronUpg(1)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='electron_upg_2' onclick='buyElectronUpg(2)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='electron_upg_3' onclick='buyElectronUpg(3)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='electron_upg_4' onclick='buyElectronUpg(4)'></button></td>
 				</tr></table>
 			</div>
 			<div class='quantumtab' id='replicants'>

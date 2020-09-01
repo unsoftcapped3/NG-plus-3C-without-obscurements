@@ -103,6 +103,7 @@ function quantum(auto, force, challid, bigRip = false, quick) {
 				if (tmp.qu.pairedChallenges.order[pc]) if (tmp.qu.pairedChallenges.order[pc].length > 1) abletostart = true
 			} else if (!pcFocus) abletostart = true
 			if (abletostart) {
+				var note = (tmp.ngp3l ? "Electrons and banked eternities do nothing in quantum challenges and your e" : "E") + "lectrons and sacrificed galaxies do not reset until you end the challenge."
 				if (pc > 0) if (tmp.qu.pairedChallenges.completed + 1 < pc) return
 				if (tmp.qu.electrons.amount < getQCCost(challid) || !inQC(0)) return
 				if (bigRip) {
@@ -111,10 +112,10 @@ function quantum(auto, force, challid, bigRip = false, quick) {
 					var qc1st = Math.min(qc1, qc2)
 					var qc2st = Math.max(qc1, qc2)
 					if (qc1st != 6 || qc2st != 8) return
-					if (tmp.qu.bigRip.conf && !auto) if (!confirm("Big ripping the universe starts PC6+8 with only quantum stuff. However, only dilation upgrades boost dilation except upgrades that multiply TP gain until you buy the eleventh upgrade. NOTE: If you can beat PC6+8, you will earn a grand reward. You can give your Time Theorems and Time Studies back by undoing Big Rip.")) return
+					if (tmp.qu.bigRip.conf && !auto) if (!confirm("Big ripping the universe starts PC6+8 with only quantum stuff. However, only dilation upgrades boost dilation except upgrades that multiply TP gain until you buy the eleventh upgrade. NOTE: If you can beat PC6+8, you will earn a grand reward. You can give your Time Theorems and Time Studies back by undoing Big Rip. " + note)) return
 				} else if (pc > 0) {
-					if (player.options.challConf || (tmp.qu.pairedChallenges.completions.length < 1 && !ghostified)) if (!confirm("You will start a Quantum Challenge, but you need to do 2 challenges at one. Completing it boosts the rewards of Quantum Challenges that you chose in this Paired Challenge. NOTE: You will keep electrons & sacrificed galaxies, but they don't work in this Challenge.")) return
-				} else if (player.options.challConf || (QCIntensity(1) == 0 && !ghostified)) if (!confirm("You will do a quantum reset but you will not gain quarks, and keep your electrons & sacrificed galaxies, and you can't buy electron upgrades. You have to reach the set goal of antimatter to complete this challenge. NOTE: Electrons and banked eternities do nothing in quantum challenges and your electrons and sacrificed galaxies do not reset until you end the challenge.")) return
+					if (player.options.challConf || (tmp.qu.pairedChallenges.completions.length < 1 && !ghostified)) if (!confirm("You will start a Quantum Challenge, but you need to do 2 challenges at one. Completing it boosts the rewards of Quantum Challenges that you chose in this Paired Challenge. NOTE: " + note)) return
+				} else if (player.options.challConf || (QCIntensity(1) == 0 && !ghostified)) if (!confirm("You will do a quantum reset but you will not gain quarks, and keep your electrons & sacrificed galaxies, and you can't buy electron upgrades. You have to reach the set goal of antimatter to complete this challenge. NOTE: " + note)) return
 				tmp.qu.electrons.amount -= getQCCost(challid)
 				if (!quick) for (var m = 0; m < qcm.on.length; m++) if (ranking >= qcm.reqs[qcm.on[m]] || !qcm.reqs[qcm.on[m]]) tmp.qu.qcsMods.current.push(qcm.on[m])
 			} else if (pcFocus && pc < 1) {
@@ -612,9 +613,9 @@ function quantumReset(force, auto, challid, bigRip, implode=false) {
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
 		}//bounds if (!force)
 		tmp.qu.pairedChallenges.current = 0
-		if (challid == 0) {
-			tmp.qu.electrons.amount = 0
+		if (challid == 0 || challid == undefined) {
 			tmp.qu.electrons.sacGals = 0
+			tmp.qu.electrons.amount = 0
 			tmp.qu.challenge = []
 			tmp.aeg = 0
 		} else if (pc < 1) tmp.qu.challenge = [challid]

@@ -229,7 +229,9 @@ var neutrinoBoosts = {
 		},
 		2: function(nt) {
 			let nb2neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
-			let nb2 = Math.pow(nb2neutrinos, .25) * 1.5
+			let nb2
+			if (tmp.ngp3l) nb2 = Math.pow(nb2neutrinos, .25) * 1.5
+			else nb2 = Math.pow(nb2neutrinos, .25) / 5 + 1
 			return nb2 
 		},
 		3: function(nt) {
