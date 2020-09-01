@@ -138,7 +138,7 @@ function getHiggsGain() {
 }
 
 function addHiggs(x) {
-	tmp.hb.higgs += x
+	player.hb.higgs += x
 	updateUnspentHiggs()
 }
 
