@@ -107,7 +107,9 @@ var nanoRewards = {
 			return x * 0.36 + 1
 		},
 		dt_production: function(x) {
-			return Decimal.pow(1e10, x)
+			let b = tmp.qu.bigRip.active ? 1e5 : 1e10
+			let minus = tmp.qu.bigRip.active ? 2 : 0
+			return Decimal.pow(b, Math.max(x - minus, 0))
 		},
 		meta_boost_power: function(x) {
 			let y = 2
