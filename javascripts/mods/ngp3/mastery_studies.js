@@ -129,16 +129,17 @@ var masteryStudies = {
 			if (player.aarexModifications.newGameExpVersion) return Math.pow(r, 2)
 			return r
 		},
-		273: function(uses){
-			var x = Math.log10(player.replicanti.chance + 1)
+		273: function(uses) {
+			var x = Decimal.add(tmp.rep.base_chance, 1).log10()
 
 			var exp
-			if (tmp.ngp3l) exp = 5
-			else exp = Math.pow(x / 2 - 0.5, 2)
-			if (ghostified && player.ghostify.neutrinos.boosts > 1 && !uses.includes("pn")) {
-				if (tmp.ngp3l) exp += tmp.nb[2]
-				else exp *= tmp.nb[2]
-			}
+			if (tmp.ngp3l) {
+				exp = 5
+				if (ghostified && player.ghostify.neutrinos.boosts > 1 && !uses.includes("pn")) {
+					if (tmp.ngp3l) exp += tmp.nb[2]
+					else exp *= tmp.nb[2]
+				}
+			} else exp = Math.pow(x / 2 - 0.5, 2)
 			if (uses.includes("intensity")) return exp
 
 			return Decimal.max(x, 1).pow(exp)

@@ -4,10 +4,12 @@ function updateNeutrinoBoostDisplay(){
 		document.getElementById("neutrinoBoost1").textContent = getDilExp().toFixed(2)
 	}
 	if (player.ghostify.neutrinos.boosts>=2) {
-		document.getElementById("preNeutrinoBoost2").textContent = "^" + shorten(getMTSMult(273, "pn"))
-		document.getElementById("neutrinoBoost2").textContent = "^" + shorten(getMTSMult(273))
-		document.getElementById("preNeutrinoBoost2Exp").textContent = getMTSMult(273, ["pn", "intensity"]).toFixed(2)
-		document.getElementById("neutrinoBoost2Exp").textContent = getMTSMult(273, "intensity").toFixed(2)
+		if (tmp.ngp3l) {
+			document.getElementById("preNeutrinoBoost2").textContent = "^" + shorten(getMTSMult(273, "pn"))
+			document.getElementById("neutrinoBoost2Legacy").textContent = "^" + shorten(getMTSMult(273))
+			document.getElementById("preNeutrinoBoost2Exp").textContent = getMTSMult(273, ["pn", "intensity"]).toFixed(2)
+			document.getElementById("neutrinoBoost2Exp").textContent = getMTSMult(273, "intensity").toFixed(2)
+		} else document.getElementById("neutrinoBoost2").textContent = tmp.nb[2].toFixed(3)
 	}
 	if (player.ghostify.neutrinos.boosts >= 3) document.getElementById("neutrinoBoost3").textContent = tmp.nb[3].toFixed(2)
 	if (player.ghostify.neutrinos.boosts >= 4) document.getElementById("neutrinoBoost4").textContent = (tmp.nb[4] * 100 - 100).toFixed(1)
@@ -200,9 +202,19 @@ function updateNU12Temp(){
 }
 
 function updateNU14Temp(){
-	var base = player.ghostify.ghostParticles.add(1).log10()
-	var colorsPortion = Math.pow(tmp.qu.colorPowers.r.add(tmp.qu.colorPowers.g).add(tmp.qu.colorPowers.b).add(1).log10(),1/3)
-	tmp.nu[5] = Decimal.pow(base, colorsPortion * 0.8 + 1).max(1) //NU14
+	var ghp, cp
+	if (tmp.ngp3l) {
+		ghp = player.ghostify.ghostParticles.add(1).log10()
+		cp = Math.pow(tmp.qu.colorPowers.r.add(tmp.qu.colorPowers.g).add(tmp.qu.colorPowers.b).add(1).log10(), 1/3) * 0.8 + 1
+	} else {
+		ghp = player.ghostify.ghostParticles.add(1).log10() / 100 + 1
+		cp = (
+			Math.sqrt(tmp.qu.colorPowers.r.add(1).log10()) +
+			Math.sqrt(tmp.qu.colorPowers.g.add(1).log10()) +
+			Math.sqrt(tmp.qu.colorPowers.b.add(1).log10())
+		) / 5 + 1
+	}
+	tmp.nu[5] = Decimal.pow(ghp, cp).max(1) //NU14
 }
 
 function updateNU15Temp(){
@@ -231,7 +243,7 @@ var neutrinoBoosts = {
 			let nb2neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			let nb2
 			if (tmp.ngp3l) nb2 = Math.pow(nb2neutrinos, .25) * 1.5
-			else nb2 = Math.pow(nb2neutrinos, .25) / 5 + 1
+			else nb2 = Math.log10(nb2neutrinos + 1) / 10 + 1
 			return nb2 
 		},
 		3: function(nt) {

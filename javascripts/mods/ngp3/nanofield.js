@@ -19,7 +19,11 @@ function updateNanoverseTab(){
 		document.getElementById("nfRewardHeader" + reward).textContent = (rewards % 8 + 1 == reward ? "Next" : DISPLAY_NAMES[reward]) + " reward"
 		document.getElementById("nfRewardTier" + reward).textContent = "Tier " + getFullExpansion(Math.ceil((rewards + 1 - reward) / 8)) + " / Power: " + tmp.nf.powers[reward].toFixed(1)
 	}
-	document.getElementById("nfReward5").textContent = (!tmp.ngp3l && tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) : nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp)) + "."
+	document.getElementById("nfReward5").textContent = (
+		tmp.ngp3l ? nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp) :
+		tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) :
+		nanoRewards.effectDisplays.dt_production(tmp.nf.effects.dt_production)
+	) + "."
 	document.getElementById("ns").textContent = ghostified || nanospeed != 1 ? "Your Nanofield speed is currently " + (nanospeed == 1 ? "" : shorten(tmp.ns) + " * " + shorten(nanospeed) + " = ") + shorten(getNanofieldFinalSpeed()) + "x." : ""
 }
 
@@ -100,8 +104,10 @@ var nanoRewards = {
 			return Math.sqrt(x) * 0.021 + 1
 		},
 		dil_effect_exp: function(x) {
-			if (!tmp.ngp3l && x > 15) tier = Math.log10(x - 5) * 15
 			return x * 0.36 + 1
+		},
+		dt_production: function(x) {
+			return Decimal.pow(1e10, x)
 		},
 		meta_boost_power: function(x) {
 			let y = 2
@@ -147,6 +153,9 @@ var nanoRewards = {
 		},
 		dil_effect_exp: function(x) {
 			return "in dilation, Normal Dimension multipliers and Tickspeed are raised by ^" + x.toFixed(2)
+		},
+		dt_production: function(x) {
+			return "Dilated time production is " + shorten(x) + "x faster"
 		},
 		meta_boost_power: function(x) {
 			return "each meta-Dimension Boost gives " + x.toFixed(2) + "x boost"
@@ -200,8 +209,7 @@ function updateNanoEffectUsages() {
 	nanoRewards.effectsUsed[1] = data2
 
 	//Fifth reward
-	var data2 = ["dil_effect_exp"]
-	if (!tmp.ngp3l) data2.push("light_threshold_speed")
+	var data2 = tmp.ngp3l ? ["dil_effect_exp"] : ["dt_production", "light_threshold_speed"]
 	nanoRewards.effectsUsed[5] = data2
 
 	//Seventh reward

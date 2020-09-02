@@ -171,10 +171,7 @@ function updateColorCharge() {
 
 function getColorPowerProduction(color) {
 	let ret = new Decimal(colorCharge[color])
-	if (!tmp.ngp3l) {
-		ret = ret.add(colorCharge.qwBonus)
-		if (player.masterystudies.includes("d7")) ret = ret.times(getElectronBoostToCQs())
-	}
+	if (!tmp.ngp3l) ret = ret.add(colorCharge.qwBonus)
 	return ret
 }
 
@@ -190,7 +187,9 @@ colorBoosts={
 }
 
 function getCPLog(c) {
-	var x = Decimal.add(tmp.qu.colorPowers[c], 1).log10()
+	var x = Decimal.add(tmp.qu.colorPowers[c], 1)
+	if (!tmp.ngp3l && player.masterystudies.includes("d7")) x = x.times(getElectronBoostToCQs())
+	x = x.log10()
 	if (x > 1024 && player.aarexModifications.ngudpV && !player.aarexModifications.nguepV) {
 		if (player.aarexModifications.ngumuV) x = Math.sqrt(x) * 32
 		else x = Math.pow(x, .9) * 2
@@ -198,7 +197,7 @@ function getCPLog(c) {
 	return x
 }
 
-function getCPLogs(c) {
+function getCPLogs() {
 	return {
 		r: getCPLog("r"),
 		g: getCPLog("g"),
@@ -430,6 +429,10 @@ function getRG3Effect() {
 	return Decimal.pow(player.resets, exp)
 }
 
+function getRG4Effect() {
+	return Math.log10(tmp.qu.electrons.amount / 10 + 1) / 10 + 1
+}
+
 function getGU8Effect(type) {
 	return Math.pow(tmp.qu.gluons[type].div("1e565").add(1).log10() * 0.505 + 1, 1.5)
 }
@@ -494,6 +497,8 @@ function updateGluonsTab() {
 		document.getElementById("generateGBGluonsAmount").textContent=shortenDimensions(gbGain)
 		document.getElementById("generateBRGluons").className = "gluonupgrade " + (brGain.gt(0) ? "br" : "unavailablebtn")
 		document.getElementById("generateBRGluonsAmount").textContent=shortenDimensions(brGain)
+
+		document.getElementById("rgupg4current").textContent = "Currently: " + shorten(getRG4Effect() * 100 - 100) + "%"
 	}
 	if (player.ghostify.milestones > 7) {
 		updateQuantumWorth("display")

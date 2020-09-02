@@ -1607,19 +1607,29 @@ function updateMatterSpeed(){
 	}
 }
 
-function updateReplicantiTemp() {
+function updateReplicateBaseChanceTemp() {
 	var data = {}
 	tmp.rep = data
 
+	var exp = 1
+	if (!tmp.ngp3l && ghostified && player.ghostify.neutrinos.boosts > 1) exp *= tmp.nb[2]
+
+	data.base_chance = player.replicanti.chance
+	if (exp !== 1) data.base_chance = Decimal.pow(data.base_chance + 1, exp).sub(1)
+}
+
+function updateReplicantiTemp() {
+	var data = tmp.rep
+
 	data.ln = player.replicanti.amount.ln()
-	data.chance = player.replicanti.chance
+	data.chance = data.base_chance
 	data.speeds = getReplSpeed()
 	data.interval = getReplicantiFinalInterval()
 
 	if (tmp.ngp3 && player.masterystudies.includes("t273")) {
 		data.chance = Decimal.pow(data.chance, tmp.mts[273])
 		data.freq = 0
-		if (data.chance.gte("1e9999998")) data.freq = tmp.mts[273].times(Math.log10(player.replicanti.chance + 1) / Math.log10(2))
+		if (data.chance.gte("1e9999998")) data.freq = tmp.mts[273].times(Decimal.add(data.base_chance, 1).log10() / Math.log10(2))
 	}
 
 	data.est = Decimal.div((data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3), data.interval)
@@ -1672,6 +1682,7 @@ function updateTemp() {
 		}
 	}
 	updateNeutrinoBoostsTemp()
+	if (player.replicanti.unl) updateReplicateBaseChanceTemp()
 	if (tmp.ngp3) {
 		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
@@ -2127,8 +2138,8 @@ function getEternityBoostToDT(){
 
 function getDilTimeGainPerSecond() {
 	let tp = player.dilation.tachyonParticles
-	let exp = GUBought("br3")?1.1:1
-	if (ghostified && player.ghostify.ghostlyPhotons.unl) exp*=tmp.le[0]
+	let exp = GUBought("br3") ? 1.1 : 1
+	if (ghostified && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
 	let gain = tp.pow(exp).times(Decimal.pow(2, getDilUpgPower(1)))
 	
 	if (player.exdilation != undefined) gain = gain.times(getNGUDTGain())
@@ -2147,9 +2158,9 @@ function getDilTimeGainPerSecond() {
 		gain = gain.times(getTreeUpgradeEffect(7))
 		gain = gain.times(colorBoosts.b)
 		if (GUBought("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
-		if (!tmp.ngp3l) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
+		if (isNanoEffectUsed("dt_production")) gain = gain.times(tmp.nf.effects.dt_production)
+		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
-	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	if (tmp.newNGP3E && player.achievements.includes("r138") && gain.lt(1e100)) gain = gain.times(3)
 	if (!tmp.ngp3l && (tmp.ngp3 || tmp.newNGP3E) && player.achievements.includes("ngpp13")) gain = gain.times(2)
 	
@@ -7002,8 +7013,10 @@ function getRebuyableDilUpgCost(id) {
 		if (id > 3) cost = cost.times(1e7)
 		if (id > 2 && cost.gte(1e25)) cost = Decimal.pow(10, Math.pow(cost.log10()/2.5-5, 2))
 	} else if (id > 2) {
-		if (player.meta != undefined && amount >= costGroup[2]) return cost.times(Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2)/4))
-		if (player.exdilation != undefined && !player.aarexModifications.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)
+		if (player.meta != undefined && amount >= costGroup[2]) {
+			cost = cost.times(Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2)/4))
+			if (tmp.ngp3 && !tmp.ngp3l && cost.gte(1e200)) cost = cost.pow(Math.pow(cost.log10() / 100 - 1, 2))
+		} else if (player.exdilation != undefined && !player.aarexModifications.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)
 	}
 	return cost
 }

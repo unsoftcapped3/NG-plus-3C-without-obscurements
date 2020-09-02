@@ -1942,6 +1942,9 @@ function onLoad(noOffline) {
       document.getElementById('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
       document.getElementById("gluonCharger1").style.display = tmp.ngp3l ? "none" : ""
       document.getElementById("gluonCharger2").style.display = tmp.ngp3l ? "none" : ""
+      document.getElementById('rgupg4desc').innerHTML = tmp.ngp3l ? "Galaxies are 50% stronger, but electrons are 30% weaker and normal galaxies are 60% weaker." :
+          "Electrons strengthen non-normal galaxies." +
+          "<br><span id='rgupg4current'></span>" /*Add the effect multiplier*/ 
       document.getElementById('rg4toggle').style.display=(!tmp.ngp3l||inQC(1)||QCIntensity(1))?"none":""
       document.getElementById('rg4toggle').textContent="Toggle: O"+(tmp.qu.rg4?"N":"FF")
       document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
@@ -1962,6 +1965,8 @@ function onLoad(noOffline) {
           if (u%3==1) document.getElementById("neutrinoUpg"+u).parentElement.parentElement.style.display=u>player.ghostify.times+2?"none":""
           else document.getElementById("neutrinoUpg"+u).style.display=u>player.ghostify.times+2?"none":""
       }
+      document.getElementById("neutrinoBoostDesc2Legacy").style.display = tmp.ngp3l ? "" : "none"
+      document.getElementById("neutrinoBoostDesc2").style.display = tmp.ngp3l ? "none" : ""
       document.getElementById("neutrinoBoost3Effect").textContent = tmp.ngp3l ? "They increase the limit of 14th dilation upgrade from 3.00x to" : "They remove the limit of 14th dilation upgrade and then boost that upgrade by "
       document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
       document.getElementById("lightBoost4Type").textContent=tmp.ngp3l?"preon":"total green power"

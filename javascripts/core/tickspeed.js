@@ -18,9 +18,12 @@ function initialGalaxies() {
 }
 
 function getGalaxyPower(ng, bi, noDil) {
-	let replGalEff = 1
-	if (player.boughtDims) replGalEff = Math.log10(player.replicanti.limit.log(2))/Math.log10(2)/10
-	else if (ECTimesCompleted("eterc8") > 0) replGalEff = getECReward(8)
+	let otherGalEFf = 1
+	if (tmp.rg4 && !tmp.ngp3l) otherGalEff = getRG4Effect()
+
+	let replGalEff = otherGalEff
+	if (player.boughtDims) replGalEff *= Math.log10(player.replicanti.limit.log(2))/Math.log10(2)/10
+	else if (ECTimesCompleted("eterc8") > 0) replGalEff *= getECReward(8)
 	if (tmp.ngp3) {
 		if (player.masterystudies.includes("t344")) replGalEff *= getMTSMult(344)
 		if (hasBosonicUpg(34)) replGalEff *= tmp.blu[34]
@@ -36,7 +39,7 @@ function getGalaxyPower(ng, bi, noDil) {
 	else otherGalPower += Math.min(player.replicanti.galaxies, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
 
 	if (tmp.ngp3) {
-		let dilGalEff = 1
+		let dilGalEff = otherGalEff
 		if (player.masterystudies.includes("t343")) dilGalEff = replGalEff
 		if (hasBosonicUpg(34)) dilGalEff *= tmp.blu[34]
 
@@ -77,7 +80,7 @@ function getGalaxyEff(bi) {
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.ngp3) eff *= colorBoosts.r
 	if (GUBought("rg2")) eff *= Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25)
-	if (tmp.rg4) eff *= 1.5
+	if (tmp.ngp3l && tmp.rg4) eff *= 1.5
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
 }

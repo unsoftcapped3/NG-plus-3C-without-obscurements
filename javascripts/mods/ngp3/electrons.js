@@ -65,22 +65,34 @@ function normalOrReducedGalaxies() {
 	return tmp.ngp3l ? player.galaxies : initialGalaxies()
 }
 
+function getElectronBoostPower() {
+	var x = tmp.qu.electrons.amount
+	if (!tmp.ngp3l) {
+		var s = 1e5
+		if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
+		if (x > s) x = Math.sqrt(x * s)
+	}
+	return x
+}
+
 function getElectronBoostToNDs(mod) {
 	if (tmp.ngp3l && !inQC(0)) return 1
-	var amount = tmp.qu.electrons.amount
+	var amount = getElectronBoostPower()
 	var s = 149840
-	if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
-	
-	if (amount > 37460 + s) amount = Math.sqrt((amount-s) * 37460) + s
+	if (!tmp.ngp3l) s = 1/0
+	else if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
+
+	if (amount > 37460 + s) amount = Math.sqrt((amount - s) * 37460) + s
 	if (tmp.ngp3l && tmp.rg4 && mod != "no-rg4") amount *= 0.7
 	if (player.masterystudies !== undefined && player.masterystudies.includes("d13") && mod != "noTree") amount *= getTreeUpgradeEffect(4)
 	return amount + 1
 }
 
 function getElectronBoostToCQs(mod) {
-	var x = 1
-	if (player.masterystudies.includes("d11") && tmp.pcc !== undefined && !tmp.ngp3l) x += tmp.pcc.normal
-	return Decimal.pow(Math.pow(x, 0.75) / 1e3 + 1, Math.pow(tmp.qu.electrons.amount, 0.75))
+	var x = getElectronBoostPower()
+	var y = 1
+	if (player.masterystudies.includes("d11") && tmp.pcc !== undefined && !tmp.ngp3l) y += tmp.pcc.normal / 2
+	return Decimal.pow(y / 1e4 + 1, x)
 }
 
 function getElectronGainMult() {
