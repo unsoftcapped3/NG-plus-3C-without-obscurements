@@ -71,8 +71,6 @@ function getElectronBoostPower() {
 		var s = 1e5
 		if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
 		if (x > s) x = Math.sqrt(x * s)
-
-		x *= tmp.qu.electrons.eff
 	}
 	return x
 }

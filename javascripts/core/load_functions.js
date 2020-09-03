@@ -2143,17 +2143,10 @@ function setupNGP31Versions() {
 	if (player.aarexModifications.newGame3PlusVersion < 2.3 || player.ghostify.hb.amount !== undefined) {
 		setupHiggsSave()
 	} else tmp.hb = player.ghostify.hb
-	if (player.aarexModifications.newGame3PlusVersion < 2.3002) {
+	if (player.aarexModifications.newGame3PlusVersion < 2.3001) {
 		electronsReworked = player.masterystudies.includes("d7")
-		if (electronsReworked) {
-			for (var u = 1; u <= 4; u++) {
-				tmp.qu.electrons.mult -= tmp.qu.electrons.rebuyables[u - 1] * 0.25
-				tmp.qu.electrons.rebuyables[u - 1] = 0
-			}
-			tmp.qu.electrons.eff = 1
-		}
 	} else electronsReworked = false
-	player.aarexModifications.newGame3PlusVersion = 2.3002
+	player.aarexModifications.newGame3PlusVersion = 2.3001
 }
 
 function checkNGM(imported) {
