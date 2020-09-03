@@ -2160,6 +2160,7 @@ function getDilTimeGainPerSecond() {
 		if (GUBought("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
 		if (isNanoEffectUsed("dt_production")) gain = gain.times(tmp.nf.effects.dt_production)
 		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
+		if (!tmp.ngp3l) gain = gain.times(Math.max((player.replicanti.amount.log10() - 2e4) / 8e3 + 1, 1))
 	}
 	if (tmp.newNGP3E && player.achievements.includes("r138") && gain.lt(1e100)) gain = gain.times(3)
 	if (!tmp.ngp3l && (tmp.ngp3 || tmp.newNGP3E) && player.achievements.includes("ngpp13")) gain = gain.times(2)
