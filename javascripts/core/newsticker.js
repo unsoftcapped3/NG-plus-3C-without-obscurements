@@ -339,7 +339,8 @@ newsArray = [//always true
 ['Later, I will finally implement original ideas from future NG+3 updates.', "tmp.ngp3", "am186"],
 ['Also later, I will implement ideas that have different gameplay than other mechanics.', "tmp.ngp3", "am187"],
 ["This news ticker has been softcapped so you can't read the re-.", true, "am188"],
-["aarex dimensions 9", true, "am189"]
+["aarex dimensions 9", true, "am189"],
+["I wonder if there are many more prestige layers...", true, "am190"]
 /*NEXT ID: am186*/
 ];}
 
