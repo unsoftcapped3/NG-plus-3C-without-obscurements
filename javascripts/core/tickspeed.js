@@ -18,7 +18,7 @@ function initialGalaxies() {
 }
 
 function getGalaxyPower(ng, bi, noDil) {
-	let otherGalEFf = 1
+	let otherGalEff = 1
 	if (tmp.rg4 && !tmp.ngp3l) otherGalEff = getRG4Effect()
 
 	let replGalEff = otherGalEff
