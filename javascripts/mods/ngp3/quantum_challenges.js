@@ -161,6 +161,7 @@ function updatePCCompletions() {
 	}
 	ranking *= 100 / 56
 	if (ranking) document.getElementById("pccompletionsbtn").style.display = "inline-block"
+	if (ranking >= 190) giveAchievement("Not-so-very-challenging") 
 	if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
 	document.getElementById("pccranking").textContent = ranking.toFixed(1)
 	document.getElementById("pccrankingMax").textContent = Math.sqrt(1e4 * (2 + qcm.modifiers.length)).toFixed(1)
@@ -236,6 +237,7 @@ function updateQCRewardsTemp() {
 }
 
 function getQCCost(num) {
+	if (player.achievements.includes("ng3p55")) return 0
 	if (num > 8) return quantumChallenges.costs[tmp.qu.pairedChallenges.order[num - 8][0]] + quantumChallenges.costs[tmp.qu.pairedChallenges.order[num - 8][1]]
 	return quantumChallenges.costs[num]
 }

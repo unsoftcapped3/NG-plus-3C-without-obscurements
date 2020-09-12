@@ -341,8 +341,8 @@ newsArray = [//always true
 ["This news ticker has been softcapped so you can't read the re-.", true, "am188"],
 ["aarex dimensions 9", true, "am189"],
 ["I wonder if there are many more prestige layers...", true, "am191"],
-["wow so much prestigious", true, "am192"]
-/*NEXT ID: am186*/
+["wow so much prestigious", true, "am192"],
+/*NEXT ID: am193*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
