@@ -504,7 +504,7 @@ function onLoad(noOffline) {
 		updateAchievements()
 		if (!inERS) player.replicanti.intervalCost = player.replicanti.intervalCost.dividedBy(1e20)
 	}
-	document.getElementById(inERS?"r22":"r35").appendChild(document.getElementById("Don't you dare to sleep"))
+	document.getElementById(inERS?"r22":"r35").appendChild(document.getElementById("Don't you dare sleep"))
 	document.getElementById(inERS?"r35":"r76").appendChild(document.getElementById("One for each dimension"))
 	document.getElementById(inERS?"r41":"r22").appendChild(document.getElementById("Fake News"))
 	document.getElementById(inERS?"r76":"r41").appendChild(document.getElementById("Spreading Cancer"))
@@ -1246,6 +1246,7 @@ function onLoad(noOffline) {
   }
   if (player.aarexModifications.newGame3PlusVersion < 2.21) {
       if (prompt("Welcome to the NG+3.1 update! This update changes this mod significantly. It is recommended to migrate your save as NG+3.1 is the better rebalanced experience. but if you don't want to start playing NG+3.1 on this save yet, type 'legacy' on the input box. You can proceed to migrate later on.") == "legacy") {
+          alert("WARNING: There are some boosts that work the same as in NG+3.1, not in the Bosonic Update. Found one? Give feedback in the Discord server!")
           player.aarexModifications.ngp3lV = 1
           tmp.ngp3l = true
       }
@@ -1864,7 +1865,7 @@ function onLoad(noOffline) {
   document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
   document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20?" (disabled)":"")
   document.getElementById("41desc").textContent=tsMults[41]()
-  document.getElementById("42desc").textContent=player.galacticSacrifice?"Galaxy cost multiplier is reduced by "+Math.round(tsMults[42]()*15)+"/15x.":"Galaxy cost increases by only "+(60*tsMults[42]())+" 8ths instead of 60."
+  document.getElementById("42desc").textContent=player.galacticSacrifice?"Galaxy cost multiplier is reduced by "+Math.round(tsMults[42]()*15)+"/15x.":"Galaxy cost increases by "+(60*tsMults[42]())+" 8ths instead of 60."
   document.getElementById("61desc").innerHTML=tsMults[61]()
   document.getElementById("62desc").textContent=tsMults[62]()
   document.getElementById("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
@@ -2092,7 +2093,10 @@ function onLoad(noOffline) {
       if (player.meta!==undefined||player.exdilation!==undefined) {
           if (!player.aarexModifications.newGamePlusVersion) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")
           if (player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+4 by Aarex and Soul147! This is a NG+ version of NG+3, starting you off with all features up to Big Rip unlocked. It isn't recommended to play this mode as you have some more content accessible early on compared to NG+.")
-          if (player.aarexModifications.ngp3lV) ngModeMessages.push("Welcome to NG+3 Legacy, made by Aarex! This is the last version of NG+3 before the NG+3.1 update. All mods are affected to be updated prior to NG+3.1's release. This is much more unbalanced than the current update, so you will experience balancing problems. Good luck.")
+          if (player.aarexModifications.ngp3lV) {
+              ngModeMessages.push("WARNING: There are some boosts that work the same as in NG+3.1, not in the Bosonic Update. Found one? Give feedback in the Discord server!")
+              ngModeMessages.push("Welcome to NG+3 Legacy, made by Aarex! This is the last version of NG+3 before the NG+3.1 update. All mods are affected to be updated prior to NG+3.1's release. This is much more unbalanced than the current update, so you will experience balancing problems. Good luck.")
+          }
           if (player.exdilation!==undefined) {
               if (player.aarexModifications.nguspV) ngModeMessages.push("Welcome to NG Update Semiprime, made by Aarex! This is like NGUd', but with balancing changes implemented. Good luck! :)")
               if (player.aarexModifications.ngumuV||player.aarexModifications.nguepV) {
