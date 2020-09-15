@@ -1,4 +1,4 @@
-//test
+//test 
 var gameLoopIntervalId;
 var Marathon = 0;
 var Marathon2 = 0;
