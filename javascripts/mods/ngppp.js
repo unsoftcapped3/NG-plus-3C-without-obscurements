@@ -696,7 +696,8 @@ function getGHPGain() {
 
 function getGHPMult() {
 	let x = Decimal.pow(2, player.ghostify.multPower - 1)
-	if (player.achievements.includes("ng3p93")) x = x.times(5)
+	if (player.achievements.includes("ng3p93")) x = x.times(500)
+	if (player.achievements.includes("ng3p83")) x = x.times(ranking + 1)
 	if (player.achievements.includes("ng3p97")) x = x.times(Decimal.pow(player.ghostify.times + 1, 1/3))
 	return x
 }
@@ -1309,14 +1310,6 @@ function setNonlegacyStuff() {
 function displayNonlegacyStuff() {
 	//QC Modifiers
 	for (var m = 1; m < qcm.modifiers.length; m++) document.getElementById("qcm_" + qcm.modifiers[m]).style.display = tmp.ngp3l ? "none" : ""
-}
-
-function exitLegacy() {
-	if (!confirm("This ends the legacy mode, a.k.a. NG+3L, and bring you into NG+3.1. Are you sure?")) return
-	clearInterval(gameLoopIntervalId)
-	delete player.aarexModifications.ngp3lV
-	set_save(metaSave.current, player)
-	reload()
 }
 
 function getOldAgeRequirement() {

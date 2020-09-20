@@ -1,7 +1,7 @@
 //Bosonic Lab
 function canUnlockBosonicLab() {
 	let max = getMaximumUnstableQuarks()
-	return (max.decays > 5 || max.quarks.e >= (tmp.ngp3l ? 1e10 : 5e10)) && (tmp.ngp3l || player.ghostify.ghostlyPhotons.enpowerments >= 3)
+	return (max.decays > 5 || max.quarks.e >= (tmp.ngp3l ? 1e10 : 5e10)) && max.decays > 4 && (tmp.ngp3l || player.ghostify.ghostlyPhotons.enpowerments >= 3)
 }
   
 function updateBLUnlocks() {
@@ -150,6 +150,7 @@ function getBosonicAMProduction() {
 	if (player.achievements.includes("ng3p91")) ret = ret.times(getAchBAMMult())
 	if (player.achievements.includes("ng3p98")) ret = ret.plus(Math.pow(player.ghostify.hb.higgs, 2))
 	//maybe softcap at e40 or e50?
+	ret = softcap(ret, "bam")
 	return ret
 }
 
@@ -172,8 +173,8 @@ function updateBosonicAMDimReturnsTemp() {
 	data.base = getHiggsRequirementMult()
 	data.offset = 1 / Math.log(data.base) - 1
 	data.offset2 = 1 - Math.log10(data.offset + 1) / Math.log10(data.base)
-	data.postDim = player.ghostify.bl.am.div(data.start).toNumber()
-	data.preDim = Decimal.pow(data.base, data.postDim - data.offset2).add(-data.offset).max(1)
+	data.postDim = player.ghostify.bl.am.div(data.start)
+	data.preDim = Decimal.pow(data.base,  Decimal.log(100, data.postDim) - data.offset2).add(-data.offset).max(1)
 }
 
 function updateBosonicLimits() {

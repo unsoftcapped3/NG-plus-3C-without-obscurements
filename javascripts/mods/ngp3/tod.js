@@ -2,6 +2,13 @@ function getLogTotalSpin() {
 	return tmp.qu.tod.r.spin.plus(tmp.qu.tod.b.spin).plus(tmp.qu.tod.g.spin).add(1).log10()
 }
 
+function updateToDSpeedDisplay(){
+	let t = ''
+	if (shiftDown) t = getBranchSpeedText()
+	else t = "Branch speed: " + (todspeed == 1 ? "" : shorten(tmp.branchSpeed) + " * " + shorten(todspeed) + " = ") + shorten(getBranchFinalSpeed()) + "x"
+	document.getElementById("todspeed").textContent = t
+}
+
 function updateTreeOfDecayTab(){
 	var branchNum
 	var colors = ["red", "green", "blue"]
@@ -45,7 +52,7 @@ function updateTreeOfDecayTab(){
 		}
 		setAndMaybeShow("treeUpgradeEff", ghostified, '"Tree upgrade efficiency: "+(tmp.tue*100).toFixed(1)+"%"')
 	}
-	document.getElementById("todspeed").textContent = "Branch speed: " + (todspeed == 1 ? "" : shorten(tmp.branchSpeed) + " * " + shorten(todspeed) + " = ") + shorten(getBranchFinalSpeed()) + "x"
+	updateToDSpeedDisplay()
 }
 
 function updateTODStuff() {
@@ -114,15 +121,27 @@ function unstableQuarks(branch) {
 	else player.unstableThisGhostify = 10
 }
 
-function getBranchSpeed() {
+function getBranchSpeedText(){
+	let text = ""
+	if (getTreeUpgradeEffect(3).gt(1)) text += "Tree Upgrade 3: " + shorten(getTreeUpgradeEffect(3))
+	if (getTreeUpgradeEffect(5).gt(1)) text += "Tree Upgrade 5: " + shorten(getTreeUpgradeEffect(5))
+	if (player.masterystudies.includes("t431")) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431))
+	if (hasNU(4)) if (tmp.nu[2].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[2])
+	if (!tmp.ngp3l) if (player.achievements.includes("ng3p58")) if (player.meta.resets > 1) text += "\n'Are you currently dying?' Reward: " + shorten (Math.sqrt(player.meta.resets + 1))
+	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shroten(getMilestone14SpinMult())
+	if (todspeed) if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed)
+	return text
+}
+
+function getBranchSpeed() { // idea: when you hold shift you can see where the multipliers of branch speed are
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
 	if (player.masterystudies.includes("t431")) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[2])
 	if (!tmp.ngp3l) {
 		if (player.achievements.includes("ng3p58")) x = x.times(Math.sqrt(player.meta.resets + 1))
-		if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
 	}
+	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
 	return x
 }
 
@@ -131,7 +150,7 @@ function getBranchFinalSpeed() {
 }
 
 function getDecayRate(branch) {
-	let ret = Decimal.pow(2, getBU1Power(branch) * Math.max((getRadioactiveDecays(branch) - 8) / 10, 1)).div(getBranchUpgMult(branch, 3)).div(Decimal.pow(2, getRDPower(branch) - 4))
+	let ret = Decimal.pow(2, getBU1Power(branch) * Math.max((getRadioactiveDecays(branch) - 8) / 10, 1)).div(getBranchUpgMult(branch, 3)).div(Decimal.pow(2, Math.max(0, getRDPower(branch) - 4)))
 	if (branch == "r") {
 		if (GUBought("rg8")) ret = ret.div(getGU8Effect("rg"))
 	}
@@ -147,7 +166,7 @@ function getDecayRate(branch) {
 
 function getMilestone14SpinMult(){
 	var logSpin = getLogTotalSpin()
-	if (logSpin <= 25) return 10
+	if (logSpin <= 25 || tmp.ngp3l) return 10
 	return Math.pow(logSpin, 2) / 625 * 10
 }
 
@@ -227,7 +246,7 @@ function getTreeUpgradeEffect(upg) {
 		return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
 	}
 	if (upg == 8) {
-		if (lvl > 1111) lvl = 1111 + (lvl - 1111)/2
+		if (lvl > 1111) lvl = 1111 + (lvl - 1111) / 2
 		return Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4 * Math.sqrt(lvl)
 	}
 	return 0

@@ -1,6 +1,6 @@
 var quantumChallenges = {
-	costs:[0,16750,19100,21500,24050,25900,28900,31300,33600],
-	goals:[0,665e7,768e8,4525e7,5325e7,1344e7,561e6,6254e7,2925e7]
+	costs:[0, 16750, 19100, 21500,  24050,  25900,  28900, 31300,  33600],
+	goals:[0, 665e7, 768e8, 4525e7, 5325e7, 1344e7, 561e6, 6254e7, 2925e7]
 }
 
 var assigned = []
@@ -85,7 +85,7 @@ function getQCGoal(num, bigRip) {
 	var c1 = 0
 	var c2 = 0
 	var mult = 1
-	if (player.achievements.includes("ng3p96") && !bigRip) mult = 0.95
+	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
 	if (num == undefined) {
 		var data = tmp.inQCs
 		if (data[0]) c1 = data[0]
@@ -125,7 +125,7 @@ function updateQCTimes() {
 		}
 	}
 	if (tempcounter > 0) document.getElementById("qcsbtn").style.display = "inline-block"
-	setAndMaybeShow("qctimesum", tempcounter > 1, '"Sum of completed quantum challenge time records is "+timeDisplayShort('+temp+', false, 3)')
+	setAndMaybeShow("qctimesum", tempcounter > 1, '"The sum of your completed Quantum Challenge time records is "+timeDisplayShort('+temp+', false, 3)')
 }
 
 var ranking=0
@@ -134,7 +134,7 @@ function updatePCCompletions() {
 	tmp.pcc = {} //PC Completion counters
 	document.getElementById("pccompletionsbtn").style.display = "none"
 	if (!tmp.ngp3) return
-	var ranking = 0
+	var r = 0
 	for (var c1 = 2; c1 < 9; c1++) for (var c2 = 1; c2 < c1; c2++) {
 		var rankingPart = 0
 		if (tmp.qu.pairedChallenges.completions[c2 * 10 + c1]) {
@@ -157,13 +157,11 @@ function updatePCCompletions() {
 				shownormal = true
 			}
 		}
-		ranking += Math.sqrt(rankingPart)
+		r += Math.sqrt(rankingPart)
 	}
-	ranking *= 100 / 56
-	if (ranking) document.getElementById("pccompletionsbtn").style.display = "inline-block"
-	if (ranking >= 190) giveAchievement("Not-so-very-challenging") 
-	if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
-	document.getElementById("pccranking").textContent = ranking.toFixed(1)
+	r *= 100 / 56
+	if (r) document.getElementById("pccompletionsbtn").style.display = "inline-block"
+	document.getElementById("pccranking").textContent = r.toFixed(1)
 	document.getElementById("pccrankingMax").textContent = Math.sqrt(1e4 * (2 + qcm.modifiers.length)).toFixed(1)
 	updatePCTable()
 	for (var m = 0; m < qcm.modifiers.length; m++) {
@@ -172,21 +170,24 @@ function updatePCCompletions() {
 		document.getElementById("qcms_" + id).style.display = tmp.qu.qcsMods[id] !== undefined ? "" : "none"
 	}
 	document.getElementById("qcms_normal").style.display = shownormal ? "" : "none"
-	if (ranking >= 75) {
+	if (r >= 75) {
 		document.getElementById("modifiersdiv").style.display = ""
 		for (var m = 0; m < qcm.modifiers.length; m++) {
 			var id = qcm.modifiers[m]
-			if (ranking >= qcm.reqs[id] || !qcm.reqs[id]) {
+			if (r >= qcm.reqs[id] || !qcm.reqs[id]) {
 				document.getElementById("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
 				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', qcm.descs[id] || "???")
 			} else {
 				document.getElementById("qcm_" + id).className = "unavailablebtn"
-				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', 'Get '+qcm.reqs[id]+' Paired Challenges ranking to unlock this modifier. Ranking: ' + ranking.toFixed(1))
+				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', 'Get ' + qcm.reqs[id] + ' Paired Challenges ranking to unlock this modifier. Ranking: ' + ranking.toFixed(1))
 			}
 		}
 	} else document.getElementById("modifiersdiv").style.display = "none"
-	if (ranking >= 165) giveAchievement("Pulling an All-Nighter")
-	if (ranking >= 1/0) giveAchievement("Not-so-very-challenging")
+	
+	if (r >= 165) giveAchievement("Pulling an All-Nighter")
+	if (r >= 190) giveAchievement("Not-so-very-challenging") 
+	if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
+	ranking = r //its global
 }
 
 let qcRewards = {
@@ -250,11 +251,11 @@ function showQCModifierStats(id) {
 function updatePCTable() {
 	var data=tmp.qu.qcsMods[tmp.pct]
 	for (r = 1; r < 9; r++) for (c = 1; c < 9; c++) {
-		if (r!=c) {
-			var divid = "pc" + (r*10+c)
-			var pcid = r*10+c
-			if (r>c) pcid = c*10+r
-			if (tmp.pct=="") {
+		if (r != c) {
+			var divid = "pc" + (r * 10 + c)
+			var pcid = r * 10 + c
+			if (r > c) pcid = c * 10  +r
+			if (tmp.pct == "") {
 				var comp = tmp.qu.pairedChallenges.completions[pcid]
 				if (comp !== undefined) {
 					document.getElementById(divid).textContent = "PC" + comp
@@ -284,11 +285,11 @@ function updatePCTable() {
 				document.getElementById(divid).className = ""
 				document.getElementById(divid).removeAttribute('ach-tooltip')
 			}
-		} else {
-			var divid="qcC"+r
-			if (tmp.pct==""||(data&&data["qc"+r])) {
+		} else { // r == c
+			var divid = "qcC" + r
+			if (tmp.pct == "" || (data && data["qc" + r])) {
 				document.getElementById(divid).textContent = "QC"+r
-				if (tmp.qu.qcsNoDil["qc"+r]&&tmp.pct=="") {
+				if (tmp.qu.qcsNoDil["qc" + r] && tmp.pct == "") {
 					document.getElementById(divid).className = "ndcompleted"
 					document.getElementById(divid).setAttribute('ach-tooltip', "No dilation achieved!")
 				} else {
@@ -319,7 +320,7 @@ var qcm={
 	},
 	descs:{
 		ad: "You always have no Tachyon particles. You can dilate time, but you can't gain Tachyon particles.",
-		sm: "You can't have normal time studies or more than 20 normal mastery studies."
+		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies."
 	},
 	on: []
 }

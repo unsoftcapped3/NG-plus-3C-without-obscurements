@@ -32,6 +32,12 @@ var softcap_data = {
 			func: "pow",
 			start: 12e3,
 			pow: 0.2
+		},
+		7: {
+			func: "pow",
+			start: 2e4,
+			pow: .9,
+			derv: true
 		}
 	},
 	ts_reduce_log: {
@@ -52,12 +58,12 @@ var softcap_data = {
 		},
 		4: {
 			func: "pow",
-			start: 8e7,
+			start: 6e7,
 			pow: 0.60
 		},
 		5: {
 			func: "pow",
-			start: 1e8,
+			start: 8e7,
 			pow: 0.55
 		}
 	},
@@ -181,6 +187,16 @@ var softcap_data = {
 			func: "pow",
 			start: 12e7,
 			pow: 0.6
+		},
+		2: {
+			func: "pow",
+			start: 16e7,
+			pow: 0.5
+		},
+		3: {
+			func: "pow",
+			start: 20e7,
+			pow: 0.4
 		}
 	},
 	ig_log_high: {
@@ -204,6 +220,82 @@ var softcap_data = {
 			func: "pow",
 			start: 1e23,
 			pow: 0.1
+		}
+	},
+	bam: {
+		1: {
+			func: "pow",
+			start: new Decimal(1e80),
+			pow: 0.9,
+			derv: true
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(1e90),
+			pow: 0.8,
+			derv: true
+		},
+		3: {
+			func: "pow",
+			start: new Decimal(1e100),
+			pow: 0.7,
+			derv: true
+		},
+		4: {
+			func: "pow",
+			start: new Decimal(1e110),
+			pow: 0.6,
+			derv: true
+		},
+		5: {
+			func: "pow",
+			start: new Decimal(1e120),
+			pow: 0.5,
+			derv: true
+		},
+		6: {
+			func: "pow",
+			start: new Decimal(1e130),
+			pow: 0.4,
+			derv: true
+		}
+	},
+	idbase:{
+		1:{
+			func: "pow",
+			start: 1e14,
+			pow: .90,
+			derv: true
+		},
+		2:{
+			func: "pow",
+			start: 1e15,
+			pow: .85,
+			derv: true
+		},
+		3:{
+			func: "pow",
+			start: 1e16,
+			pow: .80,
+			derv: true
+		},
+		4:{
+			func: "pow",
+			start: 1e17,
+			pow: .75,
+			derv: true
+		},
+		5:{
+			func: "pow",
+			start: 3e17,
+			pow: .70,
+			derv: true
+		},
+		6:{
+			func: "pow",
+			start: 1e18,
+			pow: .65,
+			derv: true
 		}
 	}
 }
@@ -236,6 +328,11 @@ var softcap_funcs = {
 		var x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		if (x > x2) return x2
 		return x
+	},
+	logshift: function (x, shift, pow, add = 0){
+		var x2 = Math.pow(Math.log10(x * shift), pow) + add
+		if (x > x2) return x2
+		return x
 	}
 }
 
@@ -256,7 +353,7 @@ function softcap(x, id, max = 1/0) {
 	}
 
 	var sc = 1
-	var stopped
+	var stopped = false
 	while (!stopped && sc <= max) {
 		var y = do_softcap(x, data, sc)
 		if (y !== undefined) {
