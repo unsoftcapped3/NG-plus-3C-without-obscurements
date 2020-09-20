@@ -683,13 +683,16 @@ function switchAB() {
 function getGHPGain() {
 	if (!tmp.ngp3 || !tmp.qu.bigRip.active) return new Decimal(0)
 	if (!tmp.ngp3l && !ghostified) return new Decimal(1)
-	let log=(tmp.qu.bigRip.bestThisRun.log10()/getQCGoal(undefined,true)-1)
-	if (tmp.ngp3l) log*=2
-	else log+=(player.quantum.quarks.add(1).log10()-0)*0
-	if (log>1e4&&player.aarexModifications.ngudpV!=undefined) log=Math.sqrt(log*1e4)
-	if (player.aarexModifications.nguepV!=undefined) {
-		if (log>2e4) log=Math.pow(4e8*log,1/3)
-		if (log>59049) log=Math.pow(Math.log10(log)/Math.log10(9)+4,5)
+	let log = tmp.qu.bigRip.bestThisRun.log10() / getQCGoal(undefined,true) - 1
+	if (log < 0) return new Decimal(0)
+	if (tmp.ngp3l) {
+		log *= 2
+	} else if (player.achievements.includes("ng3p58")) { 
+		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
+		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
+		y = player.ghostify.ghostParticles.plus(Decimal.pow(10, log)).plus(10).log10()
+		if (!player.achievements.includes("ng3p84")) x = Math.min(x, 600 / y)
+		log += x
 	}
 	return Decimal.pow(10, log).times(getGHPMult()).floor()
 }
@@ -1157,18 +1160,18 @@ function updateAutoGhosts(load) {
 		}
 	}
 	if (load) {
-		document.getElementById("autoGhostMod4").textContent="Every "+(data[4].mode=="t"?"second":"Quantum")
-		document.getElementById("autoGhostRotate4").textContent=data[4].rotate=="l"?"Left":"Right"
-		document.getElementById("autoGhost11pw").value=data[11].pw
-		document.getElementById("autoGhost11lw").value=data[11].lw
-		document.getElementById("autoGhost11cw").value=data[11].cw
-		document.getElementById("autoGhost13t").value=data[13].t
-		document.getElementById("autoGhost13u").value=data[13].u
-		document.getElementById("autoGhost15a").value=formatValue("Scientific", data[15].a, 2, 1)
+		document.getElementById("autoGhostMod4").textContent = "Every " + (data[4].mode == "t" ? "second" : "Quantum")
+		document.getElementById("autoGhostRotate4").textContent = data[4].rotate == "l" ? "Left" : "Right"
+		document.getElementById("autoGhost11pw").value = data[11].pw
+		document.getElementById("autoGhost11lw").value = data[11].lw
+		document.getElementById("autoGhost11cw").value = data[11].cw
+		document.getElementById("autoGhost13t").value = data[13].t
+		document.getElementById("autoGhost13u").value = data[13].u
+		document.getElementById("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
 	}
-	document.getElementById("consumedPower").textContent=powerConsumed.toFixed(2)
-	isAutoGhostsSafe=data.power>=powerConsumed
-	document.getElementById("tooMuchPowerConsumed").style.display=isAutoGhostsSafe?"none":""
+	document.getElementById("consumedPower").textContent = powerConsumed.toFixed(2)
+	isAutoGhostsSafe = data.power >= powerConsumed
+	document.getElementById("tooMuchPowerConsumed").style.display = isAutoGhostsSafe ? "none" : ""
 }
 
 function toggleAutoGhost(id) {
@@ -1182,30 +1185,30 @@ function isAutoGhostActive(id) {
 }
 
 function changeAutoGhost(o) {
-	if (o=="4m") {
-		player.ghostify.automatorGhosts[4].mode=player.ghostify.automatorGhosts[4].mode=="t"?"q":"t"
-		document.getElementById("autoGhostMod4").textContent="Every "+(player.ghostify.automatorGhosts[4].mode=="t"?"second":"Quantum")
-	} else if (o=="4r") {
-		player.ghostify.automatorGhosts[4].rotate=player.ghostify.automatorGhosts[4].rotate=="l"?"r":"l"
-		document.getElementById("autoGhostRotate4").textContent=player.ghostify.automatorGhosts[4].rotate=="l"?"Left":"Right"
-	} else if (o=="11pw") {
-		var num=parseFloat(document.getElementById("autoGhost11pw").value)
-		if (!isNaN(num)&&num>0) player.ghostify.automatorGhosts[11].pw=num
-	} else if (o=="11lw") {
-		var num=parseFloat(document.getElementById("autoGhost11lw").value)
-		if (!isNaN(num)&&num>0) player.ghostify.automatorGhosts[11].lw=num
-	} else if (o=="11cw") {
-		var num=parseFloat(document.getElementById("autoGhost11cw").value)
-		if (!isNaN(num)&&num>0) player.ghostify.automatorGhosts[11].cw=num
-	} else if (o=="13t") {
-		var num=parseFloat(document.getElementById("autoGhost13t").value)
-		if (!isNaN(num)&&num>=0) player.ghostify.automatorGhosts[13].t=num
-	} else if (o=="13u") {
-		var num=parseFloat(document.getElementById("autoGhost13u").value)
-		if (!isNaN(num)&&num>0) player.ghostify.automatorGhosts[13].u=num
-	} else if (o=="15a") {
-		var num=fromValue(document.getElementById("autoGhost15a").value)
-		if (!isNaN(break_infinity_js?num:num.l)) player.ghostify.automatorGhosts[15].a=num
+	if (o == "4m") {
+		player.ghostify.automatorGhosts[4].mode = player.ghostify.automatorGhosts[4].mode == "t" ? "q" : "t"
+		document.getElementById("autoGhostMod4").textContent = "Every " + (player.ghostify.automatorGhosts[4].mode == "t" ? "second" : "Quantum")
+	} else if (o == "4r") {
+		player.ghostify.automatorGhosts[4].rotate = player.ghostify.automatorGhosts[4].rotate == "l" ? "r" : "l"
+		document.getElementById("autoGhostRotate4").textContent = player.ghostify.automatorGhosts[4].rotate == "l" ? "Left" : "Right"
+	} else if (o == "11pw") {
+		var num = parseFloat(document.getElementById("autoGhost11pw").value)
+		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].pw = num
+	} else if (o == "11lw") {
+		var num = parseFloat(document.getElementById("autoGhost11lw").value)
+		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].lw = num
+	} else if (o == "11cw") {
+		var num = parseFloat(document.getElementById("autoGhost11cw").value)
+		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].cw = num
+	} else if (o == "13t") {
+		var num = parseFloat(document.getElementById("autoGhost13t").value)
+		if (!isNaN(num) && num >= 0) player.ghostify.automatorGhosts[13].t = num
+	} else if (o == "13u") {
+		var num = parseFloat(document.getElementById("autoGhost13u").value)
+		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[13].u = num
+	} else if (o == "15a") {
+		var num = fromValue(document.getElementById("autoGhost15a").value)
+		if (!isNaN(break_infinity_js ? num : num.l)) player.ghostify.automatorGhosts[15].a = num
 	}
 }
 
@@ -1220,7 +1223,7 @@ function rotateAutoUnstable() {
 		player.ghostify.automatorGhosts[2].on = player.ghostify.automatorGhosts[1].on
 		player.ghostify.automatorGhosts[1].on = tg
 	}
-	for (var g = 1; g < 4; g++) document.getElementById("isAutoGhostOn"+g).checked=player.ghostify.automatorGhosts[g].on
+	for (var g = 1; g < 4; g++) document.getElementById("isAutoGhostOn" + g).checked = player.ghostify.automatorGhosts[g].on
 }
 
 function getMaxAutoGhosts() {
@@ -1240,8 +1243,8 @@ function startEC10() {
 function subNeutrinos(sub) {
 	let neu = player.ghostify.neutrinos
 	let sum = neu.electron.add(neu.mu).add(neu.tau).round()
-	let gen = ["electron","mu","tau"]
-	for (g=0;g<3;g++) neu[gen[g]] = neu[gen[g]].sub(neu[gen[g]].div(sum).times(sub).min(neu[gen[g]])).round()
+	let gen = ["electron", "mu", "tau"]
+	for (g = 0; g < 3; g++) neu[gen[g]] = neu[gen[g]].sub(neu[gen[g]].div(sum).times(sub).min(neu[gen[g]])).round()
 }
 
 function getGHPMultCost(offset=0) {
@@ -1286,15 +1289,15 @@ function toggleLEConf() {
 
 function gainNeutrinos(bulk,type) {
 	let gain = getNeutrinoGain().times(bulk)
-	let gens = ["electron","mu","tau"]
+	let gens = ["electron", "mu", "tau"]
 	if (type == "all") {
 		for (var g = 0; g < 3; g++) {
-			var gen=gens[g]
-			player.ghostify.neutrinos[gen]=player.ghostify.neutrinos[gen].add(gain).round()
+			var gen = gens[g]
+			player.ghostify.neutrinos[gen] = player.ghostify.neutrinos[gen].add(gain).round()
 		}
 	} else if (type == "gen") {
-		var gen=gens[player.ghostify.neutrinos.generationGain-1]
-		player.ghostify.neutrinos[gen]=player.ghostify.neutrinos[gen].add(gain).round()
+		var gen = gens[player.ghostify.neutrinos.generationGain - 1]
+		player.ghostify.neutrinos[gen] = player.ghostify.neutrinos[gen].add(gain).round()
 	}
 }
 

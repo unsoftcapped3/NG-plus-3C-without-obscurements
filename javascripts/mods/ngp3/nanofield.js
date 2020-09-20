@@ -1,3 +1,9 @@
+function getNanospeedText(){
+	s = getNanofieldSpeedText()
+	if (!shiftDown) s = ghostified || nanospeed != 1 ? "Your Nanofield speed is currently " + (nanospeed == 1 ? "" : shorten(tmp.ns) + " * " + shorten(nanospeed) + " = ") + shorten(getNanofieldFinalSpeed()) + "x (hold shift for details)" : ""
+	return s
+}
+
 function updateNanoverseTab(){
 	var rewards = tmp.qu.nanofield.rewards
 	document.getElementById("quarksNanofield").textContent = shortenDimensions(tmp.qu.replicants.quarks)		
@@ -24,7 +30,7 @@ function updateNanoverseTab(){
 		tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) :
 		nanoRewards.effectDisplays.dt_production(tmp.nf.effects.dt_production)
 	) + "."
-	document.getElementById("ns").textContent = ghostified || nanospeed != 1 ? "Your Nanofield speed is currently " + (nanospeed == 1 ? "" : shorten(tmp.ns) + " * " + shorten(nanospeed) + " = ") + shorten(getNanofieldFinalSpeed()) + "x." : ""
+	document.getElementById("ns").textContent = getNanospeedText()
 }
 
 function updateNanofieldAntipreon(){
@@ -201,63 +207,18 @@ function isNanoEffectUsed(x) {
 	return tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined && tmp.nf.rewardsUsed.includes(x) && tmp.nf.effects !== undefined
 }
 
-function updateNanoEffectUsages() {
-	var data = []
-	tmp.nf.rewardsUsed = data
-	nanoRewards.effectToReward = {}
-
-	//First reward
-	var data2 = [hasBosonicUpg(21) ? "supersonic_start" : "hatch_speed"]
-	nanoRewards.effectsUsed[1] = data2
-
-	//Fifth reward
-	var data2 = tmp.ngp3l ? ["dil_effect_exp"] : ["dt_production", "light_threshold_speed"]
-	nanoRewards.effectsUsed[5] = data2
-
-	//Seventh reward
-	var data2 = [hasBosonicUpg(22) ? "neutrinos" : "remote_start", "preon_charge"]
-	nanoRewards.effectsUsed[7] = data2
-
-	//Used Nanofield rewards
-	for (var x = 1; x <= 8; x++) {
-		var rewards = nanoRewards.effectsUsed[x]
-		for (var r = 0; r < rewards.length; r++) {
-			data.push(rewards[r])
-			nanoRewards.effectToReward[rewards[r]] = x
-		}
-	}
-}
-
-function updateNanoRewardPowers() {
-	var data = {}
-	tmp.nf.powers = data
-
-	for (var x = 1; x <= 8; x++) data[x] = getNanoRewardPower(x, tmp.nf.rewards)
-}
-
-function updateNanoRewardEffects() {
-	var data = {}
-	tmp.nf.effects = data
-
-	for (var e = 0; e < tmp.nf.rewardsUsed.length; e++) {
-		var effect = tmp.nf.rewardsUsed[e]
-		tmp.nf.effects[effect] = nanoRewards.effects[effect](tmp.nf.powers[nanoRewards.effectToReward[effect]])
-	}
-}
-
-function updateNanoRewardTemp() {
-	tmp.nf = {}
-
-	if (!tmp.ngp3) return
-	if (!player.masterystudies.includes("d11")) return
-
-	updateNanoEffectUsages()
-	//The rest is calculated by updateTemp().
+function getNanofieldSpeedText(){
+	text = ""
+	if (ghostified) text += "Ghostify Bonus: " + shorten(tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)) + "x, "
+	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
+	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[6]) + "x, "
+	if (text == "") return "No multipliers currently"
+	return text.slice(0, text.length-2)
 }
 
 function getNanofieldSpeed() {
 	let x = 1
-	if (ghostified) x *= tmp.qu.nanofield.rewards < 16 ? 6 : 3
+	if (ghostified) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[6].times(x)
 	return x
@@ -291,13 +252,14 @@ function getNanoRewardReq(additional){
 function getNanoRewardReqFixed(n){
 	let x = new Decimal(50)
 	if (n >= 0)   x = x.times(Decimal.pow(4  , n))
-	if (n >= 15)  x = x.times(Decimal.pow(4  , (n - 15) * (0.5 * (n - 15) + 1.5)))
+	if (n >= 15)  x = x.times(Decimal.pow(4  , (n - 15) * (0.5 * (n - 12))))
 	if (n >= 125) x = x.times(Decimal.pow(4  , (0.5) * (n - 124) * (n - 123)))
 	if (n >= 150) x = x.times(Decimal.pow(1.1, (n-150)*(n-149)*(n-148)/6*2 + (n-150)*(n-149)/2*19))
 	if (n >= 160) x = x.times(Decimal.pow(1.3, (n-160)*(n-159)*(n-158)/6*2 + (n-160)*(n-159)/2*39))
 	if (n >= 170) x = x.times(Decimal.pow(1.6, (n-170)*(n-169)*(n-168)/6*2 + (n-170)*(n-169)/2*59))
 	if (n >= 180) x = x.times(Decimal.pow(2.0, (n-180)*(n-179)*(n-178)/6*2 + (n-180)*(n-179)/2*79))
-	return x.pow(tmp.ppti)
+	if (!player.ghostify.ghostlyPhotons.unl) return x
+	return x.pow(tmp.ppti || 1)
 }
 
 function updateNextPreonEnergyThreshold(){

@@ -209,23 +209,24 @@ let quarkGain = function () {
 	if (log > logBoost) log = Math.pow(log / logBoost, logBoostExp) * logBoost
 	if (log > 738 && !hasNU(8)) log = Math.sqrt(log * 738)
 	if (!tmp.ngp3l) {
-		let exp = 0.6
-		if (tmp.newNGP3E) exp += 0.05
-		if (player.achievements.includes("ng3p28")) exp *= 1.01
+		if (player.achievements.includes("ng3p16")) {
+			let exp = 0.6
+			if (tmp.newNGP3E) exp += 0.05
+			if (player.achievements.includes("ng3p28")) exp *= 1.01
 
-		var EPBonus = Math.pow(Math.max(player.eternityPoints.log10() / 1e6, 1), exp) - 1
-		if (EPBonus > 1e4) EPBonus = 1e4 * Math.sqrt(EPBonus / 1e4)
-		if (EPBonus > 1e5) EPBonus = 1e5 * Math.sqrt(EPBonus / 1e5)
-		
-		log += EPBonus 
-		log += Math.log10(getQCtoQKEffect())
-		log += player.quantum.bigRip.spaceShards.plus(1).log10()
-		if (player.achievements.includes("ng3p65")) log += player.ghostify.ghostlyPhotons.enpowerments * (Math.min(20, player.ghostify.ghostlyPhotons.enpowerments))
+			var EPBonus = Math.pow(Math.max(player.eternityPoints.log10() / 1e6, 1), exp) - 1
+			if (EPBonus > 1e4) EPBonus = 1e4 * Math.sqrt(EPBonus / 1e4)
+			if (EPBonus > 1e5) EPBonus = 1e5 * Math.sqrt(EPBonus / 1e5)
+			log += EPBonus 
+		}
+		if (player.achievements.includes("ng3p33")) log += Math.log10(getQCtoQKEffect())
+		if (player.achievements.includes("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
+		if (player.achievements.includes("ng3p65")) log += getTotalRadioactiveDecays()
+		if (player.achievements.includes("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2) 
 	}
 
 	var dlog = Math.log10(log)
-	let start = 4 // Starts at e10k.
-	if (!(player.aarexModifications.ngumuV || player.aarexModifications.nguepV)) start = 5
+	let start = 5
 	if (dlog > start) {
 		let capped = Math.floor(Math.log10(Math.max(dlog + 2 - start, 1)) / Math.log10(2))
 		dlog = (dlog - Math.pow(2, capped) + 2 - start) / Math.pow(2, capped) + capped - 1 + start
@@ -432,7 +433,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		}
 		if (!inQC(4)) if (player.meta.resets < 1) giveAchievement("Infinity Morals")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
-		if (player.achievements.includes("ng3p73")) player.infinitiedBank=nA(player.infinitiedBank,gainBankedInf())
+		if (player.achievements.includes("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
 	var oheHeadstart = bigRip ? tmp.qu.bigRip.upgrades.includes(2) : speedrunMilestonesReached > 0
 	var keepABnICs = oheHeadstart || bigRip || player.achievements.includes("ng3p51")
@@ -528,7 +529,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 	if (bigRip && player.ghostify.milestones > 9 && player.aarexModifications.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
 	if (isRewardEnabled(11) && (bigRip && !tmp.qu.bigRip.upgrades.includes(12))) {
 		if (player.eternityChallUnlocked > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.eternityChallUnlocked]
-		else player.timestudy.theorem += ([0,30,35,40,70,130,85,115,115,415,550,1,1])[player.eternityChallUnlocked]
+		else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.eternityChallUnlocked]
 	}
 	player.eternityChallUnlocked = 0
 	if (headstart) for (var ec = 1; ec < 13; ec++) player.eternityChalls['eterc' + ec]=5
@@ -568,14 +569,14 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 			if (intensity > 1) {
 				var qc1st = Math.min(qc1, qc2)
 				var qc2st = Math.max(qc1, qc2)
-				if (qc1st == qc2st) console.log("there is some issue, you have assigned a QC twice (QC" + qc1st + ")")
+				if (qc1st == qc2st) console.log("There is an issue, you have assigned a QC twice (QC" + qc1st + ")")
 				var pcid = qc1st * 10 + qc2st
 				if (tmp.qu.pairedChallenges.current > tmp.qu.pairedChallenges.completed) {
 					tmp.qu.challenges[qc1] = 2
 					tmp.qu.challenges[qc2] = 2
 					tmp.qu.electrons.mult += 0.5
 					tmp.qu.pairedChallenges.completed = tmp.qu.pairedChallenges.current
-					if (pcid == 68 && tmp.qu.pairedChallenges.current == 1 && oldMoney.e >= 165e7) giveAchievement("Back to Challenge One")
+					if (pcid == 68 && tmp.qu.pairedChallenges.current == 1 && oldMoney.e >= 1.65e9) giveAchievement("Back to Challenge One")
 					if (tmp.qu.pairedChallenges.current == 4) giveAchievement("Twice in a row")
 				}
 				if (tmp.qu.pairedChallenges.completions[pcid] === undefined) tmp.qu.pairedChallenges.completions[pcid] = tmp.qu.pairedChallenges.current
@@ -649,7 +650,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 			if (ghostified) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			tmp.qu.bigRip.active = bigRip
 		}
-		document.getElementById("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per dimension boost"
+		document.getElementById("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
 		updateColorCharge()
 		updateColorDimPowers()
 		updateGluonsTabOnUpdate()

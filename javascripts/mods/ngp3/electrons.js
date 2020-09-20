@@ -44,7 +44,7 @@ function sacrificeGalaxy(auto = false) {
 	var mult = getGalaxySacrificeMult()
 	var amount = (player.galaxies - tmp.qu.electrons.sacGals / mult) * mult
 	if (amount < 1 || mult == 0) return
-	if (!auto && player.options.sacrificeConfirmation && !confirm("You will perform a galaxy reset, but you will exchange all your galaxies to electrons which will give a boost to multiplier per ten dimensions.")) return
+	if (!auto && player.options.sacrificeConfirmation && !confirm("You will perform a Galaxy reset, but you will exchange all your galaxies to electrons, which will give a boost to your Multiplier per Ten Dimensions.")) return
 	tmp.qu.electrons.sacGals += amount
 	tmp.qu.electrons.amount += getElectronGainFinalMult() * amount
 	if (!tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
@@ -137,7 +137,7 @@ function buyElectronUpg(u, quick) {
 	if (u == 1) player.timestudy.theorem -= cost
 	else if (u == 2) player.dilation.dilatedTime = player.dilation.dilatedTime.sub(cost)
 	else if (u == 3) player.meta.antimatter = player.meta.antimatter.sub(cost)
-	else if (u == 4 && (tmp.ngp3l || player.achievements.includes("ng3p64"))) {
+	else if (u == 4 && (tmp.ngp3l || !player.achievements.includes("ng3p64"))) {
 		player.meta.resets -= cost
 		player.meta.antimatter = getMetaAntimatterStart()
 		clearMetaDimensions()

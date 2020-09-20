@@ -339,78 +339,80 @@ newsArray = [//always true
 ['Later, I will finally implement original ideas from future NG+3 updates.', "tmp.ngp3", "am186"],
 ['Also later, I will implement ideas that have different gameplay than other mechanics.', "tmp.ngp3", "am187"],
 ["This news ticker has been softcapped so you can't read the re-.", true, "am188"],
-["aarex dimensions 9", true, "am189"],
-["I wonder if there are many more prestige layers...", true, "am191"],
-["wow so much prestigious", true, "am192"],
-/*NEXT ID: am193*/
+["After all, I do build up speed for 5 hours. But to answer that, we need to talk about parallel dimensions. And if you thought my other mechanics were complicated, just you wait. Ok, so Mario's antimatter is a floating point logarithm, but it's converted to sci notation when the game uses break_infinity.js. In other words, Mario's antimatter can basically be any logarithm number, but it's converted to sci notation between negative 9ee15, and positive 9ee15 inclusive. So, any fractional antimatter is truncated, and any numbers too big or too small will break break_infinity.js. Graphically, that means the antimatter you used for break_infinity.js is always inside of The Box, so if the antimatter's in The Box, then its logarithmica_lite.js value and the value used for break_infinity.js are the same. Albeit, maybe off by a single fraction due to the library switch. But if the antimatter leaves The Box, then its logarithmica_lite.js value and its break_infinity.js value will separate, since break_infinity.js will just break...", true, "am189"],
+["The next news ticker is sponsored by the anti-store. Get your daily anti-cinnamon toast crunch!", true, "am190"],
+["The photons wall seems to be gone, but there's only the bricks of it left. We should maybe do stuff with those bricks, except they might be made out of concentrated time, so that's a bad idea...", true, "am191"]
+["aarex dimensions 9", true, "am192"],
+["I wonder if there are many more prestige layers...", true, "am193"],
+["wow so much prestigious", true, "am194"],
+/*NEXT ID: am195*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
 var scrollTimeouts = [];
 var nextMsgIndex;
 function scrollNextMessage() {
-  //don't run if hidden to save performance
-  if (!player) return
-  if (player.options.newsHidden) return false
-  var s = document.getElementById('news');
-  updateNewsArray();
-  tmp.blankedOut=false
+        //don't run if hidden to save performance
+        if (typeof (player) == "undefined") return
+        if (player.options.newsHidden) return false
+        var s = document.getElementById('news');
+        updateNewsArray();
+        tmp.blankedOut = false
+        
+        //select a message at random
+        try {
+                do {nextMsgIndex = Math.floor(Math.random() * newsArray.length)} while (!eval(newsArray[nextMsgIndex][1]) || (newsArray[nextMsgIndex][2].indexOf("am") > -1 && !player.achievements.includes("r22")))
+        } catch(e) {
+                console.log("Newsarray doesn't work at idx " + nextMsgIndex)
+        }
+        scrollTimeouts.forEach(function(v) {clearTimeout(v);});
+        scrollTimeouts = [];
+        
+        //set the text
+        var m = newsArray[nextMsgIndex][0];
+        if (newsArray[nextMsgIndex][2] == "am37") {
+                //coded by Naruyoko
+                var m = ""
+                for (var i = 0; i < 256; i++) m += String.fromCharCode(Math.random() * 95 + 32);
+        }
+        s.textContent = m
+        
+        //get the parent width so we can start the message beyond it
+        let parentWidth = s.parentElement.clientWidth;
+        
+        //set the transition to blank so the move happens immediately
+        s.style.transition = '';
+        //move div_text to the right, beyond the edge of the div_container
+        s.style.transform = 'translateX('+parentWidth+'px)';
+        
+        //we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
+        scrollTimeouts.push(setTimeout( function() {
+                //distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
+                //we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
+                let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
+                let rate = 100; //change this value to change the scroll speed
+                let transformDuration = dist / rate;
+                if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][2])) {
+                        player.newsArray.push(newsArray[nextMsgIndex][2]);
+                        if (player.newsArray.length>=50) giveAchievement("Fake News")
+                        if (!tmp.ngp3l&&player.newsArray.length>=400) giveAchievement("400% Breaking News")
+                }
 
-  //select a message at random
-  try {
-    do {nextMsgIndex = Math.floor(Math.random() * newsArray.length)} while (!eval(newsArray[nextMsgIndex][1]) || (newsArray[nextMsgIndex][2].indexOf("am") > -1 && !player.achievements.includes("r22")))
-  } catch(e) {
-      console.log("Newsarray doesn't work at idx " + nextMsgIndex)
-  }
-  scrollTimeouts.forEach(function(v) {clearTimeout(v);});
-  scrollTimeouts = [];
 
-  //set the text
-  var m = newsArray[nextMsgIndex][0];
-  if (newsArray[nextMsgIndex][2] == "am37") {
-    //coded by Naruyoko
-    var m = ""
-    for (var i=0;i<256;i++) m+=String.fromCharCode(Math.random()*95+32);
-  }
-  s.textContent = m
-
-  //get the parent width so we can start the message beyond it
-  let parentWidth = s.parentElement.clientWidth;
-
-  //set the transition to blank so the move happens immediately
-  s.style.transition = '';
-  //move div_text to the right, beyond the edge of the div_container
-  s.style.transform = 'translateX('+parentWidth+'px)';
-
-  //we need to use a setTimeout here to allow the browser time to move the div_text before we start the scrolling
-  scrollTimeouts.push(setTimeout( function() {
-    //distance to travel is s.parentElement.clientWidth + s.clientWidth + parent padding
-    //we want to travel at rate pixels per second so we need to travel for (distance / rate) seconds
-    let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
-    let rate = 100; //change this value to change the scroll speed
-    let transformDuration = dist / rate;
-
-    if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][2])) {
-        player.newsArray.push(newsArray[nextMsgIndex][2]);
-        if (player.newsArray.length>=50) giveAchievement("Fake News")
-        if (!tmp.ngp3l&&player.newsArray.length>=400) giveAchievement("400% Breaking News")
-    }
-
-
-    //set the transition duration
-    s.style.transition = 'transform '+transformDuration+'s linear';
-    let textWidth = s.clientWidth;
-    //we need to move it to -(width+parent padding) before it won't be visible
-    s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
-    //automatically start the next message scrolling after this one finishes
-    //you could add more time to this timeout if you wanted to have some time between messages
-	scrollTimeouts.push(setTimeout(function() {
-		if (newsArray[nextMsgIndex][2] == "am104") {
-			tmp.blankedOut=true
-			setTimeout(scrollNextMessage, 60e3)
-		} else scrollNextMessage()
-	}, Math.ceil(transformDuration * 1000)));
-  }, 100));
+                //set the transition duration
+                s.style.transition = 'transform '+transformDuration+'s linear';
+                let textWidth = s.clientWidth;
+                //we need to move it to -(width+parent padding) before it won't be visible
+                s.style.transform = 'translateX(-'+(textWidth+5)+'px)';
+                //automatically start the next message scrolling after this one finishes
+                //you could add more time to this timeout if you wanted to have some time between messages
+                scrollTimeouts.push(setTimeout(function() {
+		        if (newsArray[nextMsgIndex][2] == "am104") {
+			        tmp.blankedOut=true
+			        setTimeout(scrollNextMessage, 60e3)
+		        } else scrollNextMessage()
+                }, Math.ceil(transformDuration * 1000)));
+        }, 100));
 }
 
 function updateGhostlyNewsArray() {
@@ -503,22 +505,22 @@ function nextGhostlyNewsTickerMsg() {
 			newsText.style["transition-timing-function"] = "linear"
 			newsText.style["transition-duration"] = (duration / 100) + "s"
 			setTimeout(function() {
-				if (ghostlyNewsArray[ghostlyNewsIndex][2]=="gn32") {
-					tmp.blankedOut2=true
+				if (ghostlyNewsArray[ghostlyNewsIndex][2] == "gn32") {
+					tmp.blankedOut2 = true
 					setTimeout(function() {
-						ghostlyNewsTickerCache=false
+						ghostlyNewsTickerCache = false
 					}, 60e3)
-				} else ghostlyNewsTickerCache=false
+				} else ghostlyNewsTickerCache = false
 			}, duration * 10)
 		}, 2000)
 	}, 100)
 }
 
 function toggleGhostlyNews(force) {
-	player.options.secrets.ghostlyNews=!player.options.secrets.ghostlyNews
-	document.getElementById("ghostlyNewsTicker").style.height=(player.options.secrets.ghostlyNews?24:0)+"px"
-	document.getElementById("ghostlyNewsTickerBlock").style.height=(player.options.secrets.ghostlyNews?16:0)+"px"
-	document.getElementById("ghostlynewsbtn").textContent=(player.options.secrets.ghostlyNews?"Hide":"Show")+" ghostly news ticker"
+	player.options.secrets.ghostlyNews = !player.options.secrets.ghostlyNews
+	document.getElementById("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
+	document.getElementById("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
+	document.getElementById("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
 }
 
 document.getElementById("ghostlyNewsTicker").onclick = function () {

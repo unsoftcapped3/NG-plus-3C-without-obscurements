@@ -1,6 +1,9 @@
 function babyRateUpdating(){
 	var eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed())
-	if (eggonRate.lt(30)) {
+	if (eggonRate.lt(3)){
+		document.getElementById("eggonRate").textContent = shortenDimensions(eggonRate.times(60))
+		document.getElementById("eggonRateTimeframe").textContent = "hour"
+	} else if (eggonRate.lt(30)) {
 		document.getElementById("eggonRate").textContent = shortenDimensions(eggonRate)
 		document.getElementById("eggonRateTimeframe").textContent = "minute"
 	} else {
@@ -18,7 +21,7 @@ function preonGatherRateUpdating(){
 }
 
 function getGrowupRatePerMinute(){
-	return tmp.twr.times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed())
+	return tmp.twr.plus(tmp.qu.replicants.amount).times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed())
 }
 
 function growupRateUpdating(){
@@ -319,11 +322,17 @@ function maxReduceHatchSpeed() {
 	updateReplicants()
 }
 
-function replicantReset() {
+function replicantReset(bulk = false) {
 	if (player.replicanti.amount.lt(tmp.qu.replicants.requirement)) return
 	if (!player.achievements.includes("ng3p47")) player.replicanti.amount = new Decimal(1)
-	tmp.qu.replicants.amount = tmp.qu.replicants.amount.add(1)
-	tmp.qu.replicants.requirement = tmp.qu.replicants.requirement.times("1e100000")
+	if ((player.achievements.includes("ng3p74") && !tmp.ngp3l) && bulk) {
+		let x = Math.floor(player.replicanti.amount.div(tmp.qu.replicants.requirement).log10() / 1e5) + 1
+		tmp.qu.replicants.amount = tmp.qu.replicants.amount.add(x)
+		tmp.qu.replicants.requirement = tmp.qu.replicants.requirement.times(Decimal.pow(10, x * 1e5))
+	} else {
+		tmp.qu.replicants.amount = tmp.qu.replicants.amount.add(1)
+		tmp.qu.replicants.requirement = tmp.qu.replicants.requirement.times(Decimal.pow(10, 1e5))
+	}
 }
 
 function breakLimit() {

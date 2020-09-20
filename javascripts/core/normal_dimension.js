@@ -29,15 +29,14 @@ function getNormalDimensionVanillaAchievementBonus(tier){
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined && player.achievements.includes("r46")) mult = mult.times(productAllDims1());
 	if (player.achievements.includes("r74") && player.currentChallenge != "") mult = mult.times(player.galacticSacrifice ? 40 : 1.4);
 	if (player.achievements.includes("r77")) mult = mult.times(1 + tier / (player.galacticSacrifice ? 10 : 100));
-	if (!player.galacticSacrifice) {
-		if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) mult = mult.times(3600 / (player.thisInfinityTime + 1800));
-		if (player.achievements.includes("r78") && player.thisInfinityTime < 3) mult = mult.times(3.3 / (player.thisInfinityTime + 0.3));
-		if (player.achievements.includes("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) mult = mult.times(Math.max(2400 / (player.thisInfinityTime + 600), 1))
-		if (player.achievements.includes("r91") && player.thisInfinityTime < 50) mult = mult.times(Math.max(301 - player.thisInfinityTime * 6, 1))
-		if (player.achievements.includes("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
-	}
 	if (player.boughtDims && player.achievements.includes("r98")) mult = mult.times(player.infinityDimension8.amount.max(1))
 	mult = mult.times(getR84or73Mult())
+	if (player.galacticSacrifice) return mult
+	if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) mult = mult.times(3600 / (player.thisInfinityTime + 1800));
+	if (player.achievements.includes("r78") && player.thisInfinityTime < 3) mult = mult.times(3.3 / (player.thisInfinityTime + 0.3));
+	if (player.achievements.includes("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) mult = mult.times(Math.max(2400 / (player.thisInfinityTime + 600), 1))
+	if (player.achievements.includes("r91") && player.thisInfinityTime < 50) mult = mult.times(Math.max(301 - player.thisInfinityTime * 6, 1))
+	if (player.achievements.includes("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
 	return mult
 }
 
@@ -72,19 +71,18 @@ function getAfterDefaultDilationLayerAchBonus(tier){
 	let timeAndDimMult = timeMult()
 	if (hasInfinityMult(tier) && !(player.aarexModifications.ngmX >= 4)) timeAndDimMult = dimMults().times(timeAndDimMult)
 	if (player.challenges.includes("postcngmm_1")||player.currentChallenge=="postcngmm_1") mult = mult.times(timeAndDimMult)
-	if (player.galacticSacrifice) {
-		if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) mult = mult.times(3600 / (player.thisInfinityTime + 1800));
-		if (player.achievements.includes("r78") && player.thisInfinityTime < 3) mult = mult.times(3.3 / (player.thisInfinityTime + 0.3));
-		if (player.achievements.includes("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) mult = mult.times(Math.max(2400 / (player.thisInfinityTime + 600), 1))
-		if (player.achievements.includes("r91") && player.thisInfinityTime < 50) mult = mult.times(Math.max(301 - player.thisInfinityTime * 6, 1))
-		if (player.achievements.includes("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
-		if (player.currentChallenge == "postc6" || inQC(6)) mult = mult.dividedBy(player.matter.max(1))
-		if (player.currentChallenge == "postc8" || inQC(6)) mult = mult.times(player.postC8Mult)
-		if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42) && player.aarexModifications.ngmX >= 4) mult = mult.times(galMults.u12())
-		if (player.galacticSacrifice.upgrades.includes(45) && player.aarexModifications.ngmX >= 4) {
-			var e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
-			mult = mult.times(Math.pow(player["timeDimension" + tier].amount.plus(10).log10(), e))
-		}
+	if (!player.galacticSacrifice) return mult
+	if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) mult = mult.times(3600 / (player.thisInfinityTime + 1800));
+	if (player.achievements.includes("r78") && player.thisInfinityTime < 3) mult = mult.times(3.3 / (player.thisInfinityTime + 0.3));
+	if (player.achievements.includes("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) mult = mult.times(Math.max(2400 / (player.thisInfinityTime + 600), 1))
+	if (player.achievements.includes("r91") && player.thisInfinityTime < 50) mult = mult.times(Math.max(301 - player.thisInfinityTime * 6, 1))
+	if (player.achievements.includes("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
+	if (player.currentChallenge == "postc6" || inQC(6)) mult = mult.dividedBy(player.matter.max(1))
+	if (player.currentChallenge == "postc8" || inQC(6)) mult = mult.times(player.postC8Mult)
+	if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42) && player.aarexModifications.ngmX >= 4) mult = mult.times(galMults.u12())
+	if (player.galacticSacrifice.upgrades.includes(45) && player.aarexModifications.ngmX >= 4) {
+		var e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
+		mult = mult.times(Math.pow(player["timeDimension" + tier].amount.plus(10).log10(), e))
 	}
 	return mult
 }
@@ -99,9 +97,19 @@ function getPostBreakInfNDMult(){
 	return mult
 }
 
-function getDimensionFinalMultiplier(tier) {
-	let mult = player[TIER_NAMES[tier] + 'Pow']
+function getStartingNDMult(tier){
+	let mPerTen = getDimensionPowerMultiplier()
+	let mPerDB = getDimensionBoostPower()
+	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1)
+	let mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
+	return mptMult.times(dbMult)
+}
 
+function getDimensionFinalMultiplier(tier) {
+	let mult = getStartingNDMult(tier)
+	
+	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
+	if (!tmp.infPow) updateInfinityPowerEffects()
 	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
 	if (player.currentEternityChall == "eterc11") return tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {
@@ -166,9 +174,7 @@ function getDimensionDescription(tier) {
 }
 
 function getDimensionRateOfChange(tier) {
-	if (tier == 8 || (player.currentEternityChall == "eterc3" && tier > 3)) {
-		return 0;
-	}
+	if (tier == 8 || (player.currentEternityChall == "eterc3" && tier > 3)) return 0;
 
 	let toGain = getDimensionProductionPerSecond(tier + 1)
 	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = DimensionProduction(1).times(10)
@@ -237,7 +243,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 	if (exp > 1) ret = Decimal.pow(ret, exp)
 	if (player.aarexModifications.newGameMult !== undefined) {
 		ret = Decimal.times(ret, Math.log10(player.resets + 1) + 1)
-		ret = Decimal.times(ret, Math.log10(player.galaxies + 1) * 5 + 1)
+		ret = Decimal.times(ret, Math.log10(Math.max(player.galaxies, 0) + 1) * 5 + 1)
 	}
 	return ret
 }
@@ -251,8 +257,8 @@ function getMPTBase(focusOn) {
 	if (player.tickspeedBoosts !== undefined) ret = 1
 	if (player.aarexModifications.newGameExpVersion) ret *= 10
 	if (player.aarexModifications.newGameMult) ret *= 2.1
-	if (player.infinityUpgrades.includes('ret')) ret *= infUpg12Pow()
-	if ((inNC(9)||player.currentChallenge=="postc1")&&!focusOn) ret = Math.pow(10 / 0.30, Math.random()) * 0.30
+	if (player.infinityUpgrades.includes("dimMult")) ret *= infUpg12Pow()
+	if ((inNC(9) || player.currentChallenge === "postc1") && !focusOn) ret = Math.pow(10 / 0.30, Math.random()) * 0.30
 	if (player.achievements.includes("r58")) {
 		if (player.galacticSacrifice !== undefined) {
 			let exp = 1.0666
@@ -353,16 +359,14 @@ function buyOneDimension(tier) {
 	getOrSubResource(tier, cost)
 	player[name + "Amount"] = player[name + "Amount"].add(1)
 	recordBought(name, 1)
-	if (dimBought(tier) < 1) {
-		let b = getDimensionPowerMultiplier(tier)
-		player[name + "Pow"] = player[name + "Pow"].times(b)
+	if (dimBought(tier) == 0) {
 		if (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined) multiplyPC5Costs(player[name + 'Cost'], tier)
 		else if (inNC(5) && player.tickspeedBoosts == undefined) multiplySameCosts(player[name + 'Cost'])
 		else player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
-		floatText("D" + tier, "x" + shortenMoney(b))
+		floatText("D" + tier, "x" + shortenMoney(getDimensionPowerMultiplier()))
 	}
-	if (tier < 2 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
+	if (tier == 1 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
 	if (getAmount(8) == 99) giveAchievement("The 9th Dimension is a lie");
 	onBuyDimension(tier)
 	reduceMatter(1)
@@ -379,14 +383,12 @@ function buyManyDimension(tier, quick) {
 	getOrSubResource(tier, cost)
 	player[name + "Amount"] = player[name + "Amount"].add(toBuy)
 	recordBought(name, toBuy)
-	let b = getDimensionPowerMultiplier(tier)
-	player[name + "Pow"] = player[name + "Pow"].times(b)
 	if (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined) multiplyPC5Costs(player[name + 'Cost'], tier)
 	else if (inNC(5) && player.tickspeedBoosts == undefined) multiplySameCosts(player[name + 'Cost'])
 	else player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
 	if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
 	if (!quick) {
-		floatText("D" + tier, "x" + shortenMoney(b))
+		floatText("D" + tier, "x" + shortenMoney(getDimensionPowerMultiplier()))
 		onBuyDimension(tier)
 	}
 	reduceMatter(toBuy)
@@ -414,7 +416,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		getOrSubResource(tier, Decimal.pow(mult, toBuy).sub(1).div(mult-1).times(cost))
 		player[name + "Amount"] = player[name + "Amount"].add(toBuy * 10)
 		recordBought(name, toBuy*10)
-		player[name + "Pow"] = player[name + "Pow"].times(Decimal.pow(getDimensionPowerMultiplier(tier), toBuy))
 		player[name + "Cost"] = player[name + "Cost"].times(Decimal.pow(mult, toBuy))
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
 		bought += toBuy
@@ -431,7 +432,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		if (failsafe > 149) break
 		stopped = false
 	}
-	var b = getDimensionPowerMultiplier(tier)
 	while (!stopped) {
 		stopped = true
 		let mi = getDimensionCostMultiplierIncrease()
@@ -450,13 +450,12 @@ function buyBulkDimension(tier, bulk, auto) {
 		}
 		player[name + "Amount"] = player[name + "Amount"].add(toBuy * 10)
 		recordBought(name, toBuy * 10)
-		player[name + "Pow"] = player[name + "Pow"].times(Decimal.pow(b, toBuy))
 		player[name + "Cost"] = newCost.times(newMult)
 		player.costMultipliers[tier - 1] = newMult.times(mi)
 		bought += toBuy
 		reduceMatter(toBuy * 10)
 	}
-	if (!auto) floatText("D" + tier, "x" + shortenMoney(Decimal.pow(b, bought)))
+	if (!auto) floatText("D" + tier, "x" + shortenMoney(Decimal.pow(getDimensionPowerMultiplier(), bought)))
 	onBuyDimension(tier)
 }
 

@@ -8,12 +8,10 @@ function getTickSpeedMultiplier() {
 function initialGalaxies() {
 	let g = player.galaxies
 	if (tmp.ngp3 && !tmp.be) {
-		g = Math.max(g - Math.ceil(tmp.qu.electrons.sacGals), 0)
-		if (tmp.ngp3l) g *= Math.max(Math.min(10 - (player.quantum.electrons.amount + g * getElectronGainFinalMult()) / 16857, 1), 0)
+		g = Math.max(g-player.quantum.electrons.sacGals, 0)
 		if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
-		if (!tmp.ngp3l && tmp.rg4) g *= 0.4
 	}
-	if ((inNC(15) || player.currentChallenge=="postc1") && player.aarexModifications.ngmX == 3) g = 0
+	if ((inNC(15) || player.currentChallenge == "postc1") && player.aarexModifications.ngmX == 3) g = 0
 	return g
 }
 
@@ -22,7 +20,7 @@ function getGalaxyPower(ng, bi, noDil) {
 	if (tmp.rg4 && !tmp.ngp3l) otherGalEff = getRG4Effect()
 
 	let replGalEff = otherGalEff
-	if (player.boughtDims) replGalEff *= Math.log10(player.replicanti.limit.log(2))/Math.log10(2)/10
+	if (player.boughtDims) replGalEff *= Math.log10(player.replicanti.limit.log(2)) / Math.log10(2) / 10
 	else if (ECTimesCompleted("eterc8") > 0) replGalEff *= getECReward(8)
 	if (tmp.ngp3) {
 		if (player.masterystudies.includes("t344")) replGalEff *= getMTSMult(344)
@@ -30,8 +28,8 @@ function getGalaxyPower(ng, bi, noDil) {
 	}
 	
 	let extraReplGalPower = 0
-	if (player.timestudy.studies.includes(133)) extraReplGalPower += player.replicanti.galaxies*0.5
-	if (player.timestudy.studies.includes(132)) extraReplGalPower += player.replicanti.galaxies*0.4
+	if (player.timestudy.studies.includes(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
+	if (player.timestudy.studies.includes(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
 	extraReplGalPower += extraReplGalaxies // extraReplGalaxies is a constant
 	
 	let otherGalPower = player.replicanti.galaxies
@@ -75,12 +73,11 @@ function getGalaxyEff(bi) {
 	if (player.tickspeedBoosts !== undefined && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
 	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
 	if (player.timestudy.studies.includes(212)) eff *= tsMults[212]()
-	if (player.timestudy.studies.includes(232)&&bi) eff *= tmp.ts232
+	if (player.timestudy.studies.includes(232) && bi) eff *= tmp.ts232
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.ngp3) eff *= colorBoosts.r
 	if (GUBought("rg2")) eff *= Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25)
-	if (tmp.ngp3l && tmp.rg4) eff *= 1.5
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
 }
@@ -119,10 +116,10 @@ function getGalaxyTickSpeedMultiplier() {
 		else if (g == 0) baseMultiplier = 0.89
 		if (inNC(6, 1) || player.currentChallenge == "postc1" || player.pSac != undefined) baseMultiplier = 0.93
 		if (inRS) {
-			baseMultiplier -= linearGalaxies*0.02
+			baseMultiplier -= linearGalaxies * 0.02
 		} else {
 			let perGalaxy = 0.02 * getGalaxyEff()
-			return Math.max(baseMultiplier-g*perGalaxy, 0.83)
+			return Math.max(baseMultiplier - (g * perGalaxy), 0.83)
 		}
 	}
 	let perGalaxy = player.infinityUpgradesRespecced != undefined ? 0.98 : 0.965
@@ -135,7 +132,7 @@ function getGalaxyTickSpeedMultiplier() {
 function getPostC3Mult() {
 	let base = getPostC3Base()
 	let exp = getPostC3Exp()
-	if (exp>1) return Decimal.pow(base,exp)
+	if (exp > 1) return Decimal.pow(base,exp)
 	return base
 }
 
@@ -226,7 +223,7 @@ function getTickSpeedCostMultiplierIncrease() {
 	return ret
 }
 
-function buyMaxPostInfTickSpeed (mult) {
+function buyMaxPostInfTickSpeed(mult) {
 	var mi = getTickSpeedCostMultiplierIncrease()
 	var a = Math.log10(Math.sqrt(mi))
 	var b = player.tickspeedMultiplier.dividedBy(Math.sqrt(mi)).log10()
@@ -252,7 +249,7 @@ function buyMaxPostInfTickSpeed (mult) {
 	player.postC8Mult = new Decimal(1)
 }
 
-function cannotUsePostInfTickSpeed () {
+function cannotUsePostInfTickSpeed() {
 	return ((inNC(5) || player.currentChallenge == "postc5") && player.tickspeedBoosts == undefined) || !costIncreaseActive(player.tickSpeedCost) || (player.tickSpeedMultDecrease > 2 && player.tickspeedMultiplier.lt(Number.MAX_SAFE_INTEGER));
 }
 
@@ -300,11 +297,7 @@ function buyMaxTickSpeed() {
 
 function getWorkingTickspeed(){
 	var log = -player.tickspeed.log10()
-	if (log > 1 && tmp.ngp3) {
-		log = doWeakerPowerReductionSoftcapNumber(log, 1e15, .9)
-		log = doWeakerPowerReductionSoftcapNumber(log, 1e16, .8)
-		log = doWeakerPowerReductionSoftcapNumber(log, 1e17, .7)
-	}
+	if (tmp.ngp3) log = softcap(log, "working_ts")
 	tick = Decimal.pow(10, -log)
 	return tick
 }

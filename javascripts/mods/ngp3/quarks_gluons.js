@@ -60,11 +60,14 @@ function changeAssortPercentage(x) {
 
 function assignQuark(color) {
 	var usedQuarks = getAssortAmount()
-	if (usedQuarks.eq(0)) return
+	if (usedQuarks.eq(0)) {
+		$.notify("Make sure you are assigning at least one quark!")
+		return
+	}
 	if (tmp.ngp3l && color != "r" && tmp.qu.times < 2 && !ghostified) if (!confirm("It is strongly recommended to assign your first quarks to red. Are you sure you want to do that?")) return
 	var mult = getQuarkAssignMult()
 	tmp.qu.usedQuarks[color] = tmp.qu.usedQuarks[color].add(usedQuarks.times(mult)).round()
-	tmp.qu.quarks=tmp.qu.quarks.sub(usedQuarks)
+	tmp.qu.quarks = tmp.qu.quarks.sub(usedQuarks)
 	document.getElementById("quarks").innerHTML = "You have <b class='QKAmount'>0</b> quarks."
 	if (!mult.eq(1)) updateQuantumWorth()
 	updateColorCharge()
@@ -142,16 +145,16 @@ function rotateAutoAssign() {
 }
 
 //Color Charge
-colorCharge={
+colorCharge = {
 	normal: {}
 }
-colorShorthands={r:'red',
+colorShorthands = {r:'red',
 	g:'green',
 	b:'blue'}
 
 function updateColorCharge() {
 	if (!tmp.ngp3) return
-	var colors=['r','g','b']
+	var colors = ['r','g','b']
 	for (var i = 0; i < 3; i++) {
 		var ret = new Decimal(0)
 		if (player.ghostify.milestones >= 2) ret = tmp.qu.usedQuarks[colors[i]]
@@ -193,10 +196,6 @@ function getCPLog(c) {
 	var x = Decimal.add(tmp.qu.colorPowers[c], 1)
 	if (!tmp.ngp3l && player.masterystudies.includes("d7")) x = x.times(getElectronBoostToCQs())
 	x = x.log10()
-	if (x > 1024 && player.aarexModifications.ngudpV && !player.aarexModifications.nguepV) {
-		if (player.aarexModifications.ngumuV) x = Math.sqrt(x) * 32
-		else x = Math.pow(x, .9) * 2
-	}
 	return x
 }
 
@@ -407,7 +406,7 @@ function maxQuarkMult() {
 			}
 		}
 	}
-	tmp.qu.multPower.total+=bought
+	tmp.qu.multPower.total += bought
 	if (tmp.qu.autobuyer.mode === 'amount') {
 		tmp.qu.autobuyer.limit = Decimal.times(tmp.qu.autobuyer.limit, Decimal.pow(2, bought))
 		document.getElementById("priorityquantum").value = formatValue("Scientific", tmp.qu.autobuyer.limit, 2, 0)
@@ -416,7 +415,7 @@ function maxQuarkMult() {
 }
 
 function getGB1Effect() {
-	if (tmp.ngp3l) return 1-Math.min(Decimal.log10(tmp.tsReduce),0)
+	if (tmp.ngp3l) return 1 - Math.min(Decimal.log10(tmp.tsReduce),0)
 	return Decimal.div(1, tmp.tsReduce).log10() / 100 + 1
 }
 
@@ -459,7 +458,7 @@ function updateQuarksTab(tab) {
 		var assortAmount=getAssortAmount()
 		if (!tmp.ngp3l) {
 			var colors=['r','g','b']
-			document.getElementById("assort_amount").textContent=shortenDimensions(assortAmount.times(getQuarkAssignMult()))
+			document.getElementById("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
 			for (c = 0; c < 3; c++) if (colorCharge[colors[c]].div(colorCharge.qwBonus).lte(1e16)) document.getElementById(colors[c]+"PowerRate").textContent="+"+shorten(getColorPowerProduction(colors[c]))+"/s"
 		}
 		document.getElementById("assignAllButton").className=(assortAmount.lt(1)?"unavailabl":"stor")+"ebtn"
@@ -471,13 +470,13 @@ function updateGluonsTab() {
 	document.getElementById("gbupg1current").textContent = "Currently: " + shortenMoney(getGB1Effect()) + "x"
 	document.getElementById("brupg1current").textContent = "Currently: " + shortenMoney(getBR1Effect()) + "x"
 	document.getElementById("rgupg2current").textContent = "Currently: " + (Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25) * 100 - 100).toFixed(1) + "%"
-	document.getElementById("brupg2current").textContent = "Currently: " + shortenMoney(Decimal.pow(2.2, Math.pow(tmp.sacPow.log10()/1e6, 0.25))) + "x"
+	document.getElementById("brupg2current").textContent = "Currently: " + shortenMoney(Decimal.pow(2.2, Math.pow(tmp.sacPow.log10() / 1e6, 0.25))) + "x"
 	document.getElementById("rgupg3current").textContent = "Currently: " + shorten(getRG3Effect()) + "x"
 	document.getElementById("brupg4current").textContent = "Currently: " + shortenMoney(Decimal.pow(getDimensionPowerMultiplier(hasNU(13) && "no-rg4"), 0.0003).max(1)) + "x"
 	if (player.masterystudies.includes("d9")) {
 		document.getElementById("gbupg5current").textContent = "Currently: " + (Math.sqrt(player.replicanti.galaxies) / 5.5).toFixed(1) + "%"
 		document.getElementById("brupg5current").textContent = "Currently: " + Math.min(Math.sqrt(player.dilation.tachyonParticles.max(1).log10())*1.3,14).toFixed(1) + "%"
-		document.getElementById("gbupg6current").textContent = "Currently: " + (100-100/(1 + Math.pow(player.infinityPower.log10(),0.25)/2810)).toFixed(1) + "%"
+		document.getElementById("gbupg6current").textContent = "Currently: " + (100-100/(1 + Math.pow(player.infinityPower.plus(1).log10(),0.25)/2810)).toFixed(1) + "%"
 		document.getElementById("brupg6current").textContent = "Currently: " + (100-100/(1 + player.meta.resets/340)).toFixed(1) + "%"
 		document.getElementById("gbupg7current").textContent = "Currently: " + (100-100/(1 + Math.log10(1+player.infinityPoints.max(1).log10())/100)).toFixed(1) + "%"
 		document.getElementById("brupg7current").textContent = "Currently: " + (100-100/(1 + Math.log10(1+player.eternityPoints.max(1).log10())/80)).toFixed(1) + "%"
@@ -511,10 +510,10 @@ function updateGluonsTab() {
 
 //Display: On load
 function updateQuarksTabOnUpdate(mode) {
-	var colors=['r','g','b']
+	var colors = ['r','g','b']
 	if (colorCharge.normal.charge.eq(0)) document.getElementById("colorCharge").innerHTML='neutral charge'
 	else {
-		var color=colorShorthands[colorCharge.normal.color]
+		var color = colorShorthands[colorCharge.normal.color]
 		document.getElementById("colorCharge").innerHTML='<span class="'+color+'">'+color+'</span> charge of <span class="'+color+'" style="font-size:35px">' + shortenDimensions(colorCharge.normal.charge) + "</span>"
 	}
 	for (c = 0; c < 3; c++) document.getElementById(colors[c]+"PowerRate").textContent="+"+shorten(getColorPowerProduction(colors[c]))+"/s"
@@ -543,10 +542,10 @@ function updateQuarksTabOnUpdate(mode) {
 		document.getElementById("colorDimPowerUpg").className = "gluonupgrade " + (tmp.qu.quarks.gte(getColorDimPowerUpgradeCost()) ? "storebtn" : "unavailablebtn")
 	}
 
-	var uq=tmp.qu.usedQuarks
-	var gl=tmp.qu.gluons
-	for (var p=0;p<3;p++) {
-		var pair = (["rg","gb","br"])[p]
+	var uq = tmp.qu.usedQuarks
+	var gl = tmp.qu.gluons
+	for (var p = 0; p < 3; p++) {
+		var pair = (["rg", "gb", "br"])[p]
 		var diff = uq[pair[0]].min(uq[pair[1]])
 		document.getElementById(pair + "gain").textContent = shortenDimensions(diff)
 		document.getElementById(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
