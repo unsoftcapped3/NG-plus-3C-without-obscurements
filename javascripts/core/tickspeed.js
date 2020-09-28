@@ -13,6 +13,7 @@ function initialGalaxies() {
 		if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
 	}
 	if (tmp.rg4) g *= 0.4
+	if (player.aarexModifications.ngp3c) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && player.aarexModifications.ngmX == 3) g = 0
 	return g
 }

@@ -2117,8 +2117,9 @@ function updateNGModeMessage(){
         if (player.aarexModifications.ngexV) ngModeMessages.push("Welcome to Expert Mode! This is a more difficult version of Antimatter Dimensions. Please note that this mod is in beta and may be unfinished. If you experience unbalancing, report it to #other_modifications in the Discord server. Good luck!")
         if (player.aarexModifications.newGameMult) ngModeMessages.push("Welcome to NG Multiplied, made by Despacit and Soul147! This mode adds many buffs which may break the game, similar to NG^.")
         if (player.aarexModifications.newGameExpVersion) ngModeMessages.push("Welcome to NG^, made by Naruyoko! This mode adds many buffs to features that can end up unbalancing the game significantly.")
+		if (player.aarexModifications.ngp3c) ngModeMessages.push("Welcome to NG+3 Condensed, made by Jacorb! This mode rebalances NG+++ to speed it up while also adding new features along the way.")
         if (player.meta!==undefined||player.exdilation!==undefined) {
-                if (!player.aarexModifications.newGamePlusVersion) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")
+                if (!player.aarexModifications.newGamePlusVersion&&!player.aarexModifications.ngp3c) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")
                 if (player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+4 by Aarex and Soul147! This is a NG+ version of NG+3, starting you off with all features up to Big Rip unlocked. It isn't recommended to play this mode as you have some more content accessible early on compared to NG+.")
                 if (player.aarexModifications.ngp3lV) {
                 ngModeMessages.push("WARNING: There are some boosts that work the same as in NG+3.1, not in the Bosonic Update. Found one? Give feedback in the Discord server!")
@@ -2163,6 +2164,7 @@ function onLoad(noOffline) {
 	ghostifyDenied = 0
 	setEverythingPreNGp3onLoad()
         setAarexModIfUndefined()
+	if (player.aarexModifications.ngp3c) loadCondensedData()
 	doNGp3Init1()
         setSaveStuffHTML()
 

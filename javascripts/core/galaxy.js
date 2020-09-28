@@ -42,6 +42,7 @@ function galaxyReset(bulk) {
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
 		if (ghostified && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	}
+	if (player.aarexModifications.ngp3c) loadCondensedData(2)
 	hideDimensions()
 	tmp.tickUpdate = true;
 }
@@ -134,6 +135,7 @@ function getGalaxyReqMultiplier() {
 	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.galaxies <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
+	if (player.aarexModifications.ngp3c) ret = 25
 	if (player.galacticSacrifice !== undefined) if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
 	else if (player.timestudy.studies.includes(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
@@ -146,7 +148,7 @@ function getGalaxyReqMultiplier() {
 
 function getDistantScalingStart() {
 	if (player.currentEternityChall == "eterc5") return 0
-	var n = 100 + getECReward(5)
+	var n = (player.aarexModifications.ngp3c?1:100) + getECReward(5)
 	if (player.timestudy.studies.includes(223)) n += 7
 	if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
 	if (tmp.ngp3) if (tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]

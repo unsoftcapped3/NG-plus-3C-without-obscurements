@@ -66,6 +66,8 @@ function updateTemp() {
 	tmp.tsReduce = getTickSpeedMultiplier()
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()
+	
+	updateCondenseTemp()
 
 	if (tmp.gameSpeed != gameSpeed) {
 		tmp.gameSpeed = gameSpeed
@@ -675,3 +677,13 @@ function updateNanoRewardTemp() {
 	//The rest is calculated by updateTemp().
 }
 
+function updateCondenseTemp() {
+	if (!tmp.cnd) tmp.cnd = {}
+	
+	if (!player.aarexModifications.ngp3c) return;
+	
+	if (!tmp.cnd.nrm) tmp.cnd.nrm = {}
+	for (let i=1;i<=8;i++) {
+		tmp.cnd.nrm[i] = getCondenserEff(i)
+	}
+}

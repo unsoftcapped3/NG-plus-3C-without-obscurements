@@ -227,6 +227,7 @@ function setupPCTableHTMLandData(){
 		html += '<td id="A' + d + '"></td>'
 		html += '<td align="right" width="10%"><button id="B' + d + '" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn" onclick="buyOneDimension(' + d + ')"></button></td>'
 		html += '<td align="right" width="10%"><button id="M' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="buyManyDimension(' + d + ')"></button></td>'
+		html += '<td id="CondenseDiv'+d+'" style="display: none;" align="right" width="10%"><button id="Condense' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="condenseDimension(' + d + ')"></button></td>'
 		row.innerHTML = html
 		
 		var row=pdsDiv.insertRow(d-1)
@@ -404,7 +405,8 @@ function updateNewPlayer(reseted) {
 			ngmu: player.aarexModifications.newGameMult === 1,
 			ngumu: player.aarexModifications.ngumuV !== undefined,
 			ngex: player.aarexModifications.ngexV !== undefined,
-			aau: player.aarexModifications.aau !== undefined
+			aau: player.aarexModifications.aau !== undefined,
+			ngp3c: player.aarexModifications.ngp3c !== undefined,
 		}
 	} 
 	else var modesChosen = modes
@@ -720,6 +722,10 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.aau) {
 		player.aarexModifications.aau = 1
 		dev.giveAllAchievements(true)
+	}
+	if (modesChosen.ngp3c) {
+		player.aarexModifications.ngp3c = 1
+		loadCondensedData(1/0)
 	}
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
 }
@@ -1670,6 +1676,8 @@ function updateCosts() {
 			document.getElementById('B'+i).textContent = costPart + shortenPreInfCosts(cost)
 			document.getElementById('M'+i).className = cost.times(10 - dimBought(i)).lte(resource) ? 'storebtn' : 'unavailablebtn'
 			document.getElementById('M'+i).textContent = until10CostPart + shortenPreInfCosts(cost.times(10 - dimBought(i)));
+			document.getElementById("CondenseDiv"+i).style.display = player.aarexModifications.ngp3c?"":"none"
+			if (player.aarexModifications.ngp3c) updateCondenser(i)
 		}
 	}
 	document.getElementById("tickSpeed").textContent = costPart + shortenPreInfCosts(player.tickSpeedCost);
@@ -1882,6 +1890,7 @@ document.getElementById("maxall").onclick = function () {
 	for (var tier=1; tier<9;tier++) buyBulkDimension(tier, 1/0)
 	if (player.aarexModifications.ngmX>3) buyMaxTimeDimensions()
 	if (player.pSac!=undefined) maxAllIDswithAM()
+	if (player.aarexModifications.ngp3c) for (let i=1;i<=8;i++) maxCondense(i)
 }
 
 document.getElementById("challengeconfirmation").onclick = function () {
@@ -2322,7 +2331,8 @@ var modFullNames = {
 	ngumu: "NGUd*'",
 	ngex: "Expert Mode",
 	aau: "AAU",
-	ngprw: "NG+ Reworked"
+	ngprw: "NG+ Reworked",
+	ngp3c: "NG+++ Condensed"
 }
 var modSubNames = {
 	ngp: ["OFF", "ON", "NG++++"],
@@ -2397,6 +2407,16 @@ function toggle_mod(id) {
 	if ((id=="ngumu"||id=="nguep")&&!(modes.ngud>1)&&subMode) {
 		modes.ngud=1
 		toggle_mod("ngud")
+	}
+	if ((id=="ngp"&&subMode)||(id=="ngpp"&&!subMode)) {
+		modes.ngp3c=0
+		document.getElementById("ngp3cBtn").textContent = "NG+++ Condensed: OFF"
+	}
+	if (id=="ngp3c"&&subMode) {
+		modes.ngp=0
+		modes.ngpp=2
+		document.getElementById("ngpBtn").textContent = "NG+: OFF"
+		document.getElementById("ngppBtn").textContent = "NG++: NG+++"
 	}
 
 	var ngp3ex = modes.ngex&& modes.ngpp
@@ -2845,6 +2865,10 @@ function calcSacrificeBoost() {
 		ret = Decimal.pow(Math.max(player.firstAmount.e/10.0, 1) / Math.max(player.sacrificed.e/10.0, 1), pow).max(1)
 	} else ret = player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(player.aarexModifications.ngmX>3?0.05:0.04).max(1)).max(1)
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + player.timestudy.ers_studies[1] / 5)))
+	if (player.aarexModifications.ngp3c) {
+		if (player.resets>=6) ret = ret.pow(1.5)
+		if (player.galaxies>=1) ret = ret.pow(1.75)
+	}
 	return ret
 }
 
@@ -2870,6 +2894,10 @@ function calcTotalSacrificeBoost(next) {
 		ret = Decimal.pow(Math.max(player.sacrificed.e/10.0, 1), pow)
 	} else ret = player.chall11Pow 
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + (player.timestudy.ers_studies[1] + (next ? 1 : 0))/ 5)))
+	if (player.aarexModifications.ngp3c) {
+		if (player.resets>=6) ret = ret.pow(1.5)
+		if (player.galaxies>=1) ret = ret.pow(1.75)
+	}
 	return ret
 }
 

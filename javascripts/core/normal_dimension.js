@@ -106,7 +106,9 @@ function getStartingNDMult(tier){
 
 function getDimensionFinalMultiplier(tier) {
 	let mult = getStartingNDMult(tier)
-	if (tier == 8) mult = mult.times(getTotalSacrificeBoost())
+	if (player.aarexModifications.ngp3c) if (tmp.cnd.nrm) mult = mult.times(tmp.cnd.nrm[tier])
+	
+	if ((tier == 8) || player.aarexModifications.ngp3c) mult = mult.times(getTotalSacrificeBoost())
 	
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
@@ -147,7 +149,6 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.currentEternityChall == "eterc10") mult = mult.times(ec10bonus)
 	
 	if (tier == 8 && player.achievements.includes("ng3p27")) mult = mult.times(tmp.ig)	
-
 	
 	if (mult.gt(10)) mult = dilates(mult.max(1), 2)
 	mult = mult.times(getAfterDefaultDilationLayerAchBonus(tier))
@@ -332,6 +333,7 @@ function recordBought (name, num) {
 }
 
 function costIncreaseActive(cost) {
+	if (player.aarexModifications.ngp3c) return true;
 	if (inNC(10) || player.currentChallenge == "postc1" || player.infinityUpgradesRespecced != undefined) return false
 	return cost.gte(Number.MAX_VALUE) || player.currentChallenge === 'postcngmm_2';
 }
@@ -518,6 +520,7 @@ function getDimensionProductionPerSecond(tier) {
 		else if (tier == 2) ret = ret.pow(1.5)
 	}
 	ret = ret.times(getDimensionFinalMultiplier(tier))
+	if (player.aarexModifications.ngp3c && tier==1) ret = ret.times(3)
 	if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)

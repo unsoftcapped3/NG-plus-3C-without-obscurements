@@ -87,6 +87,7 @@ function softReset(bulk, tier=1) {
 	hideDimensions()
 	tmp.tickUpdate = true;
 	if (!player.achievements.includes("r111")) setInitialMoney()
+	if (player.aarexModifications.ngp3c) loadCondensedData(1)
 }
 
 function setInitialMoney() {
@@ -216,7 +217,8 @@ function getSupersonicStart() {
 	if (inQC(5)) return 0
 	if (player.galacticSacrifice) return 1/0
 	let r = 56e4
-	if (player.aarexModifications.nguspV && !player.aarexModifications.nguepV) r = 1e5
+	if (player.aarexModifications.ngp3c) r = 1
+	else if (player.aarexModifications.nguspV && !player.aarexModifications.nguepV) r = 1e5
 	if (tmp.ngp3) {
 		if (player.masterystudies.includes("t331")) r += 24e4
 		if (isNanoEffectUsed("supersonic_start")) if (tmp.nf.effects.supersonic_start) r += tmp.nf.effects.supersonic_start 

@@ -198,6 +198,7 @@ function doQuantumResetStuff(bigRip, challid){
 	player.masterystudies = tmp.ngp3 ? (bigRip && !tmp.qu.bigRip.upgrades.includes(12) ? ["d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14"] : speedrunMilestonesReached > 15 && isRewardEnabled(11) ? player.masterystudies : []) : undefined
 	player.old = tmp.ngp3 ? inQC(0) : undefined
 	player.dontWant = tmp.ngp3 || undefined
+	if (player.aarexModifications.ngp3c) loadCondensedData(5)
 }
 		
 function doMetaDimensionsReset(bigRip, headstart, challid){
@@ -268,6 +269,7 @@ function doGalaxyResetStuff(bulk){
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
+	if (player.aarexModifications.ngp3c) loadCondensedData(2)
 }
 
 
@@ -291,6 +293,7 @@ function doNormalChallengeResetStuff(){
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
+	if (player.aarexModifications.ngp3c) loadCondensedData(3)
 }
 			
 function completelyResetTimeDimensions(){
@@ -480,6 +483,7 @@ function doCrunchResetStuff(){
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
 	player.galaxies = 0
+	if (player.aarexModifications.ngp3c) loadCondensedData(3)
 }
 
 function doEternityResetStuff(){
@@ -548,6 +552,7 @@ function doEternityResetStuff(){
 	player.currentEternityChall = ""
 	player.quantum = tmp.qu
 	player.dontWant = tmp.ngp3 ? true : undefined
+	if (player.aarexModifications.ngp3c) loadCondensedData(4)
 }
 
 function getReplicantsOnGhostifyData(){
@@ -873,6 +878,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.old = false
 	player.dontWant = true	
 	player.unstableThisGhostify = 0
+	if (player.aarexModifications.ngp3c) loadCondensedData(6)
 }
 
 function doPreInfinityGhostifyResetStuff(implode){
