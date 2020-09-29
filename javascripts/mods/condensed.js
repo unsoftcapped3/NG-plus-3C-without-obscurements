@@ -17,11 +17,6 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (resetNum>=4) {
 		player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	}
-	
-	if (resetNum===Infinity) { // Hard Reset
-		save_game();
-		window.location.reload();
-	}
 }
 
 const CONDENSER_START = {
