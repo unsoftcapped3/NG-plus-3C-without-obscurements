@@ -45,7 +45,7 @@ function setupAutobuyerHTMLandData(){
 			}
 			if (b1) giveAchievement("Bulked up");
 		} else {
-			player.autobuyers[id].interval = Math.max(player.autobuyers[id].interval * 0.6, 100);
+			player.autobuyers[id].interval = Math.max(player.autobuyers[id].interval * (player.aarexModifications.ngp3c?0.3:0.6), 100);
 			if (player.autobuyers[id].interval > 120) player.autobuyers[id].cost *= 2; //if your last purchase wont be very strong, dont double the cost
 		}
 		updateAutobuyers();
@@ -1760,6 +1760,10 @@ function getNextAt(chall) {
 		var retNGM4 = nextAt[chall+"_ngm4"]
 		if (retNGM4) ret = retNGM4
 	}
+	if (player.aarexModifications.ngp3c) {
+		var retNGP3C = nextAt[chall+"_ngp3c"]
+		if (retNGP3C) ret = retNGP3C
+	}
 	return ret
 }
 
@@ -1776,6 +1780,10 @@ function getGoal(chall) {
 	if (player.aarexModifications.ngmX >= 4){
 		var retNGM4 = goals[chall+"_ngm4"]
 		if (retNGM4) ret = retNGM4
+	}
+	if (player.aarexModifications.ngp3c) {
+		var retNGP3C = goals[chall+"_ngp3c"]
+		if (retNGP3C) ret = retNGP3C
 	}
 	return ret
 }
@@ -1886,11 +1894,11 @@ function glowText(id) {
 
 document.getElementById("maxall").onclick = function () {
 	if (tmp.ri) return false
+	if (player.aarexModifications.ngp3c) for (let i=1;i<=8;i++) maxCondense(i)
 	if (player.currentChallenge !== 'challenge14' || player.aarexModifications.ngmX !== 2) buyMaxTickSpeed()
 	for (var tier=1; tier<9;tier++) buyBulkDimension(tier, 1/0)
 	if (player.aarexModifications.ngmX>3) buyMaxTimeDimensions()
 	if (player.pSac!=undefined) maxAllIDswithAM()
-	if (player.aarexModifications.ngp3c) for (let i=1;i<=8;i++) maxCondense(i)
 }
 
 document.getElementById("challengeconfirmation").onclick = function () {
@@ -1918,7 +1926,7 @@ function getIPMultPower() {
 }
 function canBuyIPMult() {
 	if (player.infinityUpgradesRespecced!=undefined) return player.infinityPoints.gte(player.infMultCost)
-	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
+	return (player.aarexModifications.ngp3c || (player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost"))) && player.infinityPoints.gte(player.infMultCost)
 }
 
 document.getElementById("infiMult").onclick = function() {
@@ -2868,6 +2876,7 @@ function calcSacrificeBoost() {
 	if (player.aarexModifications.ngp3c) {
 		if (player.resets>=6) ret = ret.pow(1.5)
 		if (player.galaxies>=1) ret = ret.pow(1.75)
+		ret = softcap(ret, "ngp3cSAC")
 	}
 	return ret
 }
@@ -2897,6 +2906,7 @@ function calcTotalSacrificeBoost(next) {
 	if (player.aarexModifications.ngp3c) {
 		if (player.resets>=6) ret = ret.pow(1.5)
 		if (player.galaxies>=1) ret = ret.pow(1.75)
+		ret = softcap(ret, "ngp3cSAC")
 	}
 	return ret
 }
@@ -4705,10 +4715,11 @@ function updateResetTierButtons(){
 }
 
 function updateOrderGoals(){
+	document.getElementById("ngp3c_pc6_desc").textContent = player.aarexModifications.ngp3c?", and the IP gain softcap is 75% weaker":""
 	if (order) for (var i=0; i<order.length; i++) document.getElementById(order[i]+"goal").textContent = "Goal: "+shortenCosts(getGoal(order[i]))
 }
 
-function updateReplicantiGalaxyToggels(){
+function updateReplicantiGalaxyToggels(){ // epik speling
 	if (player.replicanti.galaxybuyer === undefined || player.boughtDims) document.getElementById("replicantiresettoggle").style.display = "none"
 	else document.getElementById("replicantiresettoggle").style.display = "inline-block"
 }
@@ -6288,9 +6299,11 @@ function autoBuyerTick() {
 					}
 				} else if (canBuyDimension(priority[i].tier)) {
 					if (priority[i].target > 10) {
+						if (player.aarexModifications.ngp3c) maxCondense(priority[i].target - 10)
 						if (player.options.bulkOn) buyBulkDimension(priority[i].target - 10, priority[i].bulk, true)
 						else buyBulkDimension(priority[i].target - 10, 1, true)
 					} else {
+						if (player.aarexModifications.ngp3c) maxCondense(priority[i].target)
 						buyOneDimension(priority[i].target)
 					}
 					if (player.aarexModifications.ngmX>3) buyMaxTimeDimension(priority[i].target % 10, priority[i].bulk)
@@ -6635,7 +6648,7 @@ function getUnspentBonus() {
 	x = player.infinityPoints
 	if (!x) return new Decimal(1)
 	if (player.galacticSacrifice) return x.pow(Math.max(Math.min(Math.pow(x.max(1).log(10), 1 / 3) * 3, 8), 1)).plus(1);
-	else return x.dividedBy(2).pow(1.5).plus(1)
+	else return x.dividedBy(2).pow(1.5).plus(1).pow(player.aarexModifications.ngp3c?5:1)
 }
 
 var totalMult = 1
@@ -6660,6 +6673,7 @@ function getAchievementMult(){
 		div -= Math.sqrt(gups)
 		if (gups > 15) exp += gups
 	}
+	if (player.aarexModifications.ngp3c) div /= 10
 	return Math.max(Math.pow(ach - minus - getSecretAchAmount(), exp) / div, 1)
 }
 

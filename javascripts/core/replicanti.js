@@ -1,10 +1,15 @@
+let replicantiUnlock = function() { 
+	if (player.aarexModifications.ngp3c) return 1e111
+	return player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140 
+}
+
 function unlockReplicantis() {
-	if (player.infinityPoints.gte(player.galacticSacrifice!=undefined&&player.tickspeedBoosts==undefined?1e80:1e140)) {
+	if (player.infinityPoints.gte(replicantiUnlock())) {
 		document.getElementById("replicantidiv").style.display = "inline-block"
 		document.getElementById("replicantiunlock").style.display = "none"
 		player.replicanti.unl = true
 		player.replicanti.amount = new Decimal(1)
-		player.infinityPoints = player.infinityPoints.minus(player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140)
+		player.infinityPoints = player.infinityPoints.minus(replicantiUnlock())
 	}
 }
 

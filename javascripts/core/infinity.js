@@ -53,6 +53,9 @@ function gainedInfinityPoints(next) {
 	}
 	if (isBigRipUpgradeActive(4)) ret = ret.times(player.replicanti.amount.pow(0.34).max(1))
 	if (player.tickspeedBoosts != undefined && player.achievements.includes("r95") && player.eightAmount > 5000) ret = ret.times(Decimal.pow(player.eightAmount, 2))
+	
+	if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cIP")
+	if (player.infinityUpgrades.includes("postinfi80")) ret = ret.times(getPostInfi80Mult())
 	return ret.floor()
 }
 

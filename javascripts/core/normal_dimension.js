@@ -162,6 +162,8 @@ function getDimensionFinalMultiplier(tier) {
 	if (quantumed && !tmp.ngp3l) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
+	
+	if (player.aarexModifications.ngp3c && mult.gte(1e50)) mult = softcap(mult, "ngp3cNDs")
 
 	return mult
 }
@@ -284,10 +286,13 @@ function getMPTExp(focusOn) {
 }
 
 function infUpg12Pow() {
+	let toAdd = 0.1
+	if (player.aarexModifications.ngp3c) toAdd *= Math.log10(player.money.plus(1).log10()+1)+1
+	
 	if (player.tickspeedBoosts !== undefined) return 1.05 + .01 * Math.min(Math.max(player.infinitied, 0), 45)
 	if (player.galacticSacrifice) return 1.05 + .0025 * Math.min(Math.max(player.infinitied, 0), 60)
-	if (player.aarexModifications.newGameExpVersion) return 1.2
-	return 1.1
+	if (player.aarexModifications.newGameExpVersion) return 1+toAdd*2
+	return 1+toAdd
 }
 	
 function clearDimensions(amount) {
@@ -489,17 +494,25 @@ function timeMult() {
 }
 
 function infUpg11Pow() {
-	if (player.galacticSacrifice) return Math.max(Math.pow(player.totalTimePlayed / 864e3, 0.75), 1)
-	else return Math.max(Math.pow(player.totalTimePlayed / 1200, 0.15), 1)
+	let pow = 1
+	if (player.aarexModifications.ngp3c) pow *= Math.log10(player.money.plus(1).log10()+1)*3+1
+	
+	if (player.galacticSacrifice) return Math.max(Math.pow(player.totalTimePlayed / 864e3, 0.75*pow), 1)
+	else return Math.max(Math.pow(player.totalTimePlayed / 1200, 0.15*pow), 1)
 }
 
 function infUpg13Pow() {
-	if (player.galacticSacrifice) return Math.pow(1 + player.thisInfinityTime / 2400, 1.5)
-	else return Math.max(Math.pow(player.thisInfinityTime / 2400, 0.25), 1)
+	let pow = 1
+	if (player.aarexModifications.ngp3c) pow *= Math.sqrt(player.galaxies+1)*200
+	
+	if (player.galacticSacrifice) return Math.pow(1 + player.thisInfinityTime / 2400, 1.5*pow)
+	else return Math.max(Math.pow((player.aarexModifications.ngp3c?1:0)+player.thisInfinityTime / 2400, 0.25*pow), 1)
 }
 
 function dimMults() {
-	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1),(player.galacticSacrifice ? 2 : 1) * (player.timestudy.studies.includes(31) ? 4 : 1))
+	let exp = 1
+	if (player.aarexModifications.ngp3c) exp = Decimal.log10(nA(getInfinitied(), 1))+1
+	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1),(player.galacticSacrifice ? 2 : 1) * (player.timestudy.studies.includes(31) ? 4 : 1)).pow(exp)
 }
 
 function getInfinitiedMult() {

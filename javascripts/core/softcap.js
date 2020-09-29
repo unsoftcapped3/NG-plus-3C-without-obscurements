@@ -404,7 +404,63 @@ var softcap_data = {
 			mul: 4 / Math.log10(8), /* log2(4096)=12, so 4/3s that is 16 and 16**3 = 4096 */
 			pow: 3
 		}
-	}
+	},
+	ngp3cNDs: {
+		1: {
+			func: "pow",
+			start: 1e50,
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: Number.MAX_VALUE,
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	ngp3cTS: {
+		1: {
+			func: "pow",
+			start: Number.MAX_VALUE,
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal("1e1000"),
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	ngp3cIP: {
+		1: {
+			func: "pow",
+			start: 1e10,
+			pow() { return (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?.875:.5 },
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: 1e30,
+			pow() { return (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?5/6:1/3 },
+			derv: false,
+		},
+	},
+	ngp3cSAC: {
+		1: {
+			func: "pow",
+			start: 1e25,
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "log",
+			start: new Decimal(Number.MAX_VALUE),
+			mul: 10,
+			pow: 88.352902,
+		},
+	},
 }
 
 var softcap_vars = {
@@ -444,6 +500,13 @@ var softcap_funcs = {
 		if (typeof add == "function") add = add()
 		var x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		return Math.min(x, x2)
+	},
+	log_decimal: function(x, pow = 1, mul = 1, add = 0) {
+		if (typeof pow == "function") pow = pow()
+		if (typeof mul == "function") mul = mul()
+		if (typeof add == "function") add = add()
+		var x2 = Math.pow(Decimal.log10(x) * mul + add, pow)
+		return new Decimal(Math.min(x, x2))
 	},
 	logshift: function (x, shift, pow, add = 0){
 		if (typeof pow == "function") pow = pow()

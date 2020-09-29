@@ -26,6 +26,7 @@ function maxAllID() {
 			dim.power=dim.power.times(Decimal.pow(getInfBuy10Mult(t),toBuy))
 			dim.cost=dim.cost.times(Decimal.pow(costMult,toBuy))
 		}
+		if (player.aarexModifications.ngp3c && player.infDimensionsUnlocked[t - 1]) maxInfCondense(t)
 	}
 }
 
@@ -75,6 +76,7 @@ function updateInfinityDimensions() {
 				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) document.getElementById("infMax"+tier).className = "storebtn"
 				else document.getElementById("infMax" + tier).className = "unavailablebtn"
 				document.getElementById("infRow" + tier).style.visibility = "visible";
+				if (player.aarexModifications.ngp3c) updateInfCondenser(tier)
 			}
 		}
 	}
@@ -146,6 +148,8 @@ function DimensionPower(tier) {
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
 	
+	if (player.aarexModifications.ngp3c) mult = mult.times(getInfCondenserEff(tier))
+	
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(getECReward(4))
 
@@ -186,6 +190,7 @@ var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280]
 function getIDCost(tier) {
 	let ret = player["infinityDimension" + tier].cost
 	if (player.galacticSacrifice !== undefined && player.achievements.includes("r123")) ret = ret.div(galMults.u11())
+	if (player.aarexModifications.ngp3c) ret = ret.div(500/tier)
 	return ret
 }
 
@@ -207,6 +212,7 @@ function getInfBuy10Mult(tier) {
 	let ret = infPowerMults[player.galacticSacrifice!==undefined&&player.tickspeedBoosts===undefined ? 1 : 0][tier]
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
 	if (player.dilation.upgrades.includes("ngmm6")) ret *= getDil45Mult()
+	if (player.aarexModifications.ngp3c) ret *= 0.25
 	return ret
 }
 
@@ -278,6 +284,8 @@ function getInfinityPowerEffectExp() {
 	if (x > 100) x = 50 * Math.log10(x)
 	if (hasPU(34)) x *= puMults[34]()
 	if (player.dilation.upgrades.includes("ngmm5")) x += getDil44Mult()
+	
+	if (player.aarexModifications.ngp3c) x *= 0.85
 	return x
 }
 
@@ -367,6 +375,16 @@ function getNewInfReq() {
 		if (player.aarexModifications.ngmX >= 4){
 			reqs[0] = new Decimal("1e1777")
 		}
+	}
+	if (player.aarexModifications.ngp3c) {
+		reqs[0] = new Decimal("1e1450")
+		reqs[1] = new Decimal("1e1750")
+		reqs[2] = new Decimal("1e5825")
+		reqs[3] = new Decimal("1e7150")
+		reqs[4] = new Decimal("1e60000")
+		reqs[5] = new Decimal("1e80000")
+		reqs[6] = new Decimal("1e100000")
+		reqs[7] = new Decimal("1e120000")
 	}
 	for (var tier = 0; tier < 7; tier++) if (!player.infDimensionsUnlocked[tier]) return {money: reqs[tier], tier: tier+1}
 	return {money: new Decimal("1e60000"), tier: 8}

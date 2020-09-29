@@ -52,7 +52,7 @@ function getGalaxyEff(bi) {
 	let eff = 1
 	if (inNC(6, 2)) eff *= 1.5
 	if (player.galacticSacrifice) if (player.galacticSacrifice.upgrades.includes(22)) eff *= player.aarexModifications.ngmX>3?2:5;
-	if (player.infinityUpgrades.includes("galaxyBoost")) eff *= 2;
+	if (player.infinityUpgrades.includes("galaxyBoost")) eff *= player.aarexModifications.ngp3c?4:2;
 	if (player.infinityUpgrades.includes("postGalaxy")) eff *= getPostGalaxyEff();
 	if (player.challenges.includes("postc5")) eff *= player.galacticSacrifice ? 1.15 : 1.1;
 	if (player.achievements.includes("r86")) eff *= player.galacticSacrifice ? 1.05 : 1.01
@@ -174,6 +174,10 @@ function getPostC3Exp() {
 			} else z = .6
 		}
 		x = 2 + Math.pow(g - 5, z) / y
+	}
+	if (player.aarexModifications.ngp3c) {
+		let g = player.galaxies
+		x *= Math.log2(g+1)*10+1
 	}
 	return x
 }
@@ -297,6 +301,11 @@ function getWorkingTickspeed(){
 	var log = -player.tickspeed.log10()
 	if (tmp.ngp3) log = softcap(log, "working_ts")
 	tick = Decimal.pow(10, -log)
+	if (player.aarexModifications.ngp3c) {
+		for (let i=1;i<=4;i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
+		if (player.infinityUpgrades.includes("postinfi82")) tick = tick.div(getTotalSacrificeBoost())
+		tick = softcap(tick.pow(-1), "ngp3cTS").pow(-1)
+	}
 	return tick
 }
 
