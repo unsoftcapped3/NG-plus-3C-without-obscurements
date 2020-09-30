@@ -78,11 +78,12 @@ function updateCondenser(x) {
 	let cost = getCondenserCost(x)
 	let resource = getOrSubResource(x)
 	document.getElementById("Condense"+x).textContent = costPart + shortenPreInfCosts(cost)
-	document.getElementById("Condense"+x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+	document.getElementById("Condense"+x).className = (resource.gte(cost)&&player[TIER_NAMES[x]+"Bought"]>0) ? 'storebtn' : 'unavailablebtn'
 }
 
 function condenseDimension(x) {
 	if (!player.aarexModifications.ngp3c) return;
+	if (player[TIER_NAMES[x]+"Bought"]<=0) return;
 	let res = getOrSubResource(x)
 	let cost = getCondenserCost(x)
 	if (res.lt(cost)) return;
@@ -92,6 +93,7 @@ function condenseDimension(x) {
 
 function maxCondense(x) {
 	if (!player.aarexModifications.ngp3c) return;
+	if (player[TIER_NAMES[x]+"Bought"]<=0) return;
 	let res = getOrSubResource(x)
 	let cost = getCondenserCost(x)
 	if (res.lt(cost)) return;
