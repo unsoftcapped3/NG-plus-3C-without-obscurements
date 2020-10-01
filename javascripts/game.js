@@ -3646,7 +3646,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	updateSingularity()
 	updateDimTechs()
 	if (player.replicanti.unl && !player.achievements.includes("r95")) player.replicanti.amount = new Decimal(1)
-	if (speedrunMilestonesReached < 28 && (tmp.ngp3l || !player.achievements.includes("ng3p67"))) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
+	if (!player.aarexModifications.ngp3c && speedrunMilestonesReached < 28 && (tmp.ngp3l || !player.achievements.includes("ng3p67"))) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDs()

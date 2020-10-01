@@ -112,8 +112,14 @@ function getDimensionFinalMultiplier(tier) {
 	
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
-	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
-	if (player.currentEternityChall == "eterc11") return tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
+	if (player.currentChallenge == "postcngc_2" || player.currentChallenge == "postcngm3_2" || player.currentEternityChall == "eterc11") {
+		let forcedMult = new Decimal(1);
+		if (player.currentChallenge == "postcngc_2") forcedMult = ((player.aarexModifications.ngp3c?tmp.cnd.nrm[tier]:1)||1)
+		else if (player.currentChallenge == "postcngm3_2") forcedMult = tmp.infPow.max(1e100)
+		else if (player.currentEternityChall == "eterc11") forcedMult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
+		if (player.aarexModifications.ngp3c) return softcap(forcedMult, "ngp3cNDs")
+		else return forcedMult;
+	}
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {
 		if (tier == 4) mult = mult.pow(1.4)
 		if (tier == 2) mult = mult.pow(1.7)
@@ -163,7 +169,8 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
 	
-	if (player.aarexModifications.ngp3c && mult.gte(1e50)) mult = softcap(mult, "ngp3cNDs")
+	if (player.aarexModifications.ngp3c) mult = softcap(mult, "ngp3cNDs")
+	if (player.aarexModifications.ngp3c) mult = mult.times(getIDReplMult())
 
 	return mult
 }

@@ -25,6 +25,8 @@ function getReplMult(next) {
 		exp += (player.timestudy.ers_studies[3] + (next ? 1 : 0)) / 2
 		if (player.achievements.includes('r108')) exp *= 1.09;
 	}
+	if (player.aarexModifications.ngp3c) exp *= 2.5
+	if (tmp.cnd && player.aarexModifications.ngp3c) exp = Decimal.mul(exp, tmp.cnd.repl.eff2);
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
 	if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
 	if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
@@ -214,7 +216,7 @@ function replicantiGalaxyAutoToggle() {
 
 function getReplSpeed() {
 	let inc = .2
-	let exp = 308
+	let exp = Math.floor(Decimal.log10(getReplScaleStart()))
 	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
 		let expDiv = 10
 		if (tmp.ngp3 && !tmp.ngp3l) expDiv = 9
@@ -227,6 +229,7 @@ function getReplSpeed() {
 	if (GUBought("gb2")) exp *= 2
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
+	
 	return {inc: inc, exp: exp}
 }
 
@@ -245,12 +248,18 @@ function getReplicantiInterval() {
 	if (player.dilation.upgrades.includes('ngpp1') && player.aarexModifications.nguspV && !player.aarexModifications.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (tmp.ngp3) if (player.masterystudies.includes("t332")) interval = interval.div(getMTSMult(332))
+	if (tmp.cnd && player.aarexModifications.ngp3c) interval = interval.div(tmp.cnd.repl.eff1)
 	return interval
+}
+
+function getReplScaleStart() {
+	return Number.MAX_VALUE
 }
 
 function getReplicantiFinalInterval() {
 	let x = getReplicantiInterval()
-	if (player.replicanti.amount.gt(Number.MAX_VALUE)) x = player.boughtDims ? Math.pow(player.achievements.includes("r107") ? Math.max(player.replicanti.amount.log(2)/1024,1) : 1, -.25) * x.toNumber() : Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0)/tmp.rep.speeds.exp).times(x)
+	if (player.replicanti.amount.gt(getReplScaleStart())) x = player.boughtDims ? Math.pow(player.achievements.includes("r107") ? Math.max(player.replicanti.amount.log(2)/1024,1) : 1, -.25) * x.toNumber() : Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0)/tmp.rep.speeds.exp).times(x)
+	if (player.aarexModifications.ngp3c) x = Decimal.div(x, 20)
 	return x
 }
 

@@ -56,6 +56,7 @@ function gainedInfinityPoints(next) {
 	
 	if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cIP")
 	if (player.infinityUpgrades.includes("postinfi80")) ret = ret.times(getPostInfi80Mult())
+	if (player.aarexModifications.ngp3c) ret = ret.times(getIDReplMult())
 	return ret.floor()
 }
 
@@ -181,7 +182,7 @@ function startChallenge(name) {
 	updateDimTechs()
 	
 	if (player.replicanti.unl) player.replicanti.amount = new Decimal(1)
-	player.replicanti.galaxies = 0
+	if (!player.aarexModifications.ngp3c) player.replicanti.galaxies = 0
 
 	// even if we're in a challenge, apparently if it's challenge 2 we might have four resets anyway.
 	setInitialDimensionPower();

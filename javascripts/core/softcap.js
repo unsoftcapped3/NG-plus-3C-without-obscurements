@@ -414,7 +414,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "pow",
-			start: Number.MAX_VALUE,
+			start: new Decimal(Number.MAX_VALUE),
 			pow: 1/4,
 			derv: false,
 		},
@@ -423,13 +423,13 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: Number.MAX_VALUE,
-			pow: 1/3,
+			pow() { return player.challenges.includes("postcngc_2")?2/5:1/3 },
 			derv: false,
 		},
 		2: {
 			func: "pow",
 			start: new Decimal("1e1000"),
-			pow: 1/4,
+			pow() { return player.challenges.includes("postcngc_2")?13/40:1/4 },
 			derv: false,
 		},
 	},
@@ -455,10 +455,24 @@ var softcap_data = {
 			derv: false,
 		},
 		2: {
-			func: "log",
+			func: "pow",
 			start: new Decimal(Number.MAX_VALUE),
-			mul: 10,
-			pow: 88.352902,
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	condenseRepl: {
+		1: {
+			func: "pow",
+			start: 1e6,
+			pow: 1/2,
+			derv: false,
+		},
+		2: {
+			func: "log",
+			start: 1e9,
+			mul: Math.sqrt(1e9)/9,
+			pow: 2,
 		},
 	},
 }
@@ -521,7 +535,7 @@ function do_softcap(x, data, num) {
 	var data = data[num]
 	if (data === undefined) return
 	var func = data.func
-	if (func == "log" && data["start"]) if (x < data["start"]) return x
+	if (func == "log" && data["start"]) if ((x instanceof Decimal) ? x.lt(data["start"]) : x < data["start"]) return x
 	var vars = softcap_vars[func]
 	if (x + 0 != x) func += "_decimal"
 	return softcap_funcs[func](x, data[vars[0]], data[vars[1]], data[vars[2]])

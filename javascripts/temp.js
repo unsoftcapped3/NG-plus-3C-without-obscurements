@@ -63,11 +63,11 @@ function updateTemp() {
 	updateTS232Temp()
 	updateMatterSpeed()
 
+	updateCondenseTemp()
+	
 	tmp.tsReduce = getTickSpeedMultiplier()
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()
-	
-	updateCondenseTemp()
 
 	if (tmp.gameSpeed != gameSpeed) {
 		tmp.gameSpeed = gameSpeed
@@ -289,7 +289,7 @@ function updateReplicantiTemp() {
 	if (tmp.ngp3 && player.masterystudies.includes("t273")) {
 		data.chance = Decimal.pow(data.chance, tmp.mts[273])
 		data.freq = 0
-		if (data.chance.gte("1e9999998")) data.freq = tmp.mts[273].times(Math.log10(player.replicanti.chance + 1) / Math.log10(2))
+		if (data.chance.gte("1e9999998")) data.freq = tmp.mts[273].times(Decimal.log10(Decimal.add(data.chance, 1)) / Math.log10(2))
 	}
 
 	data.est = Decimal.div((data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3), data.interval)
@@ -686,4 +686,15 @@ function updateCondenseTemp() {
 	for (let i=1;i<=8;i++) {
 		tmp.cnd.nrm[i] = getCondenserEff(i)
 	}
+	
+	if (!tmp.cnd.repl) tmp.cnd.repl = {}
+	let repl = player.replicanti.amount
+	repl = softcap(repl, "condenseRepl")
+	tmp.cnd.repl.eff1 = Decimal.pow(new Decimal(repl.max(1).log10()).div(3).plus(1), Math.sqrt(player.condensed.repl)/4)
+	if (tmp.cnd.repl.eff1.gte(10)) tmp.cnd.repl.eff1 = Decimal.pow(10, new Decimal(tmp.cnd.repl.eff1.log10()).sqrt())
+	let c2 = player.condensed.repl
+	if (c2>=2) c2 = Math.pow(c2*4, 1/3)
+	tmp.cnd.repl.eff2 = new Decimal(repl.max(1).log10()).div(3).times(Math.pow(c2, 0.95)/2.5).plus(1)
+
+	tmp.cnd.ic9 = getIC9Eff()
 }

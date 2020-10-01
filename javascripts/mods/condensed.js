@@ -6,9 +6,11 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 		player.condensed = {
 			normal: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			inf: [null, 0, 0, 0, 0, 0, 0, 0, 0],
+			repl: 0,
 		}
 	}
 	if (player.condensed.inf === undefined) player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+	if (player.condensed.repl === undefined) player.condensed.repl = 0
 	
 	// Reset Stuff
 	if (resetNum>=1) {
@@ -16,6 +18,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	}
 	if (resetNum>=4) {
 		player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+		player.condensed.repl = 0
 	}
 }
 
@@ -60,11 +63,14 @@ function getCondenserTarget(x) {
 }
 
 function getCondenserPow() {
+	if (player.currentChallenge == "postcngc_1") return new Decimal(0)
+	
 	let pow = new Decimal(1)
 	if (player.galaxies>=2) pow = pow.times((Math.sqrt(player.galaxies*2)*2)/3)
 	if (player.infinityUpgrades.includes("postinfi70")) pow = pow.times(getPostInfi70Mult())
 	if (player.infinityUpgrades.includes("postinfi72")) pow = pow.times(getPostInfi72Mult())
 	if (player.challenges.includes("postc4")) pow = pow.times(1.25)
+	if (player.challenges.includes("postcngc_2")) pow = pow.times(1.15)
 	return pow
 }
 
@@ -129,7 +135,12 @@ function getInfCondenserTarget(x) {
 }
 
 function getInfCondenserPow() {
-	return 1;
+	if (player.currentChallenge == "postcngc_1") return 0;
+	
+	let ret = new Decimal(1)
+	if (player.challenges.includes("postcngc_1")) ret = ret.times(tmp.cnd?tmp.cnd.ic9:1)
+	if (player.challenges.includes("postcngc_2")) ret = ret.times(1.15)
+	return ret;
 }
 
 function getInfCondenserEff(x) {
@@ -161,6 +172,7 @@ function getPostInfi70Mult() {
 
 function getPostInfi72Mult() {
 	let totalInf = player.condensed.inf.reduce((a,c) => (a||0)+(c||0))
+	if (totalInf>=21) totalInf = 20+Math.log10(totalInf)/Math.log10(21)
 	let mult = Math.pow(totalInf, 1.5)/10+1
 	return mult;
 }
@@ -199,4 +211,35 @@ document.getElementById("postinfi81").onclick = function() {
 
 document.getElementById("postinfi82").onclick = function() {
     buyInfinityUpgrade("postinfi82", 1e36);
+}
+
+function getReplCondenseCost() {
+	let c = player.condensed.repl
+	let cost = Decimal.pow(10, 2+Math.pow(2, c))
+	return cost;
+}
+
+function updateReplCond() {
+	document.getElementById("replCond").textContent = getFullExpansion(player.condensed.repl)
+	document.getElementById("replCond1").textContent = shorten(tmp.cnd?tmp.cnd.repl.eff1:1)
+	document.getElementById("replCond2").textContent = shorten(tmp.cnd?tmp.cnd.repl.eff2:1)
+	let cost = getReplCondenseCost()
+	document.getElementById("replCondenseReq").textContent = shortenCosts(cost)
+	document.getElementById("replCondense").className = player.replicanti.amount.gte(cost)?"storebtn":"unavailablebtn"
+}
+
+function replCondense() {
+	if (!player.replicanti.unl) return
+	if (!player.aarexModifications.ngp3c) return
+	let cost = getReplCondenseCost()
+	if (player.replicanti.amount.lt(cost)) return;
+	player.replicanti.amount = new Decimal(1)
+	player.condensed.repl++;
+}
+
+function getIC9Eff() {
+	let total = player.condensed.normal.reduce((a,c) => (a||0)+(c||0))
+	if (total>=25) total = 24+Math.log10(total)/Math.log10(24)
+	let mult = Math.log10(total+1)*2+1
+	return mult;
 }

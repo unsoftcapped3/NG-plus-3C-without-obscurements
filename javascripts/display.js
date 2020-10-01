@@ -716,7 +716,7 @@ function replicantiDisplay() {
 		document.getElementById("replicantimult").textContent = shorten(getIDReplMult())
 		
 		var chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10,1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
-		document.getElementById("replicantichance").innerHTML = "Replicate "+(tmp.rep.freq?"amount: "+shorten(tmp.rep.freq)+"x":"chance: "+getFullExpansion(chance.gt(1e12)?chance:Math.round(chance.toNumber()))+"%") + chanceDisplayEnding
+		document.getElementById("replicantichance").innerHTML = "Replicate "+(tmp.rep.freq?"amount: "+shorten(tmp.rep.freq)+"x":"chance: "+(chance.lt(1)?(chance.lt(0.001)?("1/"+getFullExpansion(chance.pow(-1).gt(1e12)?chance.pow(-1):Math.round(chance.pow(-1).toNumber()))):Math.round(chance.toNumber()*1000)/1000):getFullExpansion(chance.gt(1e12)?chance:Math.round(chance.toNumber())))+"%") + chanceDisplayEnding
 		document.getElementById("replicantiinterval").innerHTML = "Interval: "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100), true, 3) + (isIntervalAffordable() ? "<br>-> "+timeDisplayShort(Decimal.times(tmp.rep.interval, 9e-3), true, 3)+" Cost: "+shortenCosts(player.replicanti.intervalCost)+" IP" : "")
 		var replGalName = player.replicanti.gal < 3e3 ? "Max Replicanti galaxies" : (player.replicanti.gal < 58200 ? "Distant" : "Further") + " Replicated Galaxies"
 		var replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
@@ -733,6 +733,9 @@ function replicantiDisplay() {
 		document.getElementById("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (tmp.ngp3l || !player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
+		document.getElementById("replDesc").textContent = player.aarexModifications.ngp3c?"multiplier to IP gain (after softcap) & all Normal Dimensions":"multiplier on all infinity dimensions"
+		document.getElementById("replNGP3C").style.display = player.aarexModifications.ngp3c?"":"none"
+		if (player.aarexModifications.ngp3c) updateReplCond()
 	} else {
 		document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(replicantiUnlock()) + " IP"
 		document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(replicantiUnlock())) ? "storebtn" : "unavailablebtn"

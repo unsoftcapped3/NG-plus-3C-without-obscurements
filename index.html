@@ -3369,6 +3369,33 @@
 							</div>
 						</td>
 					</tr>
+					<tr>
+						<td id='postcngc_div1' style='display:none'>
+							<div class="infchallengediv" id="postcngc_1div" style="height: 140px; display: none">
+								<span>Condensers & Infinity Condensers do nothing.</span>
+								<br>
+								<div class="outer">
+									<button id="postcngc_1" class="challengesbtn" onclick="startChallenge('postcngc_1')">Start</button>
+									<br>
+									<span id="postcngc_1goal"></span><br>
+									<span>Reward: Infinity Condensers are stronger based on your Condensers.</span>
+								</div>
+							</div>
+						</td>
+						<td id='postcngc_div2' style='display:none'>
+							<div class="infchallengediv" id="postcngc_2div" style="height: 140px; display: none">
+								<span>Condensers & Infinity Condensers are the only source of production for their respective dimensions.</span>
+								<br>
+								<br>
+								<div class="outer">
+									<button id="postcngc_2" class="challengesbtn" onclick="startChallenge('postcngc_2')">Start</button>
+									<br>
+									<span id="postcngc_2goal"></span><br>
+									<span>Reward: Condensers & Infinity Condensers are 15% stronger, and the Tickspeed softcap is 10% weaker.</span>
+								</div>
+							</div>
+						</td>
+					</tr>
 				</table>
 
 			</div>
@@ -4559,7 +4586,7 @@
 			<button class="storebtn" id="replicantiunlock" onclick="unlockReplicantis()" style="width:200px; height: 80px">Unlock Replicantis<br>Cost: 1e140 IP</button>
 			<div id="replicantidiv" style="display: none; width: 1000px">
 				<div id="eterc8repl" style="display: none;"></div>
-				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti. Translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x multiplier on all infinity dimensions</p>
+				<p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti. Translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x <span id="replDesc">multiplier on all infinity dimensions</span></p>
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
 				<button class="storebtn" id="replicantiinterval" onclick="upgradeReplicantiInterval()" style="width:180px; height: 50px; font-size: 10px">Interval: 1000ms<br>-> 900 Costs: 1e6969 IP</button>
@@ -4575,6 +4602,10 @@
 				<br>
 				<button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button><br>
 				<button class="storebtn" id="replicantibulkmodetoggle" onclick="replicantiGalaxyBulkModeToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Galaxy bulk mode: single</button>
+				<div id="replNGP3C" style="display: none;">
+					<br><br><span style="font-size: 15px;">You have <span id="replCond"  style="font-size:23px; color: black"></span> Replicated Condensers, which are making Replicanti reduce their interval by <span id="replCond1"  style="font-size:23px; color: black"></span>x and raise their base effect ^<span id="replCond2"  style="font-size:23px; color: black"></span>.</span><br><br>
+					<button id="replCondense" class="storebtn" onclick="replCondense()"  style="width: 200px; height: 70px; font-size: 12px">Create a Replicated Condenser<br>Req: <span id="replCondenseReq"></span> Replicanti</button>
+				</div>
 				<div id="replicantigalaxypowerdiv" style="display: none;">
 				  <p>For next eternity:</p>
 				  Galaxy strength: <input type="text" onchange="setReplicantiNewGalaxyStrength()" id="galStrength"></input>

@@ -130,7 +130,7 @@ function DimensionPower(tier) {
   	var dim = player["infinityDimension" + tier]
   	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || player.currentEternityChall == "eterc13") return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
-  	if (player.currentEternityChall == 'eterc14') return getIDReplMult()
+  	if (player.currentEternityChall == 'eterc14') return player.aarexModifications.ngp3c?new Decimal(1):getIDReplMult()
   	if (inQC(3)) return getExtraDimensionBoostPower()
   	
 	var mult = getStartingIDPower(tier)
@@ -143,12 +143,15 @@ function DimensionPower(tier) {
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
   	if (player.achievements.includes("r75") && !player.boughtDims) mult = mult.times(player.achPow);
   	if (player.achievements.includes("r66") && player.galacticSacrifice !== undefined) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
-  	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.galacticSacrifice === undefined) mult = mult.times(getIDReplMult())
+  	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.galacticSacrifice === undefined && !player.aarexModifications.ngp3c) mult = mult.times(getIDReplMult())
 
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
 	
-	if (player.aarexModifications.ngp3c) mult = mult.times(getInfCondenserEff(tier))
+	if (player.aarexModifications.ngp3c) {
+		mult = mult.times(getInfCondenserEff(tier))
+		if (player.currentChallenge == "postcngc_2") return getInfCondenserEff(tier)
+	}
 	
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(getECReward(4))
@@ -160,7 +163,7 @@ function DimensionPower(tier) {
   	if (inQC(6)) mult = mult.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
   	mult = dilates(mult, 2)
-  	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.galacticSacrifice !== undefined) mult = mult.times(getIDReplMult())
+  	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.galacticSacrifice !== undefined && !player.aarexModifications.ngp3c) mult = mult.times(getIDReplMult())
   	if (player.galacticSacrifice !== undefined) mult = mult.times(ec9)
 
   	mult = dilates(mult, 1)
@@ -190,7 +193,10 @@ var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280]
 function getIDCost(tier) {
 	let ret = player["infinityDimension" + tier].cost
 	if (player.galacticSacrifice !== undefined && player.achievements.includes("r123")) ret = ret.div(galMults.u11())
-	if (player.aarexModifications.ngp3c) ret = ret.div(500/tier)
+	if (player.aarexModifications.ngp3c) {
+		ret = ret.div(500/tier)
+		if (tier>=7) ret = ret.div(1e30)
+	}
 	return ret
 }
 
@@ -212,7 +218,7 @@ function getInfBuy10Mult(tier) {
 	let ret = infPowerMults[player.galacticSacrifice!==undefined&&player.tickspeedBoosts===undefined ? 1 : 0][tier]
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
 	if (player.dilation.upgrades.includes("ngmm6")) ret *= getDil45Mult()
-	if (player.aarexModifications.ngp3c) ret *= 0.25
+	if (player.aarexModifications.ngp3c) if (tier<8) ret *= 0.25
 	return ret
 }
 
@@ -363,6 +369,9 @@ function updateInfPower() {
 
 function getNewInfReq() {
 	let reqs = [new Decimal("1e1100"), new Decimal("1e1900"), new Decimal("1e2400"), new Decimal("1e10500"), new Decimal("1e30000"), new Decimal("1e45000"), new Decimal("1e54000")]
+
+	let finalReq = new Decimal("1e60000")
+	
 	if (player.galacticSacrifice !== undefined) {
 		if (player.tickspeedBoosts === undefined) {
 			reqs[1] = new Decimal("1e1500")
@@ -381,12 +390,12 @@ function getNewInfReq() {
 		reqs[1] = new Decimal("1e1750")
 		reqs[2] = new Decimal("1e5825")
 		reqs[3] = new Decimal("1e7150")
-		reqs[4] = new Decimal("1e60000")
-		reqs[5] = new Decimal("1e80000")
-		reqs[6] = new Decimal("1e100000")
-		reqs[7] = new Decimal("1e120000")
+		reqs[4] = new Decimal("1e36000")
+		reqs[5] = new Decimal("1e37750")
+		reqs[6] = new Decimal("1e40500")
+		finalReq = new Decimal("1e53000")
 	}
 	for (var tier = 0; tier < 7; tier++) if (!player.infDimensionsUnlocked[tier]) return {money: reqs[tier], tier: tier+1}
-	return {money: new Decimal("1e60000"), tier: 8}
+	return {money: finalReq, tier: 8}
 }
 
