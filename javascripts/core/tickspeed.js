@@ -304,6 +304,7 @@ function getWorkingTickspeed(){
 	if (player.aarexModifications.ngp3c) {
 		for (let i=1;i<=4;i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
 		if (player.infinityUpgrades.includes("postinfi82")) tick = tick.div(getTotalSacrificeBoost())
+		if (player.timestudy.studies.includes(12)) tick = tick.div(Decimal.pow(getDimensionBoostPower(), player.resets))
 		tick = softcap(tick.pow(-1), "ngp3cTS").pow(-1)
 	}
 	return tick

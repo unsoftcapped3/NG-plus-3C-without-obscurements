@@ -2130,6 +2130,8 @@ function updateMilestones() {
 			document.getElementById(name).className = "milestonerewardlocked"
 		}
 	}
+	document.getElementById("reward2c").textContent = player.aarexModifications.ngp3c?" (which also autobuys Replicated Condensers)":""
+	document.getElementById("reward20c").textContent = player.aarexModifications.ngp3c?", and you start with 5 Replicated Condensers":""
 	document.getElementById("mdmilestonesrow1a").style.display = moreUnlocked ? "" : "none"
 	document.getElementById("mdmilestonesrow1b").style.display = moreUnlocked ? "" : "none"
 	document.getElementById("mdmilestonesrow2a").style.display = moreUnlocked ? "" : "none"
@@ -2611,6 +2613,7 @@ function gainedEternityPoints() {
 		}
 		if (tmp.be) ret = ret.times(getBreakUpgMult(7))
 	}
+	if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cEP")
 	return ret.floor()
 }
 
@@ -3496,7 +3499,7 @@ function updateChallengeTimes() {
 
 	var temp=0
 	var tempcounter=0
-	for (var i=0;i<14;i++) {
+	for (var i=0;i<16;i++) {
 		setAndMaybeShow("infchallengetime"+(i+1),player.infchallengeTimes[i]<600*60*24*31,'"Infinity Challenge '+(i+1)+' time record: "+timeDisplayShort(player.infchallengeTimes['+i+'], false, 3)')
 		if (player.infchallengeTimes[i]<600*60*24*31) {
 			temp+=player.infchallengeTimes[i]
@@ -3710,6 +3713,9 @@ function bigCrunch(autoed) {
 	implosionCheck = 0;
 	checkOnCrunchAchievements()
 	if (player.currentChallenge != "" && player.challengeTimes[challNumber-2] > player.thisInfinityTime) player.challengeTimes[challNumber-2] = player.thisInfinityTime
+	if (player.aarexModifications.ngp3c && !(challNumber<=8) && player.currentChallenge.includes("post")) {
+		challNumber = parseInt(player.currentChallenge.split("postcngc_")[1])+8
+	}
 	if (player.aarexModifications.ngmX >= 4) if (player.galacticSacrifice.chall) {
 		challNumber = player.galacticSacrifice.chall
 		if (player.challengeTimes[challNumber-2] > player.thisInfinityTime) player.challengeTimes[challNumber-2] = player.thisInfinityTime
@@ -4039,6 +4045,7 @@ function challengesCompletedOnEternity(bigRip) {
 
 function gainEternitiedStat() {
 	let ret = 1
+	if (player.timestudy.studies.includes(34) && player.aarexModifications.ngp3c) ret *= 10
 	if (ghostified) {
 		ret = Math.pow(10, 2 / (Math.log10(getEternitied() + 1) / 10 + 1))
 		if (hasNU(9)) ret = nM(ret, tmp.qu.bigRip.spaceShards.max(1).pow(.1))
@@ -4512,6 +4519,7 @@ function runIDBuyersTick(){
 	if (getEternitied() > 10 && player.currentEternityChall !== "eterc8") {
 		for (var i=1;i<getEternitied()-9 && i < 9; i++) {
 			if (player.infDimBuyers[i-1]) {
+				if (player.aarexModifications.ngp3c) maxInfCondense(i)
 				buyMaxInfDims(i, true)
 				buyManyInfinityDimension(i, true)
 			}
@@ -5393,6 +5401,7 @@ function replicantiIncrease(diff) {
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
 
 	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
+	if (player.replicanti.galaxybuyer && player.aarexModifications.ngp3c) replCondense(true);
 	if (player.replicanti.galaxybuyer && canGetReplicatedGalaxy() && canAutoReplicatedGalaxy()) replicantiGalaxy()
 }
 
@@ -5649,13 +5658,13 @@ function r127Progress(){
 
 function preQuantumNormalProgress(){
 	var gepLog = gainedEternityPoints().log2()
-	var goal = Math.pow(2,Math.ceil(Math.log10(gepLog) / Math.log10(2)))
+	var goal = Math.pow(2,Math.ceil(Math.log10(Math.max(gepLog, 1)) / Math.log10(2)))
 	if (goal > 131072 && player.meta && !player.achievements.includes('ngpp13')) {
 		ngpp13Progress()
 	} else if (goal > 512 && !player.achievements.includes('r127')) {
 		r127Progress()
 	} else {
-		var percentage = Math.min(gepLog / goal * 100, 100).toFixed(2) + "%"
+		var percentage = Math.max(Math.min(gepLog / goal * 100, 100), 0).toFixed(2) + "%"
 		document.getElementById("progressbar").style.width = percentage
 		document.getElementById("progresspercent").textContent = percentage
 		document.getElementById("progresspercent").setAttribute('ach-tooltip',"Percentage to "+shortenDimensions(Decimal.pow(2,goal))+" EP gain")

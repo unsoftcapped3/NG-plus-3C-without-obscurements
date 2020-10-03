@@ -173,13 +173,20 @@ function drawTreeBranch(num1, num2) {
 function drawStudyTree() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (document.getElementById("secretstudy").style.opacity != "0") drawTreeBranch("11", "secretstudy");
-    drawTreeBranch("11", "21");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("11", "12");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("12", "13");
+	drawTreeBranch("11", "21");
     drawTreeBranch("11", "22");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("21", "23");
     drawTreeBranch("21", "31");
     drawTreeBranch("21", "33");
     drawTreeBranch("22", "32");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("22", "24");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("22", "34");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("33", "43");
     drawTreeBranch("31", "41");
     drawTreeBranch("32", "42");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("34", "44");
     drawTreeBranch("41", "51");
     drawTreeBranch("42", "51");
     drawTreeBranch("51", "61");

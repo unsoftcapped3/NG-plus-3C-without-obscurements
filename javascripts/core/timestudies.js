@@ -98,6 +98,11 @@ function updateTheoremButtons() {
 	else if (tt == 1) html = "You have " + html + " Time Theorem."
 	else html = "You have " + html + " Time Theorems."
 	document.getElementById("timetheorems").innerHTML = html
+	
+	document.getElementById("ts21desc").textContent = player.aarexModifications.ngp3c?"Replicated Condensers are 40% stronger":"Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)"
+	document.getElementById("ts33desc").textContent = player.aarexModifications.ngp3c?"Replicated Condensers are 10% stronger":"You keep half of your replicanti galaxies on infinity"
+	document.getElementById("61req").textContent = player.aarexModifications.ngp3c?"Req: idk wait for next update I guess":""
+	if (player.aarexModifications.ngp3c) document.getElementById("13eff").textContent = "Currently: "+shorten(ts13Eff())+"x"
 }
 
 function buyTimeStudy(name, check, quickBuy) {
@@ -175,8 +180,32 @@ function hasRow(row) {
 function canBuyStudy(name) {
 	var row = Math.floor(name / 10)
 	var col = name % 10
+	if (name == 12) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(11)
+	}
+	if (name == 13) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(12)
+	}
+	if (name == 23) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(21)
+	}
+	if (name == 24) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(22)
+	}
 	if (name == 33) {
 		return player.timestudy.studies.includes(21) 
+	}
+	if (name == 34) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(22)
+	}
+	if (name == 43) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(33)
+	}
+	if (name == 44) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(34)
+	}
+	if (name == 61 && player.aarexModifications.ngp3c) {
+		return player.timestudy.studies.includes(51) && false;
 	}
 	if (name == 62) {
 		return player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42)
@@ -244,8 +273,8 @@ function canBuyStudy(name) {
 	}
 }
 
-var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 3, 2, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 12, 13, 23, 21, 22, 24, 33, 31, 32, 34, 43, 41, 42, 44, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
+var studyCosts = [1, 6, 5, 6, 3, 2, 7, 2, 3, 2, 5, 4, 4, 6, 2, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 var performedTS
 function updateTimeStudyButtons(changed, forceupdate = false) {
 	if (!forceupdate && (changed ? player.dilation.upgrades.includes(10) : performedTS && !player.dilation.upgrades.includes(10))) return
@@ -305,6 +334,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 				}
 			}
 			document.getElementById(all[i]).className = className
+			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==34||all[i]==43||all[i]==44) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
 		}
 	}
 
@@ -779,17 +809,21 @@ let tsMults = {
 		return Math.pow(Math.max(player.resets, 1), player.aarexModifications.newGameMult ? 4 : 1)
 	},
 	41: function() {
-		return player.aarexModifications.newGameExpVersion ? 1.5 : 1.2
+		return player.aarexModifications.ngp3c ? 1.1 : (player.aarexModifications.newGameExpVersion ? 1.5 : 1.2)
 	},
 	42: function() {
-		return (player.aarexModifications.newGameExpVersion ? 12 : 13) / 15
+		return player.aarexModifications.ngp3c ? 29/30 : ((player.aarexModifications.newGameExpVersion ? 12 : 13) / 15)
+	},
+	51: function() {
+		return player.aarexModifications.ngp3c ? Decimal.pow((player.condensed.repl+1)*(player.replicanti.galaxies+1), 150) : (player.aarexModifications.newGameExpVersion ? 1e30 : 1e15)
 	},
 	61: function() {
-		return player.aarexModifications.newGameExpVersion ? 100 : 10
+		return player.aarexModifications.ngp3c ? 5 : (player.aarexModifications.newGameExpVersion ? 100 : 10)
 	},
 	62: function() {
 		let r = player.aarexModifications.newGameExpVersion ? 4 : 3
 		if (tmp.ngex) r--
+		if (player.aarexModifications.ngp3c) r/=2
 		return r
 	},
 	211: function() {

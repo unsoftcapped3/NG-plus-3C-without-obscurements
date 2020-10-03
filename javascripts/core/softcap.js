@@ -418,6 +418,12 @@ var softcap_data = {
 			pow: 1/4,
 			derv: false,
 		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e10000"),
+			pow: 1/7,
+			derv: false,
+		},
 	},
 	ngp3cTS: {
 		1: {
@@ -475,6 +481,20 @@ var softcap_data = {
 			pow: 2,
 		},
 	},
+	ngp3cEP: {
+		1: {
+			func: "pow",
+			start: 1e10,
+			pow: 1/2,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/3,
+			derv: false,
+		},
+	},
 }
 
 var softcap_vars = {
@@ -520,7 +540,7 @@ var softcap_funcs = {
 		if (typeof mul == "function") mul = mul()
 		if (typeof add == "function") add = add()
 		var x2 = Math.pow(Decimal.log10(x) * mul + add, pow)
-		return new Decimal(Math.min(x, x2))
+		return Decimal.min(x, x2)
 	},
 	logshift: function (x, shift, pow, add = 0){
 		if (typeof pow == "function") pow = pow()
@@ -535,9 +555,9 @@ function do_softcap(x, data, num) {
 	var data = data[num]
 	if (data === undefined) return
 	var func = data.func
-	if (func == "log" && data["start"]) if ((x instanceof Decimal) ? x.lt(data["start"]) : x < data["start"]) return x
+	if (func == "log" && data["start"]) if (new Decimal(x).lt(data["start"])) return x
 	var vars = softcap_vars[func]
-	if (x + 0 != x) func += "_decimal"
+	if (x + 0 != x || x instanceof Decimal) func += "_decimal"
 	return softcap_funcs[func](x, data[vars[0]], data[vars[1]], data[vars[2]])
 }
 
@@ -554,6 +574,7 @@ function softcap(x, id, max = 1/0) {
 		var y = do_softcap(x, data, sc)
 		if (y !== undefined) {
 			x = y
+			if (x instanceof Decimal || x+0!=x) x = new Decimal(x)
 			sc++
 		} else stopped = true
 	}

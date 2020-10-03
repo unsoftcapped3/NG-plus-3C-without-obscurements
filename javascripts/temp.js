@@ -683,18 +683,25 @@ function updateCondenseTemp() {
 	if (!player.aarexModifications.ngp3c) return;
 	
 	if (!tmp.cnd.nrm) tmp.cnd.nrm = {}
+	if (!tmp.cnd.inf) tmp.cnd.inf = {}
+	if (!tmp.cnd.time) tmp.cnd.time = {}
 	for (let i=1;i<=8;i++) {
 		tmp.cnd.nrm[i] = getCondenserEff(i)
+		tmp.cnd.inf[i] = getInfCondenserEff(i)
+		tmp.cnd.time[i] = getTimeCondenserEff(i)
 	}
 	
 	if (!tmp.cnd.repl) tmp.cnd.repl = {}
+	tmp.cnd.repl.pow = getReplCondPow()
 	let repl = player.replicanti.amount
 	repl = softcap(repl, "condenseRepl")
-	tmp.cnd.repl.eff1 = Decimal.pow(new Decimal(repl.max(1).log10()).div(3).plus(1), Math.sqrt(player.condensed.repl)/4)
-	if (tmp.cnd.repl.eff1.gte(10)) tmp.cnd.repl.eff1 = Decimal.pow(10, new Decimal(tmp.cnd.repl.eff1.log10()).sqrt())
+	tmp.cnd.repl.eff1 = Decimal.pow(new Decimal(repl.max(1).log10()).div(3).plus(1), Math.sqrt(player.condensed.repl*tmp.cnd.repl.pow)/4)
 	let c2 = player.condensed.repl
 	if (c2>=2) c2 = Math.pow(c2*4, 1/3)
-	tmp.cnd.repl.eff2 = new Decimal(repl.max(1).log10()).div(3).times(Math.pow(c2, 0.95)/2.5).plus(1)
+	tmp.cnd.repl.eff2 = new Decimal(repl.max(1).log10()).div(3).times(Math.pow(c2*tmp.cnd.repl.pow, 0.95)/2.5).times(player.timestudy.studies.includes(24)?2:1).plus(1)
+
+	if (player.timestudy.studies.includes(23)) tmp.cnd.repl.eff1 = tmp.cnd.repl.eff1.plus(tmp.cnd.repl.eff2.sub(1).max(0))
 
 	tmp.cnd.ic9 = getIC9Eff()
+	tmp.cnd.extraInf = getExtraInfConds()
 }

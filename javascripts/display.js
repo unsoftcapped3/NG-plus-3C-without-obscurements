@@ -613,6 +613,7 @@ function INFINITYUPGRADESDisplay(){
 
 function eternityUpgradesDisplay(){
 	var eu2formula = "(x/200) ^ log4(2x)"
+	if (player.aarexModifications.ngp3c) eu2formula = "(x/100) ^ log2(4x)"
 	if (player.boughtDims !== undefined) eu2formula = "x ^ log4(2x)"
 	else if (player.achievements.includes("ngpp15")) eu2formula = "x ^ log10(x) ^ 3.75"
 	document.getElementById("eter1").innerHTML = "Infinity Dimension multiplier based on unspent EP (x + 1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
@@ -745,7 +746,7 @@ function replicantiDisplay() {
 function initialTimeStudyDisplay(){
 	document.getElementById("11desc").textContent = "Currently: " + shortenMoney(tsMults[11]()) + "x"
 	document.getElementById("32desc").textContent = "You gain " + getFullExpansion(tsMults[32]()) + "x more Infinities (based on Dimension Boosts)"
-	document.getElementById("51desc").textContent = "You gain " + shortenCosts(player.aarexModifications.newGameExpVersion ? 1e30 : 1e15) + "x more IP"
+	document.getElementById("51desc").textContent = "You gain " + shortenCosts(tsMults[51]()) + "x more IP"+(player.aarexModifications.ngp3c?" (based on your Replicated Condensers & RGs)":"")
 	document.getElementById("71desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.25).max(1).min("1e210000")) + "x"
 	document.getElementById("72desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.04).max(1).min("1e30000")) + "x"
 	document.getElementById("73desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.005).max(1).min("1e1300")) + "x"

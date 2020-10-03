@@ -6,11 +6,17 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 		player.condensed = {
 			normal: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			inf: [null, 0, 0, 0, 0, 0, 0, 0, 0],
+			time: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			repl: 0,
 		}
 	}
 	if (player.condensed.inf === undefined) player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.condensed.repl === undefined) player.condensed.repl = 0
+	if (player.condensed.time === undefined) player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+	if (player.infchallengeTimes[9] === undefined) {
+		player.infchallengeTimes.push(600*60*24*31)
+		player.infchallengeTimes.push(600*60*24*31)
+	}
 	
 	// Reset Stuff
 	if (resetNum>=1) {
@@ -18,7 +24,10 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	}
 	if (resetNum>=4) {
 		player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
-		player.condensed.repl = 0
+		player.condensed.repl = (player.eternities>=50&&resetNum==4)?5:0
+	}
+	if (resetNum>=5) {
+		player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	}
 }
 
@@ -140,11 +149,18 @@ function getInfCondenserPow() {
 	let ret = new Decimal(1)
 	if (player.challenges.includes("postcngc_1")) ret = ret.times(tmp.cnd?tmp.cnd.ic9:1)
 	if (player.challenges.includes("postcngc_2")) ret = ret.times(1.15)
+	if (player.timestudy.studies.includes(13)) ret = ret.times(ts13Eff())
 	return ret;
 }
 
+function getExtraInfConds() {
+	let cond = 0
+	if (player.timestudy.studies.includes(44)) cond+=3
+	return cond
+}
+
 function getInfCondenserEff(x) {
-	return Decimal.pow(player.infinityPower.plus(1).log10()+1, Decimal.mul(player.condensed.inf[x], getInfCondenserPow()))
+	return Decimal.pow(player.infinityPower.plus(1).log10()+1, Decimal.mul(player.condensed.inf[x]+tmp.cnd.extraInf, getInfCondenserPow()))
 }
 
 function condenseInfDim(x) {
@@ -219,6 +235,12 @@ function getReplCondenseCost() {
 	return cost;
 }
 
+function getReplCondenseTarget() {
+	if (player.replicanti.amount.lt(1e3)) return 0;
+	let targ = Math.floor(Math.log2(player.replicanti.amount.log10()-2)+1)
+	return targ;
+}
+
 function updateReplCond() {
 	document.getElementById("replCond").textContent = getFullExpansion(player.condensed.repl)
 	document.getElementById("replCond1").textContent = shorten(tmp.cnd?tmp.cnd.repl.eff1:1)
@@ -228,13 +250,22 @@ function updateReplCond() {
 	document.getElementById("replCondense").className = player.replicanti.amount.gte(cost)?"storebtn":"unavailablebtn"
 }
 
-function replCondense() {
+function replCondense(max=false) {
 	if (!player.replicanti.unl) return
 	if (!player.aarexModifications.ngp3c) return
 	let cost = getReplCondenseCost()
 	if (player.replicanti.amount.lt(cost)) return;
-	player.replicanti.amount = new Decimal(1)
-	player.condensed.repl++;
+	if (max) player.condensed.repl = Math.max(player.condensed.repl, getReplCondenseTarget())
+	else player.condensed.repl++;
+	if (!max) player.replicanti.amount = new Decimal(1)
+}
+
+function getReplCondPow() {
+	let pow = 1
+	if (player.timestudy.studies.includes(21)) pow *= 1.4
+	if (player.timestudy.studies.includes(33)) pow *= 1.1
+	if (player.timestudy.studies.includes(43)) pow *= ts43Eff()
+	return pow;
 }
 
 function getIC9Eff() {
@@ -242,4 +273,67 @@ function getIC9Eff() {
 	if (total>=25) total = 24+Math.log10(total)/Math.log10(24)
 	let mult = Math.log10(total+1)*2+1
 	return mult;
+}
+
+function updateTimeCondenser(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	let cost = getTimeCondenserCost(x)
+	let resource = player.eternityPoints
+	document.getElementById("timeCndCont"+x).style.display = ""
+	document.getElementById("timeCnd"+x).textContent = (quantumed ? '' : "Condense: ")+shortenCosts(cost)
+	document.getElementById("timeCnd"+x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+}
+
+function getTimeCondenserCostDiv() {
+	let div = new Decimal(1)
+	return div
+}
+
+function getTimeCondenserCost(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(1/0);
+	let bought = player.condensed.time[x]
+	return Decimal.pow(CONDENSER_BASE[x], Decimal.pow(bought, 4)).times(Decimal.div(CONDENSER_START[x], 10)).div(getTimeCondenserCostDiv())
+}
+
+function getTimeCondenserTarget(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(0);
+	let res = player.eternityPoints
+	return Math.floor(Math.pow(res.times(getTimeCondenserCostDiv()).div(Decimal.div(CONDENSER_START[x], 10)).max(1).log10()/Math.log10(CONDENSER_BASE[x]), 1/4)+1)
+}
+
+function getTimeCondenserPow() {
+	let ret = new Decimal(1)
+	return ret;
+}
+
+function getTimeCondenserEff(x) {
+	return Decimal.pow(player.timeShards.plus(1).log10()+1, Decimal.mul(player.condensed.time[x], getTimeCondenserPow()))
+}
+
+function condenseTimeDim(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	let res = player.eternityPoints
+	let cost = getTimeCondenserCost(x)
+	if (res.lt(cost)) return;
+	player.eternityPoints = player.eternityPoints.sub(cost)
+	player.condensed.time[x]++;
+}
+
+function maxTimeCondense(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	let res = player.eternityPoints
+	let cost = getTimeCondenserCost(x)
+	if (res.lt(cost)) return;
+	player.condensed.time[x] = Math.max(player.condensed.time[x], getTimeCondenserTarget(x))
+	player.eternityPoints = player.eternityPoints.sub(cost)
+}
+
+function ts13Eff() {
+	let eff = Math.pow(player.galaxies+1, 4/9);
+	return eff;
+}
+
+function ts43Eff() {
+	let eff = player.replicanti.galaxies*0.02
+	return eff+1
 }

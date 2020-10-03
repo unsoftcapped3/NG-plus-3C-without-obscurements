@@ -149,8 +149,8 @@ function DimensionPower(tier) {
 	mult = mult.times(getTotalIDEUMult())
 	
 	if (player.aarexModifications.ngp3c) {
-		mult = mult.times(getInfCondenserEff(tier))
-		if (player.currentChallenge == "postcngc_2") return getInfCondenserEff(tier)
+		mult = mult.times(tmp.cnd?tmp.cnd.inf[tier]:1)
+		if (player.currentChallenge == "postcngc_2") return tmp.cnd?tmp.cnd.inf[tier]:1
 	}
 	
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
@@ -347,7 +347,8 @@ function getEU2Mult() {
 	if (e > 1e5) soft = nS(e, cap)
 	var achReward = 1
 	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(e), 4.75))
-	return Decimal.pow(cap/200 + 1, Math.log(cap * 2 + 1) / Math.log(4)).times(Decimal.div(soft, 200).add(1).times(Decimal.times(soft, 2).add(1).log(4)).max(1)).max(achReward)
+	if (player.aarexModifications.ngp3c) return Decimal.pow(cap/100 + 1, Math.log(cap * 4 + 1) / Math.log(2)).times(Decimal.div(soft, 100).add(1).times(Decimal.times(soft, 4).add(1).log(2)).max(1)).max(achReward)
+	else return Decimal.pow(cap/200 + 1, Math.log(cap * 2 + 1) / Math.log(4)).times(Decimal.div(soft, 200).add(1).times(Decimal.times(soft, 2).add(1).log(4)).max(1)).max(achReward)
 }
 
 function getEU3Mult() {

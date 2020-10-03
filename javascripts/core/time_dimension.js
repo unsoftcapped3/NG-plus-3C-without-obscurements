@@ -99,6 +99,8 @@ function getTimeDimensionPower(tier) {
 	ret = dilates(ret, 1)
 	if (quantumed && !tmp.ngp3l) ret = ret.times(colorBoosts.dim.b)
 	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
+	
+	if (player.aarexModifications.ngp3c && tmp.cnd) ret = ret.times(tmp.cnd.time[tier])
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
 
 	return ret
@@ -167,6 +169,7 @@ function updateTimeDimensions() {
 				document.getElementById("timeD" + tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
 				document.getElementById("timeAmount" + tier).textContent = getTimeDimensionDescription(tier);
 				document.getElementById("timeMax" + tier).textContent = (quantumed ? '':"Cost: ") + shortenDimensions(player["timeDimension" + tier].cost) + (player.aarexModifications.ngmX > 3 ? "" : " EP")
+				if (player.aarexModifications.ngp3c) updateTimeCondenser(tier);
 				if (getOrSubResourceTD(tier).gte(player["timeDimension" + tier].cost)) document.getElementById("timeMax"+tier).className = "storebtn"
 			else document.getElementById("timeMax" + tier).className = "unavailablebtn"
 			} else document.getElementById("timeRow" + tier).style.display = "none"

@@ -28,7 +28,7 @@ function getReplMult(next) {
 	if (player.aarexModifications.ngp3c) exp *= 2.5
 	if ((tmp.cnd?tmp.cnd.repl:false) && player.aarexModifications.ngp3c) exp = Decimal.mul(exp, tmp.cnd.repl.eff2);
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
-	if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
+	if (player.timestudy.studies.includes(21) && !player.aarexModifications.ngp3c) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
 	if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
 	return replmult;
 }

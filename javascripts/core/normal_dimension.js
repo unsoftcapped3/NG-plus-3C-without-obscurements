@@ -512,8 +512,8 @@ function infUpg13Pow() {
 	let pow = 1
 	if (player.aarexModifications.ngp3c) pow *= Math.sqrt(player.galaxies+1)*200
 	
-	if (player.galacticSacrifice) return Math.pow(1 + player.thisInfinityTime / 2400, 1.5*pow)
-	else return Math.max(Math.pow((player.aarexModifications.ngp3c?1:0)+player.thisInfinityTime / 2400, 0.25*pow), 1)
+	if (player.galacticSacrifice) return Decimal.pow(1 + player.thisInfinityTime / 2400, 1.5*pow)
+	else return Decimal.max(Decimal.pow((player.aarexModifications.ngp3c?1:0)+player.thisInfinityTime / 2400, 0.25*pow), 1)
 }
 
 function dimMults() {

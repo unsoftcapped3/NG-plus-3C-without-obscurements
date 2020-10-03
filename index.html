@@ -135,30 +135,36 @@
 				<button class="storebtn" onclick="fillAll()" id="fillAll" style="width:150px; height: 40px; font-size: 10px; margin: auto">Buy all time studies</button>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button class="timestudylocked" id="13" onclick="buyTimeStudy(13)">Infinity Condensers are stronger based on your Normal Galaxies<span id="13eff">Currently: 1x</span>Cost: 5 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="12" onclick="buyTimeStudy(12)">Dimension Boosts also affect Tickspeed<span>Cost: 6 Time Theorems</button></td>
 						<td><button class="timestudylocked" id="11" onclick="buyTimeStudy(11)">Tickspeed affects 1st Time Dimension with reduced effect<span id="11desc">Currently: 1x</span>Cost: 1 Time Theorem</button></td>
 						<td><button class="timestudybought" id="secretstudy" style="opacity: 0; cursor: pointer; transition-duration: 2s;">Unlock a secret achievement<span>Cost: 0 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 					</tr>
 				</table>
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="21" onclick="buyTimeStudy(21)">Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)<span>Cost: 3 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="23" onclick="buyTimeStudy(23)">Replicated Condensers' first effect uses a better formula<span>Cost: 6 Time Theorems</button></td>
+						<td><button id="21" onclick="buyTimeStudy(21)"><span id="ts21desc">Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)</span><span>Cost: 3 Time Theorems</button></td>
 						<td><button id="22" onclick="buyTimeStudy(22)">Replicanti interval limit 50ms -> 1ms<span>Cost: 2 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="24" onclick="buyTimeStudy(24)">Replicated Condensers' second effect uses a better formula<span>Cost: 7 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="33" onclick="buyTimeStudy(33)">You keep half of your replicanti galaxies on infinity<span>Cost: 2 Time Theorems</button></td>
+						<td><button id="33" onclick="buyTimeStudy(33)"><span id="ts33desc">You keep half of your replicanti galaxies on infinity</span><span>Cost: 2 Time Theorems</button></td>
 						<td><button id="31" onclick="buyTimeStudy(31)">Powers up bonuses that are based on your infinitied stat (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
 						<td><button id="32" onclick="buyTimeStudy(32)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="34" onclick="buyTimeStudy(34)">Gain x10 eternitied stat<span>Cost: 5 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button id="43" onclick="buyTimeStudy(43)">Replicated Condensers are 2% stronger for each Replicated Galaxy (additive)<span>Cost: 4 Time Theorems</button></td>
 						<td><button id="41" onclick="buyTimeStudy(41)">You gain <span id="41desc" style="display:inline"></span>x more IP per galaxy.<span>Cost: 4 Time Theorems</button></td>
 						<td><button id="42" onclick="buyTimeStudy(42)"><span id="42desc"></span>Cost: 6 Time Theorems</button></td>
+						<td><button id="44" onclick="buyTimeStudy(44)">Get 3 of each Infinity Condenser for free.<span>Cost: 2 Time Theorems</button></td>
 					</tr>
 				</table>
 				<br>
@@ -172,7 +178,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
-						<td><button id="61" onclick="buyTimeStudy(61)">You gain <span id="61desc" style="display:inline"></span>x more EP<span>Cost: 3 Time Theorems</button></td>
+						<td><button id="61" onclick="buyTimeStudy(61)">You gain <span id="61desc" style="display:inline"></span>x more EP<span>Cost: 3 Time Theorems<span id="61req"></span></button></td>
 						<td><button id="62" onclick="buyTimeStudy(62)">You gain replicanti <span id="62desc" style="display:inline"></span> times faster<span>Cost: 3 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -685,7 +691,7 @@
 						<td class="milestoneText">4 Eternities:</td>
 					</tr>
 					<tr>
-						<td><button class="milestonerewardlocked" id="reward2">Unlock the replicanti galaxy autobuyer</button></td>
+						<td><button class="milestonerewardlocked" id="reward2">Unlock the replicanti galaxy autobuyer<span id="reward2c"></span></button></td>
 						<td><button class="milestonerewardlocked" id="reward3">You keep your Infinity upgrades on Eternity, except for your IP multiplier</button></td>
 					</tr>
 					<tr>
@@ -757,7 +763,7 @@
 						<td class="milestoneText">60 Eternities:</td>
 					</tr>
 					<tr>
-						<td><button class="milestonerewardlocked" id="reward20">You start with Replicanti unlocked</button></td>
+						<td><button class="milestonerewardlocked" id="reward20">You start with Replicanti unlocked<span id="reward20c"></span></button></td>
 						<td><button class="milestonerewardlocked" id="reward21">Unlock autobuyer for the replicanti interval upgrade</button></td>
 					</tr>
 					<tr>
@@ -1465,6 +1471,9 @@
 								<td align="right" width="10%">
 									<button id="timeMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyTimeDimension(1)">Cost: 10</button>
 								</td>
+								<td id="timeCndCont1" style="display: none;" align="right" width="10%">
+									<button id="timeCnd1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(1)">Cost: 10</button>
+								</td>
 							</tr>
 							<tr id="timeRow2" style="font-size: 17px">
 								<td id="timeD2">
@@ -1478,6 +1487,9 @@
 								</td>
 								<td>
 									<button id="timeMax2" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(2)">Cost: 10</button>
+								</td>
+								<td id="timeCndCont2" style="display: none;" align="right" width="10%">
+									<button id="timeCnd2" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(2)">Cost: 10</button>
 								</td>
 							</tr>
 							<tr id="timeRow3" style="font-size: 17px">
@@ -1493,6 +1505,9 @@
 								<td>
 									<button id="timeMax3" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(3)">Cost: 10</button>
 								</td>
+								<td id="timeCndCont3" style="display: none;" align="right" width="10%">
+									<button id="timeCnd3" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(3)">Cost: 10</button>
+								</td>
 							</tr>
 							<tr id="timeRow4" style="font-size: 17px">
 								<td id="timeD4">
@@ -1506,6 +1521,9 @@
 								</td>
 								<td>
 									<button id="timeMax4" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(4)">Cost: 10</button>
+								</td>
+								<td id="timeCndCont4" style="display: none;" align="right" width="10%">
+									<button id="timeCnd4" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(4)">Cost: 10</button>
 								</td>
 							</tr>
 							<tr id="timeRow5" style="font-size: 17px">
@@ -1521,6 +1539,9 @@
 								<td>
 									<button id="timeMax5" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(5)">Cost: 10</button>
 								</td>
+								<td id="timeCndCont5" style="display: none;" align="right" width="10%">
+									<button id="timeCnd5" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(5)">Cost: 10</button>
+								</td>
 							</tr>
 							<tr id="timeRow6" style="font-size: 17px">
 								<td id="timeD6">
@@ -1534,6 +1555,9 @@
 								</td>
 								<td>
 									<button id="timeMax6" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(6)">Cost: 10</button>
+								</td>
+								<td id="timeCndCont6" style="display: none;" align="right" width="10%">
+									<button id="timeCnd6" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(6)">Cost: 10</button>
 								</td>
 							</tr>
 							<tr id="timeRow7" style="font-size: 17px">
@@ -1549,6 +1573,9 @@
 								<td>
 									<button id="timeMax7" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(7)">Cost: 10</button>
 								</td>
+								<td id="timeCndCont7" style="display: none;" align="right" width="10%">
+									<button id="timeCnd7" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(7)">Cost: 10</button>
+								</td>
 							</tr>
 							<tr id="timeRow8" style="font-size: 17px">
 								<td id="timeD8">
@@ -1562,6 +1589,9 @@
 								</td>
 								<td>
 									<button id="timeMax8" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(8)">Cost: 10</button>
+								</td>
+								<td id="timeCndCont8" style="display: none;" align="right" width="10%">
+									<button id="timeCnd8" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="condenseTimeDim(8)">Cost: 10</button>
 								</td>
 							</tr>
 							<tr id="tdReset" style="font-size: 17px">
@@ -1977,6 +2007,8 @@
 				<div id="infchallengetime12"></div>
 				<div id="infchallengetime13"></div>
 				<div id="infchallengetime14"></div>
+				<div id="infchallengetime15"></div>
+				<div id="infchallengetime16"></div>
 				<br>
 				<div id="infchallengetimesum"></div>
 			</div>
