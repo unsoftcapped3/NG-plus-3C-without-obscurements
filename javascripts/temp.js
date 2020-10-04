@@ -698,6 +698,7 @@ function updateCondenseTemp() {
 	tmp.cnd.repl.eff1 = Decimal.pow(new Decimal(repl.max(1).log10()).div(3).plus(1), Math.sqrt(player.condensed.repl*tmp.cnd.repl.pow)/4)
 	let c2 = player.condensed.repl
 	if (c2>=2) c2 = Math.pow(c2*4, 1/3)
+	if (c2>9) c2 = Math.pow(c2, 3)/81
 	tmp.cnd.repl.eff2 = new Decimal(repl.max(1).log10()).div(3).times(Math.pow(c2*tmp.cnd.repl.pow, 0.95)/2.5).times(player.timestudy.studies.includes(24)?2:1).plus(1)
 
 	if (player.timestudy.studies.includes(23)) tmp.cnd.repl.eff1 = tmp.cnd.repl.eff1.plus(tmp.cnd.repl.eff2.sub(1).max(0))

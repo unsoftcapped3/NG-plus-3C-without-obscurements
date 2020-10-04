@@ -168,6 +168,8 @@ function DimensionPower(tier) {
 
   	mult = dilates(mult, 1)
   	if (quantumed && !tmp.ngp3l) mult = mult.times(colorBoosts.dim.g)
+	
+	if (player.aarexModifications.ngp3c) mult = softcap(mult, "ngp3cIDs")
   	return mult
 }
 
@@ -210,6 +212,10 @@ function getIDCostMult(tier) {
 	if (player.achPow.gte(Decimal.pow(5,11.9)) && tier > 1) {
 		cap = .02
 		ret /= Math.max(1, Math.log(player.totalmoney.log10())/10-.5)
+	}
+	if (player.aarexModifications.ngp3c) {
+		ret /= 500/tier
+		if (tier>=7) ret /= 1e30
 	}
 	return Math.max(ret,Math.pow(infCostMults[tier],cap))
 }
@@ -353,6 +359,7 @@ function getEU2Mult() {
 
 function getEU3Mult() {
 	if (player.boughtDims) return player.timeShards.div(1e12).plus(1)
+	if (player.aarexModifications.ngp3c) return Decimal.pow(6250 / Math.max(Math.min(infchallengeTimes, 6250), 6.1), 500 / Math.max(infchallengeTimes, 6.1))
 	return Decimal.pow(2, 300 / Math.max(infchallengeTimes, 6.1))
 }
 

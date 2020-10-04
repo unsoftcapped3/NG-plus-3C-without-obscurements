@@ -33,7 +33,7 @@ function getIPGain(){
 
 function gainedInfinityPoints(next) {
 	let div = 308;
-	if (player.timestudy.studies.includes(111)) div = 285;
+	if (player.timestudy.studies.includes(111)) div = player.aarexModifications.ngp3c?50:285;
 	else if (player.achievements.includes("r103")) div = 307.8;
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined) div -= galIP()
 

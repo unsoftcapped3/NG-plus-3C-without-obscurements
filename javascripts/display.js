@@ -713,7 +713,7 @@ function replicantiDisplay() {
 	if (player.replicanti.unl) {
 		let replGalOver = getMaxRG() - player.replicanti.gal
 		let chance = Decimal.times(tmp.rep.chance, 100)
-		document.getElementById("replicantiamount").textContent = shortenDimensions(player.replicanti.amount)
+		document.getElementById("replicantiamount").textContent = shortenDimensions(player.replicanti.amount)+(player.aarexModifications.ngp3c?(" / ")+shortenDimensions(getReplicantiCap()):"")
 		document.getElementById("replicantimult").textContent = shorten(getIDReplMult())
 		
 		var chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10,1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
@@ -734,7 +734,7 @@ function replicantiDisplay() {
 		document.getElementById("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (tmp.ngp3l || !player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
-		document.getElementById("replDesc").textContent = player.aarexModifications.ngp3c?"multiplier to IP gain (after softcap) & all Normal Dimensions":"multiplier on all infinity dimensions"
+		document.getElementById("replDesc").textContent = player.aarexModifications.ngp3c?"multiplier to IP gain (after obscurements) & all Normal Dimensions":"multiplier on all infinity dimensions"
 		document.getElementById("replNGP3C").style.display = player.aarexModifications.ngp3c?"":"none"
 		if (player.aarexModifications.ngp3c) updateReplCond()
 	} else {

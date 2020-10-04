@@ -97,6 +97,7 @@
 			<button id="optionsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('options')">Options</button>
 			<button id="statisticsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('statistics')">Statistics</button>
 			<button id="achievementsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('achievements')">Achievements</button>
+			<button id="acndbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('acnd')">Obscurements</button>
 			<button id="challengesbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('challenges')">Challenges</button>
 			<button id="automationbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick='showTab("autobuyers")'>Automation</button>
 			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn" onclick='showTab("paradox")'>Paradox</button>
@@ -145,10 +146,12 @@
 				<br>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button class="timestudylocked" id="25" onclick="buyTimeStudy(25)" style="font-size: 9px;">Infinity Power makes the Tick interval decrease by more each purchase<span id="25eff"></span>Cost: 20 Time Theorems</button></td>
 						<td><button class="timestudylocked" id="23" onclick="buyTimeStudy(23)">Replicated Condensers' first effect uses a better formula<span>Cost: 6 Time Theorems</button></td>
 						<td><button id="21" onclick="buyTimeStudy(21)"><span id="ts21desc">Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)</span><span>Cost: 3 Time Theorems</button></td>
 						<td><button id="22" onclick="buyTimeStudy(22)">Replicanti interval limit 50ms -> 1ms<span>Cost: 2 Time Theorems</button></td>
 						<td><button class="timestudylocked" id="24" onclick="buyTimeStudy(24)">Replicated Condensers' second effect uses a better formula<span>Cost: 7 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -170,15 +173,15 @@
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="52" onclick="buyTimeStudy(52)" style="font-size: 9px;">The Replicanti limit is raised to an exponent based on your RGs (but Replicanti gain slows down after 1.8e308)<span>Cost: 9 Time Theorems</button></td>
 						<td><button id="51" onclick="buyTimeStudy(51)"><span id="51desc">You gain 1e15 times more IP</span>Cost: 3 Time Theorems</button></td>
 						<td><button class="eternitychallengestudy" id="ec5unl">Eternity Challenge 5<span>Requirement: 200 galaxies<span>Cost: 100 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
-						<td><button id="61" onclick="buyTimeStudy(61)">You gain <span id="61desc" style="display:inline"></span>x more EP<span>Cost: 3 Time Theorems<span id="61req"></span></button></td>
+						<td><button id="63" onclick="buyTimeStudy(63)" style="font-size: 9px;">OS_ND_1 & 2 start later based on your unspent EP, and are 50% weaker<span id="63eff"></span>Cost: 7 Time Theorems</button></td>
+						<td><button id="61" onclick="buyTimeStudy(61)" style="font-size: 9px;">You gain <span id="61desc" style="display:inline"></span><span>Cost: 3 Time Theorems<span id="61req"></span></button></td>
 						<td><button id="62" onclick="buyTimeStudy(62)">You gain replicanti <span id="62desc" style="display:inline"></span> times faster<span>Cost: 3 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -224,7 +227,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="eternitychallengestudy" id="ec6unl">Eternity Challenge 6<span>Requirement: 40 replicanti galaxies<span>Cost: 100 Time Theorems</button></td>
-						<td><button id="131" onclick="buyTimeStudy(131)">Automatic replicanti galaxies are disabled, but you can get 50% more<span>Cost: 5 Time Theorems</button></td>
+						<td><button id="131" onclick="buyTimeStudy(131)"><span id="131desc">Automatic replicanti galaxies are disabled, but you can get 50% more</span>Cost: 5 Time Theorems</button></td>
 						<td><button id="132" onclick="buyTimeStudy(132)">Replicanti galaxies are 40% more effective<span>Cost: 5 Time Theorems</button></td>
 						<td><button id="133" onclick="buyTimeStudy(133)">Replicanti are 10x slower until infinity, but their galaxies are 50% stronger<span>Cost: 5 Time Theorems</button></td>
 						<td><button class="eternitychallengestudy" id="ec8unl">Eternity Challenge 8<span>Cost: 100 Time Theorems</button></td>
@@ -242,7 +245,7 @@
 					<tr>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button class="eternitychallengestudy" id="ec9unl">Eternity Challenge 9<span>Requirement: 1e6000 infinity power<span>Cost: 100 Time Theorems</button></td>
-						<td><button id="151" onclick="buyTimeStudy(151)"><span id="151desc">1e4x multiplier on all Time Dimensions</span>Cost: 8 Time Theorems</button></td>
+						<td><button id="151" onclick="buyTimeStudy(151)"><span id="151desc">1e4x multiplier on all Time Dimensions</span>Cost: 8 Time Theorems<span id="151req"></span></button></td>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button class="eternitychallengestudy" id="ec4unl">Eternity Challenge 4<span>Requirement: 100,000,000 infinities<span>Cost: 85 Time Theorems</button></td>
 					</tr>
@@ -255,7 +258,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="171" onclick="buyTimeStudy(171)">Time Shard requirement for the next tickspeed upgrade is reduced<span>Cost: 15 Time Theorems</button></td>
+						<td><button id="171" onclick="buyTimeStudy(171)" style="font-size: 9px;">Time Shard requirement for the next tickspeed upgrade is reduced<span>Cost: 15 Time Theorems<span id="171req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -2916,7 +2919,11 @@
 			</div>
 		</div>
 
-
+		<div id="acnd" class="tab">
+			<br><br>
+			<h1>Obscurements</h1><br><br>
+			<div id="obscurements"></div>
+		</div>
 
 		<div id="challenges" class="tab">
 			<br>

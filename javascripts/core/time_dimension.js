@@ -308,7 +308,10 @@ function buyMaxTimeDimension(tier, bulk) {
 }
 
 function buyMaxTimeDimensions() {
-	for (var i = 1; i <= 8; i++) buyMaxTimeDimension(i)
+	for (var i = 1; i <= 8; i++) {
+		if (player.aarexModifications.ngp3c) maxTimeCondense(i)
+		buyMaxTimeDimension(i)
+	}
 }
 
 function toggleAllTimeDims() {

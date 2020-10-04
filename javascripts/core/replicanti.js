@@ -63,6 +63,15 @@ function upgradeReplicantiInterval() {
 	document.getElementById("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 }
 
+function getReplicantiCap() {
+	if (player.aarexModifications.ngp3c) {
+		let lim = getReplicantiLimit();
+		if (player.timestudy.studies.includes(52)) lim = Decimal.pow(lim, ts52Eff())
+		return lim;
+	}
+	return getReplicantiLimit();
+}
+
 function getReplicantiLimit() {
 	if (player.boughtDims) return player.replicanti.limit
 	return Number.MAX_VALUE
@@ -84,7 +93,7 @@ function getRGCost(offset = 0, costChange) {
 			if (player.replicanti.gal + offset > 99) increase += (offset - Math.max(99 - player.replicanti.gal, 0)) * (25 * (offset - Math.max(99 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 99) * 2) - 4725)
 			if (player.replicanti.gal + offset > 399) {
 				if (player.exdilation != undefined) for (var g = Math.max(player.replicanti.gal, 399); g < player.replicanti.gal + offset; g++) increase += Math.pow(g - 389, 2)
-				if (player.meta != undefined) {
+				if (player.meta != undefined || player.aarexModifications.ngp3c) {
 					var isReduced = false
 					if (player.masterystudies != undefined) if (player.masterystudies.includes("t266")) isReduced = true
 					if (isReduced) {
@@ -136,7 +145,7 @@ function canGetReplicatedGalaxy() {
 }
 
 function canAutoReplicatedGalaxy() {
-	return speedrunMilestonesReached >= 20 || !player.timestudy.studies.includes(131)
+	return speedrunMilestonesReached >= 20 || !player.timestudy.studies.includes(131) || player.aarexModifications.ngp3c
 }
 
 function getMaxRG() {
@@ -283,7 +292,7 @@ function notContinuousReplicantiUpdating() {
 
 	if (interval <= replicantiTicks && player.replicanti.unl) {
 		if (player.replicanti.amount.lte(100)) runRandomReplicanti(chance) //chance should be a decimal
-		else if (player.replicanti.amount.lt(getReplicantiLimit())) {
+		else if (player.replicanti.amount.lt(getReplicantiCap())) {
 			var temp = Decimal.round(player.replicanti.amount.dividedBy(100))
 			if (chance < 1) {
 				let counter = 0
@@ -291,7 +300,7 @@ function notContinuousReplicantiUpdating() {
 				player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
 				counter = 0
 			} else player.replicanti.amount = player.replicanti.amount.times(2)
-			if (!player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.min(getReplicantiLimit())
+			if (!player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.min(getReplicantiCap())
 		}
 		replicantiTicks -= interval
 	}
@@ -300,7 +309,7 @@ function notContinuousReplicantiUpdating() {
 function continuousReplicantiUpdating(diff){
 	if (player.timestudy.studies.includes(192) && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
 	else if (player.timestudy.studies.includes(192)) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
-	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiLimit())
+	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiCap())
 	replicantiTicks = 0
 }
 

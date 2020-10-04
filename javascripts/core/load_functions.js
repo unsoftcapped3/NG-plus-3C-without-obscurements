@@ -1991,15 +1991,15 @@ function setOtherChallDisplay(){
         document.getElementById("ic7desc").textContent="You can't get Antimatter Galaxies, but the Dimension Boost multiplier "+(player.galacticSacrifice?"is cubed":"is increased to 10x")+"."
         document.getElementById("ic7reward").textContent="Reward: The Dimension Boost multiplier "+(player.galacticSacrifice? "is squared":" is increased to 4x.")
         document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
-        document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20?" (disabled)":"")
+        document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20&&!player.aarexModifications.ngp3c?" (disabled)":"")
 }
 
 function setTSDisplay(){
         document.getElementById("41desc").textContent=tsMults[41]()
         document.getElementById("42desc").textContent=player.galacticSacrifice?"Galaxy cost multiplier is reduced by "+Math.round(tsMults[42]()*15)+"/15x.":"Galaxy cost increases by "+(60*tsMults[42]())+" 8ths instead of 60."
-        document.getElementById("61desc").innerHTML=tsMults[61]()
         document.getElementById("62desc").textContent=tsMults[62]()
         document.getElementById("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
+		document.getElementById("131desc").textContent = player.aarexModifications.ngp3c?"You can get 50% more replicanti galaxies":"Automatic replicanti galaxies are disabled, but you can get 50% more"
         document.getElementById("181desc").textContent = player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined && !tmp.ngp3l ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch"
         document.getElementById("211desc").textContent=tsMults[211]()
         document.getElementById("213desc").textContent=tsMults[213]()

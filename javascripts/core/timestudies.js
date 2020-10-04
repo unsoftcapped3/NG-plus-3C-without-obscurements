@@ -101,8 +101,15 @@ function updateTheoremButtons() {
 	
 	document.getElementById("ts21desc").textContent = player.aarexModifications.ngp3c?"Replicated Condensers are 40% stronger":"Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)"
 	document.getElementById("ts33desc").textContent = player.aarexModifications.ngp3c?"Replicated Condensers are 10% stronger":"You keep half of your replicanti galaxies on infinity"
-	document.getElementById("61req").textContent = player.aarexModifications.ngp3c?"Req: idk wait for next update I guess":""
-	if (player.aarexModifications.ngp3c) document.getElementById("13eff").textContent = "Currently: "+shorten(ts13Eff())+"x"
+	document.getElementById("61req").textContent = player.aarexModifications.ngp3c?"Req: 18 Total Time Theorems":""
+	document.getElementById("61desc").textContent = shorten(tsMults[61]())+"x EP gain"+(player.aarexModifications.ngp3c?" (based on your Replicanti)":"")
+	document.getElementById("151req").textContent = player.aarexModifications.ngp3c?"Req: 195 Total Time Theorems":""
+	document.getElementById("171req").textContent = player.aarexModifications.ngp3c?"Req: idk wait for more content I guess":""
+	if (player.aarexModifications.ngp3c) {
+		document.getElementById("13eff").textContent = "Currently: "+shorten(ts13Eff())+"x"
+		document.getElementById("25eff").textContent = "Currently: /"+shorten(ts25Eff())
+		document.getElementById("63eff").textContent = "Currently: "+shorten(ts63Eff())+"x later"
+	}
 }
 
 function buyTimeStudy(name, check, quickBuy) {
@@ -180,6 +187,7 @@ function hasRow(row) {
 function canBuyStudy(name) {
 	var row = Math.floor(name / 10)
 	var col = name % 10
+	let total = getTotalTT(player)
 	if (name == 12) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(11)
 	}
@@ -191,6 +199,9 @@ function canBuyStudy(name) {
 	}
 	if (name == 24) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(22)
+	}
+	if (name == 25) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(13)
 	}
 	if (name == 33) {
 		return player.timestudy.studies.includes(21) 
@@ -204,11 +215,20 @@ function canBuyStudy(name) {
 	if (name == 44) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(34)
 	}
+	if (name == 51) {
+		return player.timestudy.studies.includes(41) || player.timestudy.studies.includes(42)
+	}
+	if (name == 52) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(41)
+	}
 	if (name == 61 && player.aarexModifications.ngp3c) {
-		return player.timestudy.studies.includes(51) && false;
+		return (player.timestudy.studies.includes(51)||player.timestudy.studies.includes(52)) && total>=18;
 	}
 	if (name == 62) {
 		return player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42)
+	}
+	if (name == 63) {
+		return player.aarexModifications.ngp3c && (player.timestudy.studies.includes(52)||player.timestudy.studies.includes(61))
 	}
 
 	if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) {
@@ -217,6 +237,14 @@ function canBuyStudy(name) {
 
 	if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11) {
 		return false;
+	}
+	
+	if (name == 151 && player.aarexModifications.ngp3c) {
+		return total>=195
+	}
+	
+	if (name == 171 && player.aarexModifications.ngp3c) {
+		return false
 	}
 
 	if (name == 181) {
@@ -273,8 +301,8 @@ function canBuyStudy(name) {
 	}
 }
 
-var all = [11, 12, 13, 23, 21, 22, 24, 33, 31, 32, 34, 43, 41, 42, 44, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 6, 5, 6, 3, 2, 7, 2, 3, 2, 5, 4, 4, 6, 2, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 12, 13, 25, 23, 21, 22, 24, 33, 31, 32, 34, 43, 41, 42, 44, 52, 51, 63, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
+var studyCosts = [1, 6, 5, 20, 6, 3, 2, 7, 2, 3, 2, 5, 4, 4, 6, 2, 9, 3, 7, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 var performedTS
 function updateTimeStudyButtons(changed, forceupdate = false) {
 	if (!forceupdate && (changed ? player.dilation.upgrades.includes(10) : performedTS && !player.dilation.upgrades.includes(10))) return
@@ -334,7 +362,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 				}
 			}
 			document.getElementById(all[i]).className = className
-			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==34||all[i]==43||all[i]==44) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
+			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==25||all[i]==34||all[i]==43||all[i]==44||all[i]==52||all[i]==63) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
 		}
 	}
 
@@ -815,10 +843,10 @@ let tsMults = {
 		return player.aarexModifications.ngp3c ? 29/30 : ((player.aarexModifications.newGameExpVersion ? 12 : 13) / 15)
 	},
 	51: function() {
-		return player.aarexModifications.ngp3c ? Decimal.pow((player.condensed.repl+1)*(player.replicanti.galaxies+1), 150) : (player.aarexModifications.newGameExpVersion ? 1e30 : 1e15)
+		return player.aarexModifications.ngp3c ? Decimal.pow((player.condensed.repl+1)*(player.replicanti.galaxies+1), 160) : (player.aarexModifications.newGameExpVersion ? 1e30 : 1e15)
 	},
 	61: function() {
-		return player.aarexModifications.ngp3c ? 5 : (player.aarexModifications.newGameExpVersion ? 100 : 10)
+		return player.aarexModifications.ngp3c ? Decimal.pow(25, Math.log10(player.replicanti.amount.max(1).log10()/308.25+1)/Math.log10(2)) : (player.aarexModifications.newGameExpVersion ? 100 : 10)
 	},
 	62: function() {
 		let r = player.aarexModifications.newGameExpVersion ? 4 : 3

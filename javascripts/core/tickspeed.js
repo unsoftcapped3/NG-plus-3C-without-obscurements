@@ -1,6 +1,7 @@
 function getTickSpeedMultiplier() {
 	let ret = new Decimal(getGalaxyTickSpeedMultiplier())
 	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(5)) ret = ret.div(getBreakUpgMult(5))
+	if (player.timestudy.studies.includes(25) && player.aarexModifications.ngp3c) ret = ret.div(ts25Eff())
 	if (inNC(6, 2)) ret = ret.add(player.resets * 1e-3)
 	return ret.min(1)
 }

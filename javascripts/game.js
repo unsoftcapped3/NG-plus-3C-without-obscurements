@@ -4687,6 +4687,8 @@ function updateResetTierButtons(){
 	if (!preQuantumEnd && player.meta !== undefined) preQuantumEnd = isQuantumReached()
 	var haveBlock = (player.galacticSacrifice!=undefined&&postBreak)||(player.pSac!=undefined&&player.infinitied>0)||preQuantumEnd
 	var haveBlock2 = player.pSac!==undefined&&(ghostified||player.achievements.includes("ng3p51")||canBigRip)
+	
+	document.getElementById("acndbtn").style.display = player.aarexModifications.ngp3c?"":"none"
 
 	if (player.pSac!==undefined) {
 		document.getElementById("px").className = haveBlock2?"PX":postBreak?"GHP":player.infinitied>0?"QK":"IP"
@@ -4723,7 +4725,7 @@ function updateResetTierButtons(){
 }
 
 function updateOrderGoals(){
-	document.getElementById("ngp3c_pc6_desc").textContent = player.aarexModifications.ngp3c?", and the IP gain softcap is 75% weaker":""
+	document.getElementById("ngp3c_pc6_desc").textContent = player.aarexModifications.ngp3c?", and OS_IP_1 & OS_IP_2 are 75% weaker":""
 	if (order) for (var i=0; i<order.length; i++) document.getElementById(order[i]+"goal").textContent = "Goal: "+shortenCosts(getGoal(order[i]))
 }
 
@@ -6018,6 +6020,8 @@ function gameLoop(diff) {
 			if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
 		}
 	}
+	
+	if (player.aarexModifications.ngp3c && document.getElementById("acnd").style.display!="none") updateObscurements();
 
 	thisQuantumTimeUpdating()
 	var s = shortenDimensions(player.infinityPoints)

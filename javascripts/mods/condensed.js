@@ -8,6 +8,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 			inf: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			time: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			repl: 0,
+			obsc: {},
 		}
 	}
 	if (player.condensed.inf === undefined) player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -17,6 +18,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 		player.infchallengeTimes.push(600*60*24*31)
 		player.infchallengeTimes.push(600*60*24*31)
 	}
+	if (player.condensed.obsc === undefined) player.condensed.obsc = {}
 	
 	// Reset Stuff
 	if (resetNum>=1) {
@@ -333,7 +335,90 @@ function ts13Eff() {
 	return eff;
 }
 
+function ts25Eff() {
+	let eff = Decimal.pow(player.infinityPower.plus(1).log10()+1, 10);
+	return eff;
+}
+
 function ts43Eff() {
 	let eff = player.replicanti.galaxies*0.02
 	return eff+1
+}
+
+function ts52Eff() {
+	let eff = Math.sqrt(player.replicanti.galaxies/2)
+	return eff+1;
+}
+
+function ts63Eff() {
+	let eff = Decimal.pow(player.eternityPoints.plus(1), 100)
+	if (eff.gte("1e1000")) eff = Decimal.pow(eff.log10(), 1000/3)
+	return eff;
+}
+
+const OBSCUREMENTS = {
+	nd: {
+		title: "Normal Dimension Multipliers",
+		scID: "NDs",
+		osID: "ND",
+		res() { return getDimensionFinalMultiplier(1) },
+	},
+	ts: {
+		title: "Tickspeed",
+		scID: "TS",
+		osID: "IS",
+		res() { return getTickspeed().pow(-1) },
+	},
+	sac: {
+		title: "Sacrifice Multiplier",
+		scID: "SAC",
+		osID: "SAC",
+		res() { return calcTotalSacrificeBoost() },
+	},
+	ip: {
+		title: "IP Gain",
+		scID: "IP",
+		osID: "IP",
+		res() { return gainedInfinityPoints() },
+	},
+	id: {
+		title: "Infinity Dimension Multipliers",
+		scID: "IDs",
+		osID: "ID",
+		res() { return DimensionPower(1) },
+	},
+	ep: {
+		title: "EP Gain",
+		scID: "EP",
+		osID: "EP",
+		res() { return gainedEternityPoints() },
+	},
+}
+
+function updateObscurements() {
+	let html = ""
+	for (let i=0;i<Object.keys(OBSCUREMENTS).length;i++) {
+		let data = OBSCUREMENTS[Object.keys(OBSCUREMENTS)[i]]
+		let scData = Object.values(softcap_data["ngp3c"+data.scID])
+		let res = new Decimal(data.res())
+		if (!player.condensed.obsc[data.osID]) {
+			if (res.gte((typeof scData[0].start == "function") ? scData[0].start() : scData[0].start)) player.condensed.obsc[data.osID] = []
+			else continue;
+		}
+		html += "<h3>"+data.title+"</h3><br><ul style='list-style-type: none;'>"
+		for (let j=0;j<scData.length;j++) {
+			let newData = scData[j]
+			let start = (typeof newData.start == "function") ? newData.start() : newData.start
+			if (!player.condensed.obsc[data.osID].includes(j+1)) {
+				if (res.gte(start)) player.condensed.obsc[data.osID].push(j+1)
+				else continue;
+			}
+			html += "<li>OS_"+data.osID+"_"+(j+1)+": Starts at "+shorten(start)
+			if (newData.func=="pow") html += ", ^"+shorten((typeof newData.pow == "function") ? newData.pow() : newData.pow)
+			html += "</li>"
+		}
+		html += "</ul><br><br>"
+	}
+	if (html=="") html+="Oh hey there's nothing here yet... you need to make more progress first, so check in later!"
+	document.getElementById("obscurements").innerHTML = html;
 }

@@ -408,14 +408,30 @@ var softcap_data = {
 	ngp3cNDs: {
 		1: {
 			func: "pow",
-			start: 1e50,
-			pow: 1/3,
+			start() {
+				let start = new Decimal(1e50);
+				if (player.timestudy.studies.includes(63)) start = start.times(ts63Eff());
+				return start;
+			},
+			pow() {
+				let pow = 1/3;
+				if (player.timestudy.studies.includes(63)) pow = Math.sqrt(pow)
+				return pow;
+			},
 			derv: false,
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
-			pow: 1/4,
+			start() {
+				let start = new Decimal(Number.MAX_VALUE);
+				if (player.timestudy.studies.includes(63)) start = start.times(ts63Eff());
+				return start;
+			},
+			pow() {
+				let pow = 1/4;
+				if (player.timestudy.studies.includes(63)) pow = Math.sqrt(pow)
+				return pow;
+			},
 			derv: false,
 		},
 		3: {
@@ -438,6 +454,12 @@ var softcap_data = {
 			pow() { return player.challenges.includes("postcngc_2")?13/40:1/4 },
 			derv: false,
 		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e25000"),
+			pow: 1/7,
+			derv: false,
+		},
 	},
 	ngp3cIP: {
 		1: {
@@ -450,6 +472,12 @@ var softcap_data = {
 			func: "pow",
 			start: 1e30,
 			pow() { return (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?5/6:1/3 },
+			derv: false,
+		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e10000"),
+			pow: 1/4,
 			derv: false,
 		},
 	},
@@ -492,6 +520,14 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(Number.MAX_VALUE),
 			pow: 1/3,
+			derv: false,
+		},
+	},
+	ngp3cIDs: {
+		1: {
+			func: "pow",
+			start: new Decimal("1e7500"),
+			pow: 0.1,
 			derv: false,
 		},
 	},

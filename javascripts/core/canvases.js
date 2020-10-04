@@ -177,6 +177,7 @@ function drawStudyTree() {
 	if (player.aarexModifications.ngp3c) drawTreeBranch("12", "13");
 	drawTreeBranch("11", "21");
     drawTreeBranch("11", "22");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("13", "25");
 	if (player.aarexModifications.ngp3c) drawTreeBranch("21", "23");
     drawTreeBranch("21", "31");
     drawTreeBranch("21", "33");
@@ -188,9 +189,13 @@ function drawStudyTree() {
     drawTreeBranch("32", "42");
 	if (player.aarexModifications.ngp3c) drawTreeBranch("34", "44");
     drawTreeBranch("41", "51");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("41", "52");
     drawTreeBranch("42", "51");
     drawTreeBranch("51", "61");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("52", "61");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("52", "63");
     drawTreeBranch("ec5unl", "62")
+	if (player.aarexModifications.ngp3c) drawTreeBranch("61", "63");
     drawTreeBranch("61", "71");
     drawTreeBranch("61", "72");
     drawTreeBranch("61", "73");
