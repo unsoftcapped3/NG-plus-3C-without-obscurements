@@ -138,7 +138,7 @@ function galaxySacDisplay(){
 
 function bestInfinityDisplay(){
 	document.getElementById("infinityStatistics").style.display = "none"
-	if (player.bestInfinityTime >= 9999999999) {
+	if (player.bestInfinityTime >= 9999999999 && player.infinitied==0) {
 		document.getElementById("bestInfinity").textContent = ""
 		document.getElementById("thisInfinity").textContent = ""
 		document.getElementById("infinitied").textContent = ""
@@ -615,7 +615,7 @@ function eternityUpgradesDisplay(){
 	var eu2formula = "(x/200) ^ log4(2x)"
 	if (player.aarexModifications.ngp3c) eu2formula = "(x/100) ^ log2(4x)"
 	if (player.boughtDims !== undefined) eu2formula = "x ^ log4(2x)"
-	else if (player.achievements.includes("ngpp15")) eu2formula = "x ^ log10(x) ^ 3.75"
+	else if (player.achievements.includes("ngpp15")) eu2formula = player.aarexModifications.ngp3c?"x ^ log10(x) ^ 2":"x ^ log10(x) ^ 3.75"
 	document.getElementById("eter1").innerHTML = "Infinity Dimension multiplier based on unspent EP (x + 1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
 	document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on Eternities (" + eu2formula + ")<br>Currently: "+shortenMoney(getEU2Mult())+"x<br>Cost: 10 EP"
 	document.getElementById("eter3").innerHTML = "Infinity Dimension multiplier based on "+(player.boughtDims ? "Time Shards (x/"+shortenCosts(1e12)+"+1)":"sum of Infinity Challenge times")+"<br>Currently: "+shortenMoney(getEU3Mult())+"x<br>Cost: "+shortenCosts(50e3)+" EP"
@@ -770,26 +770,27 @@ function initialTimeStudyDisplay(){
 }
 
 function eternityChallengeUnlockDisplay(){
-	var ec1Mult=player.aarexModifications.newGameExpVersion?1e3:2e4
-	if (player.etercreq !== 1) document.getElementById("ec1unl").innerHTML = "Eternity Challenge 1<span>Requirement: "+(ECTimesCompleted("eterc1")+1)*ec1Mult+" Eternities<span>Cost: 30 Time Theorems"
+	var ecStarts = getECStarts()
+	var ecMults = getECMults()
+	if (player.etercreq !== 1) document.getElementById("ec1unl").innerHTML = "Eternity Challenge 1<span>Requirement: "+(ecStarts[1]+(ECTimesCompleted("eterc1"))*ecMults[1])+" Eternities<span>Cost: 30 Time Theorems"
 	else document.getElementById("ec1unl").innerHTML = "Eternity Challenge 1<span>Cost: 30 Time Theorems"
-	if (player.etercreq !== 2) document.getElementById("ec2unl").innerHTML = "Eternity Challenge 2<span>Requirement: "+(1300+(ECTimesCompleted("eterc2")*150))+" Tickspeed upgrades gained from time dimensions<span>Cost: 35 Time Theorems"
+	if (player.etercreq !== 2) document.getElementById("ec2unl").innerHTML = "Eternity Challenge 2<span>Requirement: "+(ecStarts[2]+(ECTimesCompleted("eterc2")*ecMults[2]))+" Tickspeed upgrades gained from time dimensions<span>Cost: 35 Time Theorems"
 	else document.getElementById("ec2unl").innerHTML = "Eternity Challenge 2<span>Cost: 35 Time Theorems"
-	if (player.etercreq !== 3) document.getElementById("ec3unl").innerHTML = "Eternity Challenge 3<span>Requirement: "+(17300+(ECTimesCompleted("eterc3")*1250))+" 8th dimensions<span>Cost: 40 Time Theorems"
+	if (player.etercreq !== 3) document.getElementById("ec3unl").innerHTML = "Eternity Challenge 3<span>Requirement: "+(ecStarts[3]+(ECTimesCompleted("eterc3")*ecMults[3]))+" 8th dimensions<span>Cost: 40 Time Theorems"
 	else document.getElementById("ec3unl").innerHTML = "Eternity Challenge 3<span>Cost: 40 Time Theorems"
-	if (player.etercreq !== 4) document.getElementById("ec4unl").innerHTML = "Eternity Challenge 4<span>Requirement: "+(1e8 + (ECTimesCompleted("eterc4")*5e7)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" infinities<span>Cost: 70 Time Theorems"
+	if (player.etercreq !== 4) document.getElementById("ec4unl").innerHTML = "Eternity Challenge 4<span>Requirement: "+(ecStarts[4] + (ECTimesCompleted("eterc4")*ecMults[4])).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" infinities<span>Cost: 70 Time Theorems"
 	else document.getElementById("ec4unl").innerHTML = "Eternity Challenge 4<span>Cost: 70 Time Theorems"
-	if (player.etercreq !== 5) document.getElementById("ec5unl").innerHTML = "Eternity Challenge 5<span>Requirement: "+(160+(ECTimesCompleted("eterc5")*14))+" galaxies<span>Cost: 130 Time Theorems"
+	if (player.etercreq !== 5) document.getElementById("ec5unl").innerHTML = "Eternity Challenge 5<span>Requirement: "+(ecStarts[5]+(ECTimesCompleted("eterc5")*ecMults[5]))+" galaxies<span>Cost: 130 Time Theorems"
 	else document.getElementById("ec5unl").innerHTML = "Eternity Challenge 5<span>Cost: 130 Time Theorems"
-	if (player.etercreq !== 6) document.getElementById("ec6unl").innerHTML = "Eternity Challenge 6<span>Requirement: "+(40+(ECTimesCompleted("eterc6")*5))+" replicanti galaxies<span>Cost: 85 Time Theorems"
+	if (player.etercreq !== 6) document.getElementById("ec6unl").innerHTML = "Eternity Challenge 6<span>Requirement: "+(ecStarts[6]+(ECTimesCompleted("eterc6")*ecMults[6]))+" replicanti galaxies<span>Cost: 85 Time Theorems"
 	else document.getElementById("ec6unl").innerHTML = "Eternity Challenge 6<span>Cost: 85 Time Theorems"
-	if (player.etercreq !== 7) document.getElementById("ec7unl").innerHTML = "Eternity Challenge 7<span>Requirement: "+shortenCosts(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))))+" antimatter <span>Cost: 115 Time Theorems"
+	if (player.etercreq !== 7) document.getElementById("ec7unl").innerHTML = "Eternity Challenge 7<span>Requirement: "+shortenCosts(new Decimal(ecStarts[7]).times(new Decimal(ecMults[7]).pow(ECTimesCompleted("eterc7"))))+" antimatter <span>Cost: 115 Time Theorems"
 	else document.getElementById("ec7unl").innerHTML = "Eternity Challenge 7<span>Cost: 115 Time Theorems"
-	if (player.etercreq !== 8) document.getElementById("ec8unl").innerHTML = "Eternity Challenge 8<span>Requirement: "+shortenCosts(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))))+" IP <span>Cost: 115 Time Theorems"
+	if (player.etercreq !== 8) document.getElementById("ec8unl").innerHTML = "Eternity Challenge 8<span>Requirement: "+shortenCosts(new Decimal(ecStarts[8]).times(new Decimal(ecMults[8]).pow(ECTimesCompleted("eterc8"))))+" IP <span>Cost: 115 Time Theorems"
 	else document.getElementById("ec8unl").innerHTML = "Eternity Challenge 8<span>Cost: 115 Time Theorems"
-	if (player.etercreq !== 9) document.getElementById("ec9unl").innerHTML = "Eternity Challenge 9<span>Requirement: "+shortenCosts(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))))+" infinity power<span>Cost: 415 Time Theorems"
+	if (player.etercreq !== 9) document.getElementById("ec9unl").innerHTML = "Eternity Challenge 9<span>Requirement: "+shortenCosts(new Decimal(ecStarts[9]).times(new Decimal(ecMults[9]).pow(ECTimesCompleted("eterc9"))))+" infinity power<span>Cost: 415 Time Theorems"
 	else document.getElementById("ec9unl").innerHTML = "Eternity Challenge 9<span>Cost: 415 Time Theorems"
-	if (player.etercreq !== 10) document.getElementById("ec10unl").innerHTML = "Eternity Challenge 10<span>Requirement: "+shortenCosts(new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10"))))+" EP<span>Cost: 550 Time Theorems"
+	if (player.etercreq !== 10) document.getElementById("ec10unl").innerHTML = "Eternity Challenge 10<span>Requirement: "+shortenCosts(new Decimal(ecStarts[10]).times(new Decimal(ecMults[10]).pow(ECTimesCompleted("eterc10"))))+" EP<span>Cost: 550 Time Theorems"
 	else document.getElementById("ec10unl").innerHTML = "Eternity Challenge 10<span>Cost: 550 Time Theorems"
 
 	document.getElementById("ec11unl").innerHTML = "Eternity Challenge 11<span>Requirement: Use only the Normal Dimension path<span>Cost: 1 Time Theorem"

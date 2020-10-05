@@ -340,6 +340,16 @@ function ts25Eff() {
 	return eff;
 }
 
+function ts35Eff() {
+	let ip = player.infinityPoints;
+	let reached = false;
+	if (ip.gte("1e9000")) reached = true;
+	ip = ip.div("1e9500")
+	let eff = Decimal.pow(ip.plus(1).log10()/100+1, 4).max(10)
+	if (reached && ip.lt(1)) eff = new Decimal(10)
+	return eff;
+}
+
 function ts43Eff() {
 	let eff = player.replicanti.galaxies*0.02
 	return eff+1
@@ -347,12 +357,25 @@ function ts43Eff() {
 
 function ts52Eff() {
 	let eff = Math.sqrt(player.replicanti.galaxies/2)
+	if (player.timestudy.studies.includes(172)) eff *= Math.cbrt(player.replicanti.galaxies/10+1)
 	return eff+1;
 }
 
 function ts63Eff() {
 	let eff = Decimal.pow(player.eternityPoints.plus(1), 100)
 	if (eff.gte("1e1000")) eff = Decimal.pow(eff.log10(), 1000/3)
+	return eff;
+}
+
+function ts152Eff() {
+	let eff = Decimal.pow(10, Math.sqrt(player.galaxies*5))
+	return eff;
+}
+
+function ts172Eff() {
+	let repl = player.replicanti.amount
+	if (repl.gte("1e4000")) repl = Decimal.pow(repl.log10(), 1110.49).min(repl);
+	let eff = repl.plus(1).pow(1e-3);
 	return eff;
 }
 

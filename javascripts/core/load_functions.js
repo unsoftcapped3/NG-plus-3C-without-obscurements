@@ -2000,7 +2000,7 @@ function setTSDisplay(){
         document.getElementById("62desc").textContent=tsMults[62]()
         document.getElementById("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
 		document.getElementById("131desc").textContent = player.aarexModifications.ngp3c?"You can get 50% more replicanti galaxies":"Automatic replicanti galaxies are disabled, but you can get 50% more"
-        document.getElementById("181desc").textContent = player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined && !tmp.ngp3l ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch"
+        document.getElementById("181desc").textContent = "You gain "+(player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined && !tmp.ngp3l ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch")+" each second"+(player.aarexModifications.ngp3c?", and OS_IP_1-3 are 90% weaker":"")
         document.getElementById("211desc").textContent=tsMults[211]()
         document.getElementById("213desc").textContent=tsMults[213]()
         document.getElementById("221").style["font-size"] = tmp.ngp3 ? "0.45rem" : "0.55rem"

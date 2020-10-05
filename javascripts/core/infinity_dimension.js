@@ -90,7 +90,7 @@ function DimensionProduction(tier) {
 	if (inQC(4) && tier == 1) ret = ret.plus(player.infinityDimension2.amount.floor())
 	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return new Decimal(0)
 	if (player.currentEternityChall == "eterc11") return ret
-	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.tickspeed.dividedBy(1000)))
+	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.aarexModifications.ngp3c?1:player.tickspeed.dividedBy(1000)))
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(100)
 	ret = ret.times(DimensionPower(tier))
 	if (player.pSac!=undefined) ret = ret.times(player.chall2Pow)
@@ -352,7 +352,10 @@ function getEU2Mult() {
 	var soft = 0
 	if (e > 1e5) soft = nS(e, cap)
 	var achReward = 1
-	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(e), 4.75))
+	if (player.achievements.includes("ngpp15")) {
+		if (player.aarexModifications.ngp3c) achReward = Decimal.pow(10, Math.pow(Decimal.log10(e), 3))
+		else achReward = Decimal.pow(10, Math.pow(Decimal.log10(e), 4.75))
+	}
 	if (player.aarexModifications.ngp3c) return Decimal.pow(cap/100 + 1, Math.log(cap * 4 + 1) / Math.log(2)).times(Decimal.div(soft, 100).add(1).times(Decimal.times(soft, 4).add(1).log(2)).max(1)).max(achReward)
 	else return Decimal.pow(cap/200 + 1, Math.log(cap * 2 + 1) / Math.log(4)).times(Decimal.div(soft, 200).add(1).times(Decimal.times(soft, 2).add(1).log(4)).max(1)).max(achReward)
 }

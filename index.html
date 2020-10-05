@@ -156,10 +156,12 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button id="33" onclick="buyTimeStudy(33)"><span id="ts33desc">You keep half of your replicanti galaxies on infinity</span><span>Cost: 2 Time Theorems</button></td>
 						<td><button id="31" onclick="buyTimeStudy(31)">Powers up bonuses that are based on your infinitied stat (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
 						<td><button id="32" onclick="buyTimeStudy(32)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
 						<td><button id="34" onclick="buyTimeStudy(34)">Gain x10 eternitied stat<span>Cost: 5 Time Theorems</button></td>
+						<td><button id="35" onclick="buyTimeStudy(35)" style="font-size: 8px;">Gain more infinitied & eternitied stat based on your IP, and Break Infinity Upgrade 7 is impacted by infinitied stat gain multipliers<span id="35eff"></span>Cost: 10 Time Theorems<span id="35req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -213,7 +215,7 @@
 					<tr>
 						<td><button class="eternitychallengestudy" id="ec7unl">Eternity Challenge 7<span>Requirement: 1e550,000 antimatter<span>Cost: 115 Time Theorems</button></td>
 						<td><button id="111" onclick="buyTimeStudy(111, 12)">Make the IP formula better<span>Cost: 12 Time Theorems</button></td>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="112" onclick="buyTimeStudy(112)">Make the EP formula better<span>Cost: 12 Time Theorems<span>Req: 250 Total Time Theorems</button></td>
 					</tr>
 				</table>
 				<br>
@@ -243,7 +245,7 @@
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="152" onclick="buyTimeStudy(152)" style="font-size: 9px;"><span id="152eff"></span>Cost: 25 Time Theorems<span>Req: 20 Eternity Challenge completions</button></td>
 						<td><button class="eternitychallengestudy" id="ec9unl">Eternity Challenge 9<span>Requirement: 1e6000 infinity power<span>Cost: 100 Time Theorems</button></td>
 						<td><button id="151" onclick="buyTimeStudy(151)"><span id="151desc">1e4x multiplier on all Time Dimensions</span>Cost: 8 Time Theorems<span id="151req"></span></button></td>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
@@ -258,7 +260,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button id="172" onclick="buyTimeStudy(172)" style="font-size: 8px;">Replicanti boosts EP gain (after obscurements), and TS52 is 50% stronger<span id="172eff"></span><span>Cost: 10 Time Theorems<span>Req: 10 Eternity Challenge completions</button></td>
 						<td><button id="171" onclick="buyTimeStudy(171)" style="font-size: 9px;">Time Shard requirement for the next tickspeed upgrade is reduced<span>Cost: 15 Time Theorems<span id="171req"></span></button></td>
+						<td><button id="173" onclick="buyTimeStudy(173)">All Galaxies are 200% stronger<span>Cost: 25 Time Theorems<span>Req: 20 Eternity Challenge completions</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -270,7 +274,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="181" onclick="buyTimeStudy(181)">You gain <span id="181desc" style="display:inline"></span> each second.<span>Cost: 200 Time Theorems</button></td>
+						<td><button id="181" onclick="buyTimeStudy(181)"><span id="181desc" style="display:inline"></span><span>Cost: 200 Time Theorems</button></td>
 					</tr>
 					<tr>
 						<td><button class="eternitychallengestudy" id="ec10unl">Eternity Challenge 10<span>Requirement: 1e100 EP<span>Cost: 200 Time Theorems</button></td>
@@ -3536,7 +3540,7 @@
 					<tr>
 						<td>
 							<div class="eterchallengediv" id="eterc7div" style="height: 140px; display: none">
-								<span>The First Time Dimension produces Eighth Infinity Dimensions, and the First Infinity Dimension produces Seventh Dimensions. Tickspeed affects all dimensions normally.</span>
+								<span>The First Time Dimension produces Eighth Infinity Dimensions, and the First Infinity Dimension produces Seventh Dimensions. Tickspeed <span id="eterc7ts">affects all dimensions normally</span>.</span>
 								<br>
 								<br>
 								<div class="outer">

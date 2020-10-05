@@ -104,11 +104,15 @@ function updateTheoremButtons() {
 	document.getElementById("61req").textContent = player.aarexModifications.ngp3c?"Req: 18 Total Time Theorems":""
 	document.getElementById("61desc").textContent = shorten(tsMults[61]())+"x EP gain"+(player.aarexModifications.ngp3c?" (based on your Replicanti)":"")
 	document.getElementById("151req").textContent = player.aarexModifications.ngp3c?"Req: 195 Total Time Theorems":""
-	document.getElementById("171req").textContent = player.aarexModifications.ngp3c?"Req: idk wait for more content I guess":""
+	document.getElementById("171req").textContent = player.aarexModifications.ngp3c?"Req: 200 Total Time Theorems":""
 	if (player.aarexModifications.ngp3c) {
 		document.getElementById("13eff").textContent = "Currently: "+shorten(ts13Eff())+"x"
 		document.getElementById("25eff").textContent = "Currently: /"+shorten(ts25Eff())
+		document.getElementById("35eff").textContent = "Currently: "+shorten(ts35Eff())+"x"
+		document.getElementById("35req").textContent = "Req: "+shortenCosts(new Decimal("1e9000"))+" IP"
 		document.getElementById("63eff").textContent = "Currently: "+shorten(ts63Eff())+"x later"
+		document.getElementById("152eff").textContent = "The Dimension Boost base is multiplied by "+shorten(ts152Eff())+" (based on Normal Galaxies)"
+		document.getElementById("172eff").textContent = "Currently: "+shorten(ts172Eff())+"x"
 	}
 }
 
@@ -188,6 +192,7 @@ function canBuyStudy(name) {
 	var row = Math.floor(name / 10)
 	var col = name % 10
 	let total = getTotalTT(player)
+	let totalChalls = Object.values(player.eternityChalls).reduce((a,c) => (a||0)+(c||0))
 	if (name == 12) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(11)
 	}
@@ -208,6 +213,9 @@ function canBuyStudy(name) {
 	}
 	if (name == 34) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(22)
+	}
+	if (name == 35) {
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(34) && player.infinityPoints.gte("1e9000")
 	}
 	if (name == 43) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(33)
@@ -239,12 +247,27 @@ function canBuyStudy(name) {
 		return false;
 	}
 	
+	if (name == 112) {
+		return player.aarexModifications.ngp3c && total>=250 && player.timestudy.studies.includes(111)
+	}
+	
 	if (name == 151 && player.aarexModifications.ngp3c) {
-		return total>=195
+		return total>=195 && (player.timestudy.studies.includes(141)||player.timestudy.studies.includes(142)||player.timestudy.studies.includes(143))
+	}
+	
+	if (name == 152) {
+		return player.aarexModifications.ngp3c && totalChalls>=20 && player.timestudy.studies.includes(141)
 	}
 	
 	if (name == 171 && player.aarexModifications.ngp3c) {
-		return false
+		return total>=200 && (player.timestudy.studies.includes(161)||player.timestudy.studies.includes(162))
+	}
+	
+	if (name == 172) {
+		return player.aarexModifications.ngp3c && totalChalls>=10 && player.timestudy.studies.includes(161)
+	}
+	if (name == 173) {
+		return player.aarexModifications.ngp3c && totalChalls>=20 && player.timestudy.studies.includes(162)
 	}
 
 	if (name == 181) {
@@ -301,8 +324,8 @@ function canBuyStudy(name) {
 	}
 }
 
-var all = [11, 12, 13, 25, 23, 21, 22, 24, 33, 31, 32, 34, 43, 41, 42, 44, 52, 51, 63, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 6, 5, 20, 6, 3, 2, 7, 2, 3, 2, 5, 4, 4, 6, 2, 9, 3, 7, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 12, 13, 25, 23, 21, 22, 24, 33, 31, 32, 34, 35, 43, 41, 42, 44, 52, 51, 63, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 112, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 152, 161, 162, 172, 171, 173, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
+var studyCosts = [1, 6, 5, 20, 6, 3, 2, 7, 2, 3, 2, 5, 10, 4, 4, 6, 2, 9, 3, 7, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 25, 7, 7, 10, 15, 25, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 var performedTS
 function updateTimeStudyButtons(changed, forceupdate = false) {
 	if (!forceupdate && (changed ? player.dilation.upgrades.includes(10) : performedTS && !player.dilation.upgrades.includes(10))) return
@@ -362,7 +385,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 				}
 			}
 			document.getElementById(all[i]).className = className
-			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==25||all[i]==34||all[i]==43||all[i]==44||all[i]==52||all[i]==63) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
+			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==25||all[i]==34||all[i]==35||all[i]==43||all[i]==44||all[i]==52||all[i]==63||all[i]==112||all[i]==152||all[i]==172||all[i]==173) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
 		}
 	}
 

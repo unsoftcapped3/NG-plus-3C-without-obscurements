@@ -1594,6 +1594,7 @@ function getInfinitiedGain() {
 	let infGain=1
 	if (player.thisInfinityTime > 50 && player.achievements.includes("r87")) infGain = 250
 	if (player.timestudy.studies.includes(32)) infGain *= tsMults[32]()
+	if (player.timestudy.studies.includes(35) && player.aarexModifications.ngp3c) infGain = nM(infGain, ts35Eff())
 	if (player.achievements.includes("r133") && player.meta) infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
 	return nA(infGain, player.achievements.includes("r87") && player.galacticSacrifice ? 249 : 0)
 }
@@ -2598,8 +2599,15 @@ function reset_game() {
 	startInterval()
 };
 
+function getEPGainBase() {
+	let base = 308
+	if (player.achievements.includes("ng3p23")) base = 307.8
+	if (player.timestudy.studies.includes(112) && player.aarexModifications.ngp3c) base /= 2
+	return base;
+}
+
 function gainedEternityPoints() {
-	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / (player.achievements.includes("ng3p23") ? 307.8 : 308) - 0.7).times(player.epmult)
+	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(player.epmult)
 	if (player.aarexModifications.newGameExpVersion) ret = ret.times(10)
 	if (player.timestudy.studies.includes(61)) ret = ret.times(tsMults[61]())
 	if (player.timestudy.studies.includes(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
@@ -2614,6 +2622,7 @@ function gainedEternityPoints() {
 		if (tmp.be) ret = ret.times(getBreakUpgMult(7))
 	}
 	if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cEP")
+	if (player.timestudy.studies.includes(172) && player.aarexModifications.ngp3c) ret = ret.times(ts172Eff())
 	return ret.floor()
 }
 
@@ -4045,11 +4054,12 @@ function challengesCompletedOnEternity(bigRip) {
 
 function gainEternitiedStat() {
 	let ret = 1
-	if (player.timestudy.studies.includes(34) && player.aarexModifications.ngp3c) ret *= 10
 	if (ghostified) {
 		ret = Math.pow(10, 2 / (Math.log10(getEternitied() + 1) / 10 + 1))
 		if (hasNU(9)) ret = nM(ret, tmp.qu.bigRip.spaceShards.max(1).pow(.1))
 	}
+	if (player.timestudy.studies.includes(34) && player.aarexModifications.ngp3c) ret = nM(ret, 10)
+	if (player.timestudy.studies.includes(35) && player.aarexModifications.ngp3c) ret = nM(ret, ts35Eff())
 	if (quantumed && player.eternities < 1e5) ret = Math.max(ret, 20)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
@@ -4112,6 +4122,36 @@ function ECTimesCompleted(name) {
 	return player.eternityChalls[name] || 0
 }
 
+function getECStarts() {
+	let starts = {}
+	starts[1] = player.aarexModifications.newGameExpVersion?1e3:2e4
+	starts[2] = player.aarexModifications.ngp3c?1950:1300
+	starts[3] = player.aarexModifications.ngp3c?13100:17300
+	starts[4] = player.aarexModifications.ngp3c?5e7:1e8
+	starts[5] = player.aarexModifications.ngp3c?100:160
+	starts[6] = player.aarexModifications.ngp3c?80:40
+	starts[7] = player.aarexModifications.ngp3c?"1e450000":"1e500000"
+	starts[8] = player.aarexModifications.ngp3c?"1e9600":"1e4000"
+	starts[9] = player.aarexModifications.ngp3c?"1e95000":"1e17500"
+	starts[10] = player.aarexModifications.ngp3c?Number.MAX_VALUE:"1e100"
+	return starts;
+}
+
+function getECMults() {
+	let mults = {}
+	mults[1] = player.aarexModifications.newGameExpVersion?1e3:2e4
+	mults[2] = player.aarexModifications.ngp3c?350:150
+	mults[3] = player.aarexModifications.ngp3c?200:1250
+	mults[4] = player.aarexModifications.ngp3c?25e6:5e7
+	mults[5] = player.aarexModifications.ngp3c?10:14
+	mults[6] = 5
+	mults[7] = player.aarexModifications.ngp3c?"1e150000":"1e300000"
+	mults[8] = player.aarexModifications.ngp3c?"1e1200":"1e1000"
+	mults[9] = player.aarexModifications.ngp3c?"1e1500":"1e2000"
+	mults[10] = player.aarexModifications.ngp3c?Decimal.root(Number.MAX_VALUE, 5):"1e20"
+	return mults;
+}
+
 function canUnlockEC(idx, cost, study, study2) {
 	study2 = (study2 !== undefined) ? study2 : 0;
 	if (player.eternityChallUnlocked !== 0) return false
@@ -4119,46 +4159,47 @@ function canUnlockEC(idx, cost, study, study2) {
 	if (player.timestudy.theorem < cost) return false
 	if (player.etercreq == idx && idx !== 11 && idx !== 12) return true
 
-	var ec1Mult = player.aarexModifications.newGameExpVersion ? 1e3 : 2e4
+	var ecStarts = getECStarts()
+	var ecMults = getECMults()
 	switch(idx) {
 		case 1:
-			if (getEternitied() >= (ECTimesCompleted("eterc1") ? ECTimesCompleted("eterc1") + 1 : 1) * ec1Mult) return true
+			if (getEternitied() >= ecStarts[1] + (ECTimesCompleted("eterc1") ? ECTimesCompleted("eterc1") : 0) * ecMults[1]) return true
 			break;
 
 		case 2:
-			if (player.totalTickGained >= 1300 + (ECTimesCompleted("eterc2") * 150)) return true
+			if (player.totalTickGained >= ecStarts[2] + (ECTimesCompleted("eterc2") * ecMults[2])) return true
 			break;
 
 		case 3:
-			if (player.eightAmount.gte(17300 + (ECTimesCompleted("eterc3") * 1250))) return true
+			if (player.eightAmount.gte(ecStarts[3] + (ECTimesCompleted("eterc3") * ecMults[3]))) return true
 			break;
 
 		case 4:
-			if (1e8 + (ECTimesCompleted("eterc4") * 5e7) <= getInfinitied()) return true
+			if (ecStarts[4] + (ECTimesCompleted("eterc4") * ecMults[4]) <= getInfinitied()) return true
 			break;
 
 		case 5:
-			if (160 + (ECTimesCompleted("eterc5") * 14) <= player.galaxies) return true
+			if (ecStarts[5] + (ECTimesCompleted("eterc5") * ecMults[5]) <= player.galaxies) return true
 			break;
 
 		case 6:
-			if (40 + (ECTimesCompleted("eterc6") * 5) <= player.replicanti.galaxies) return true
+			if (ecStarts[6] + (ECTimesCompleted("eterc6") * ecMults[6]) <= player.replicanti.galaxies) return true
 			break;
 
 		case 7:
-			if (player.money.gte(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))))) return true
+			if (player.money.gte(new Decimal(ecStarts[7]).times(new Decimal(ecMults[7]).pow(ECTimesCompleted("eterc7"))))) return true
 			break;
 
 		case 8:
-			if (player.infinityPoints.gte(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))))) return true
+			if (player.infinityPoints.gte(new Decimal(ecStarts[8]).times(new Decimal(ecMults[8]).pow(ECTimesCompleted("eterc8"))))) return true
 			break;
 
 		case 9:
-			if (player.infinityPower.gte(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))))) return true
+			if (player.infinityPower.gte(new Decimal(ecStarts[9]).times(new Decimal(ecMults[9]).pow(ECTimesCompleted("eterc9"))))) return true
 			break;
 
 		case 10:
-			if (player.eternityPoints.gte(new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10"))))) return true
+			if (player.eternityPoints.gte(new Decimal(ecStarts[10]).times(new Decimal(ecMults[10]).pow(ECTimesCompleted("eterc10"))))) return true
 			break;
 
 		case 11:
@@ -4249,6 +4290,15 @@ var ecExpData = {
 		eterc11_ngmm: 35000,
 		eterc12_ngmm: 17000,
 		eterc13_legacy: 38000000,
+		eterc1_ngc: 7200,
+		eterc2_ngc: 4950,
+		eterc3_ngc: 4350,
+		eterc4_ngc: 9250,
+		eterc5_ngc: 1950,
+		eterc6_ngc: 7400,
+		eterc7_ngc: 2850,
+		eterc8_ngc: 8700,
+		eterc9_ngc: 23000,
 	},
 	increases: {
 		eterc1: 200,
@@ -4277,9 +4327,19 @@ var ecExpData = {
 		eterc11_ngmm: 3250,
 		eterc12_ngmm: 1500,
 		eterc13_legacy: 1200000,
-		eterc14_legacy: 250000
+		eterc14_legacy: 250000,
+		eterc1_ngc: 700,
+		eterc2_ngc: 150,
+		eterc3_ngc: 225,
+		eterc4_ngc: 150,
+		eterc5_ngc: 150,
+		eterc6_ngc: 400,
+		eterc7_ngc: 200,
+		eterc8_ngc: 1300,
+		eterc9_ngc: 400,
 	}
 }
+
 function getECGoal(x) {
 	let expInit = ecExpData.inits[x]
 	let expIncrease = ecExpData.increases[x]
@@ -4292,6 +4352,10 @@ function getECGoal(x) {
 		expInit = ecExpData.inits[x + "_legacy"] || expInit
 		expIncrease = ecExpData.increases[x + "_legacy"] || expIncrease
 	}
+	if (player.aarexModifications.ngp3c) {
+		expInit = ecExpData.inits[x + "_ngc"] || expInit
+		expIncrease = ecExpData.increases[x + "_ngc"] || expIncrease
+	}
 	let exp = expInit + expIncrease * completions
 	if (x == "ec13" && !tmp.ngp3l) exp += 600000 * Math.max(completions - 2, 0) * (completions - 3, 0)
 	return Decimal.pow(10, exp)
@@ -4299,16 +4363,18 @@ function getECGoal(x) {
 
 function getECReward(x) {
 	let m2 = player.galacticSacrifice !== undefined
+	let pc = !(!player.aarexModifications.ngp3c)
 	let c=ECTimesCompleted("eterc" + x)
-	if (x == 1) return Math.pow(Math.max(player.thisEternity * 10, 1), (0.3 + c * 0.05) * (m2 ? 5 : 1))
+	if (x == 1) return Math.pow(Math.max(player.thisEternity * 10, 1), (0.3 + c * 0.05) * ((m2||pc) ? 5 : 1))
 	if (x == 2) {
 		let r = player.infinityPower.pow((m2 ? 4.5 : 1.5) / (700 - c * 100)).add(1)
 		if (m2) r = Decimal.pow(player.infinityPower.add(10).log10(), 1000).times(r)
+		else if (pc) r = Decimal.pow(r, 100).min("1e100000")
 		else r = r.min(1e100)
 		return r.max(1)
 	}
-	if (x == 3) return c * 0.8
-	if (x == 4) return player.infinityPoints.max(1).pow((m2 ? .4 : 0.003) + c * (m2 ? .2 : 0.002)).min(m2 ? 1/0 : 1e200)
+	if (x == 3) return c * (pc?8:0.8)
+	if (x == 4) return player.infinityPoints.max(1).pow((m2 ? .4 : 0.003) + c * (m2 ? .2 : 0.002)).pow(pc ? 5 : 1).min((m2||pc) ? 1/0 : 1e200)
 	if (x == 5) return c * 5
 	if (x == 8) {
 		let x = Math.log10(player.infinityPower.plus(1).log10() + 1)
@@ -4923,13 +4989,19 @@ function passiveIPupdating(diff){
 }
 
 function passiveInfinitiesUpdating(diff){
-	if (typeof(player.infinitied) != "number") return 
-	if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") player.partInfinitied += diff / player.bestInfinityTime;
-	if (player.partInfinitied >= 1/2) {
-		let x = Math.floor(player.partInfinitied*2)
-		player.partInfinitied -= x/2
-		player.infinitied += x;
+	let tempPA = player.partInfinitied
+	if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") {
+		let gain = diff / player.bestInfinityTime;
+		if (player.eternities>0) gain = diff / 50;
+		if (player.timestudy.studies.includes(35) && player.aarexModifications.ngp3c) gain = nM(gain, getInfinitiedGain());
+		tempPA = nA(tempPA, gain);
 	}
+	if (nG(tempPA, 1/2)) {
+		let x = Decimal.floor(nM(tempPA, 2))
+		tempPA = nS(tempPA, nD(x, 2))
+		player.infinitied = nA(player.infinitied, x);
+	}
+	player.partInfinitied = Math.max(Math.min(new Decimal(tempPA).toNumber(), 1), 0);
 }
 
 function infinityRespeccedDMUpdating(diff){
@@ -5714,6 +5786,7 @@ function ECRewardDisplayUpdating(){
 	document.getElementById("ec14reward").textContent = "Reward: Free tickspeed upgrades boost the IC3 reward to be " + getIC3EffFromFreeUpgs().toFixed(0) + "x stronger."
 
 	document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
+	document.getElementById("eterc7ts").textContent = player.aarexModifications.ngp3c?"does nothing":"affects all dimensions normally"
 }
 
 function bigRipUpgradeUpdating(){

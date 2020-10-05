@@ -465,19 +465,33 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: 1e10,
-			pow() { return (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?.875:.5 },
+			pow() { 
+				let pow = (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?.875:.5 
+				if (player.timestudy.studies.includes(181)) pow = Math.pow(pow, .1);
+				return pow;
+			},
 			derv: false,
 		},
 		2: {
 			func: "pow",
 			start: 1e30,
-			pow() { return (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?5/6:1/3 },
+			pow() { 
+				let pow = (player.aarexModifications.ngp3c && player.challenges.includes("postc6"))?5/6:1/3 
+				if (player.timestudy.studies.includes(181)) pow = Math.pow(pow, .1);
+				return pow;
+			},
 			derv: false,
 		},
 		3: {
 			func: "pow",
 			start: new Decimal("1e10000"),
-			pow: 1/4,
+			pow() { return player.timestudy.studies.includes(181)?Math.pow(.25, .1):(1/4) },
+			derv: false,
+		},
+		4: {
+			func: "pow",
+			start: new Decimal("1e100000"),
+			pow: 1/5,
 			derv: false,
 		},
 	},
@@ -518,8 +532,14 @@ var softcap_data = {
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
+			start: 1e100,
 			pow: 1/3,
+			derv: false,
+		},
+		3: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/4,
 			derv: false,
 		},
 	},

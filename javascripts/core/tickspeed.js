@@ -46,6 +46,7 @@ function getGalaxyPower(ng, bi, noDil) {
 	let galaxyPower = ng
 	if (!tmp.be) galaxyPower = Math.max(ng - (bi ? 2 : 0), 0) + otherGalPower
 	if ((inNC(7) || inQC(4) ) && player.galacticSacrifice) galaxyPower *= galaxyPower
+	if (player.timestudy.studies.includes(173) && player.aarexModifications.ngp3c) galaxyPower *= 3
 	return galaxyPower
 }
 
@@ -307,6 +308,7 @@ function getWorkingTickspeed(){
 		if (player.infinityUpgrades.includes("postinfi82")) tick = tick.div(getTotalSacrificeBoost())
 		if (player.timestudy.studies.includes(12)) tick = tick.div(Decimal.pow(getDimensionBoostPower(), player.resets))
 		tick = softcap(tick.pow(-1), "ngp3cTS").pow(-1)
+		if (player.currentEternityChall=="eterc7") return new Decimal(1000)
 	}
 	return tick
 }

@@ -114,7 +114,7 @@ function getTimeDimensionProduction(tier) {
   	if (inQC(4) && tier == 1) ret = ret.plus(player.timeDimension2.amount.floor())
   	ret = ret.times(getTimeDimensionPower(tier))
   	if (player.aarexModifications.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
-  	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.tickspeed.dividedBy(1000)))
+  	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.aarexModifications.ngp3c?1:player.tickspeed.dividedBy(1000)))
   	if (player.aarexModifications.ngmX>3&&(tier>1||!player.achievements.includes("r12"))) ret = ret.div(100)
   	if (player.aarexModifications.ngexV) ret = ret.div(10 / tier)
   	if (player.currentEternityChall == "eterc1") return new Decimal(0)
