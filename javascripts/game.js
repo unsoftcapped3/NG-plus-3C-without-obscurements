@@ -4133,7 +4133,7 @@ function getECStarts() {
 	starts[7] = player.aarexModifications.ngp3c?"1e450000":"1e500000"
 	starts[8] = player.aarexModifications.ngp3c?"1e9600":"1e4000"
 	starts[9] = player.aarexModifications.ngp3c?"1e95000":"1e17500"
-	starts[10] = player.aarexModifications.ngp3c?Number.MAX_VALUE:"1e100"
+	starts[10] = player.aarexModifications.ngp3c?"2e308":"1e100"
 	return starts;
 }
 
@@ -4148,7 +4148,7 @@ function getECMults() {
 	mults[7] = player.aarexModifications.ngp3c?"1e150000":"1e300000"
 	mults[8] = player.aarexModifications.ngp3c?"1e1200":"1e1000"
 	mults[9] = player.aarexModifications.ngp3c?"1e1500":"1e2000"
-	mults[10] = player.aarexModifications.ngp3c?Decimal.root(Number.MAX_VALUE, 5):"1e20"
+	mults[10] = player.aarexModifications.ngp3c?"1e25":"1e20"
 	return mults;
 }
 

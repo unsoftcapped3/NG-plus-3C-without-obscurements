@@ -192,7 +192,12 @@ function canBuyStudy(name) {
 	var row = Math.floor(name / 10)
 	var col = name % 10
 	let total = getTotalTT(player)
-	let totalChalls = Object.values(player.eternityChalls).reduce((a,c) => (a||0)+(c||0))
+	let totalChalls;
+	let l = Object.values(player.eternityChalls).length
+	if (l==0) totalChalls = 0;
+	else if (l==1) totalChalls = Object.values(player.eternityChalls)[0]
+	else totalChalls = Object.values(player.eternityChalls).reduce((a,c) => (a||0)+(c||0));
+	
 	if (name == 12) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(11)
 	}
