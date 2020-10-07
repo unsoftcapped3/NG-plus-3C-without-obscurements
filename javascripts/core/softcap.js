@@ -499,13 +499,21 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: 1e25,
-			pow: 1/3,
+			pow() {
+				let pow = 1/3
+				if (player.timestudy.studies.includes(196)) pow = Math.pow(pow, .2);
+				return pow;
+			},
 			derv: false,
 		},
 		2: {
 			func: "pow",
 			start: new Decimal(Number.MAX_VALUE),
-			pow: 1/4,
+			pow() {
+				let pow = 1/4
+				if (player.timestudy.studies.includes(196)) pow = Math.pow(pow, .2);
+				return pow;
+			},
 			derv: false,
 		},
 	},
@@ -548,6 +556,20 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal("1e7500"),
 			pow: 0.1,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal("1e50000"),
+			pow: 0.08,
+			derv: false,
+		},
+	},
+	ngp3cTDs: {
+		1: {
+			func: "pow",
+			start: new Decimal("1e5000"),
+			pow: 1/3,
 			derv: false,
 		},
 	},

@@ -213,6 +213,7 @@ function drawStudyTree() {
     drawTreeBranch("102", "111");
     drawTreeBranch("103", "111");
 	if (player.aarexModifications.ngp3c) drawTreeBranch("111", "112");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("112", "113");
     drawTreeBranch("111", "121");
     drawTreeBranch("111", "122");
     drawTreeBranch("111", "123");
@@ -248,11 +249,17 @@ function drawStudyTree() {
     drawTreeBranch("ec10unl", "191")
     drawTreeBranch("ec10unl", "192")
     drawTreeBranch("ec10unl", "193")
+	if (player.aarexModifications.ngp3c) drawTreeBranch("191", "194");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("193", "195");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("194", "196");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("195", "197");
     drawTreeBranch("191", "211")
     drawTreeBranch("191", "212")
     drawTreeBranch("192", "201")
     drawTreeBranch("193", "213")
     drawTreeBranch("193", "214")
+	if (player.aarexModifications.ngp3c) drawTreeBranch("194", "202");
+	if (player.aarexModifications.ngp3c) drawTreeBranch("195", "203");
     drawTreeBranch("211", "221")
     drawTreeBranch("211", "222")
     drawTreeBranch("212", "223")

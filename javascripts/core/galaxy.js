@@ -166,7 +166,14 @@ function getDistantScalingStart() {
 	return n
 }
 
+function getDistantPower() {
+	let power = 1
+	if (player.timestudy.studies.includes(194) && player.aarexModifications.ngp3c) power = .5
+	return power;
+}
+
 function getDistantAdd(x) {
+	x *= getDistantPower()
 	if (player.galacticSacrifice !== undefined && player.tickspeedBoosts == undefined) return Math.pow(x, 1.5) + x
 	return (x + 1) * x
 }

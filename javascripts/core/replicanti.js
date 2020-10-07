@@ -67,6 +67,7 @@ function getReplicantiCap() {
 	if (player.aarexModifications.ngp3c) {
 		let lim = getReplicantiLimit();
 		if (player.timestudy.studies.includes(52)) lim = Decimal.pow(lim, ts52Eff())
+		if (player.timestudy.studies.includes(192)) lim = Decimal.mul(lim, player.timeShards.plus(1))
 		return lim;
 	}
 	return getReplicantiLimit();
@@ -300,15 +301,15 @@ function notContinuousReplicantiUpdating() {
 				player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
 				counter = 0
 			} else player.replicanti.amount = player.replicanti.amount.times(2)
-			if (!player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.min(getReplicantiCap())
+			if (!player.timestudy.studies.includes(192)||player.aarexModifications.ngp3c) player.replicanti.amount = player.replicanti.amount.min(getReplicantiCap())
 		}
 		replicantiTicks -= interval
 	}
 }
 
 function continuousReplicantiUpdating(diff){
-	if (player.timestudy.studies.includes(192) && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
-	else if (player.timestudy.studies.includes(192)) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
+	if (player.timestudy.studies.includes(192) && !player.aarexModifications.ngp3c && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
+	else if (player.timestudy.studies.includes(192)&&!player.aarexModifications.ngp3c) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
 	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiCap())
 	replicantiTicks = 0
 }

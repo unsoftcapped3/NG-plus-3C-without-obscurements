@@ -213,9 +213,11 @@
 				<br>
 				<table class="table" id="studytable">
 					<tr>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button class="eternitychallengestudy" id="ec7unl">Eternity Challenge 7<span>Requirement: 1e550,000 antimatter<span>Cost: 115 Time Theorems</button></td>
 						<td><button id="111" onclick="buyTimeStudy(111, 12)">Make the IP formula better<span>Cost: 12 Time Theorems</button></td>
 						<td><button id="112" onclick="buyTimeStudy(112)">Make the EP formula better<span>Cost: 12 Time Theorems<span>Req: 250 Total Time Theorems</button></td>
+						<td><button id="113" onclick="buyTimeStudy(113)">Make the EP formula even better<span>Cost: 24 Time Theorems<span>Req: 1,800 Total Time Theorems</button></td>
 					</tr>
 				</table>
 				<br>
@@ -282,14 +284,22 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="191" onclick="buyTimeStudy(191)">You bank 5% of your Infinities on Eternity.<span>Cost: 400 Time Theorems</button></td>
+						<td><button id="196" onclick="buyTimeStudy(196)">OS_SAC_1 & 2 are 80% weaker, and sacrifice is 1,900% more efficient<span>Cost: 450 Time Theorems</button></td>
+						<td><button id="194" onclick="buyTimeStudy(194)">Dimension Supersonic and Distant Galaxy scalings are 50% weaker<span>Cost: 375 Time Theorems</button></td>
+						<td><button id="191" onclick="buyTimeStudy(191)" style="font-size: 9px;"><span id="191desc"></span>Cost: 400 Time Theorems</button></td>
 						<td><button id="192" onclick="buyTimeStudy(192)" style="font-size: 10px;"><span id="192desc"></span>Cost: 730 Time Theorems</button></td>
 						<td><button id="193" onclick="buyTimeStudy(193)">Normal Dimensions gain a multiplier based on your Eternities<span id="193desc">Currently: 1x</span>Cost: 300 Time Theorems</button></td>
+						<td><button id="195" onclick="buyTimeStudy(195)">Time Condensers are 4,900% stronger<span>Cost: 375 Time Theorems</button></td>
+						<td><button id="197" onclick="buyTimeStudy(197)">TS24, TS25, TS32, TS43, & TS111 are 3x as powerful, and TS172 uses a better formula<span>Cost: 500 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button id="202" onclick="buyTimeStudy(202)" style="font-size: 10px;">Normal Condensers are cheaper based on their amount<span id="202eff"></span>Cost: 200 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button id="201" onclick="buyTimeStudy(201)">Pick another path from the first split<span>Cost: 900 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="203" onclick="buyTimeStudy(203)">Time Condensers are cheaper based on their amount<span id="203eff"></span>Cost: 200 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -302,14 +312,14 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr class="wideRow">
-						<td><button id="221" onclick="buyTimeStudy(221)">Dimension Boosts affect Time Dimensions with reduced power.<span id="221desc"></span><span>Cost: 900 Time Theorems</button></td>
-						<td><button id="222" onclick="buyTimeStudy(222)">Dimension Boost costs scale by another <span id="222desc" style="display:inline"></span> less.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="223" onclick="buyTimeStudy(223)">Galaxy cost scaling starts 7 galaxies later.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="224" onclick="buyTimeStudy(224)">Galaxy cost scaling starts 1 galaxy later for every 2000 Dimension Boosts.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="225" onclick="buyTimeStudy(225)">You gain extra RGs based on how high above infinity your replicanti are.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="226" onclick="buyTimeStudy(226)">You gain extra RGs based on your max RGs.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="227" onclick="buyTimeStudy(227)">Sacrifice affects the 4th Time Dimension with reduced effect.<span id="227desc"></span><span>Cost: 900 Time Theorems</button></td>
-						<td><button id="228" onclick="buyTimeStudy(228)">Sacrifice scales better.<span>Cost: 900 Time Theorems</button></td>
+						<td><button id="221" onclick="buyTimeStudy(221)" style="font-size: 8px;">Dimension Boosts affect Time Dimensions with reduced power.<span id="221desc"></span><span>Cost: 900 Time Theorems<span id="221req"></span></button></td>
+						<td><button id="222" onclick="buyTimeStudy(222)" style="font-size: 8px;">Dimension Boost costs scale by another <span id="222desc" style="display:inline"></span> less.<span>Cost: 900 Time Theorems<span id="222req"></span></button></td>
+						<td><button id="223" onclick="buyTimeStudy(223)" style="font-size: 8px;">Galaxy cost scaling starts 7 galaxies later.<span>Cost: 900 Time Theorems<span id="223req"></span></button></td>
+						<td><button id="224" onclick="buyTimeStudy(224)" style="font-size: 8px;">Galaxy cost scaling starts 1 galaxy later for every 2000 Dimension Boosts.<span>Cost: 900 Time Theorems<span id="224req"></span></button></td>
+						<td><button id="225" onclick="buyTimeStudy(225)" style="font-size: 8px;">You gain extra RGs based on how high above infinity your replicanti are.<span>Cost: 900 Time Theorems<span id="225req"></span></button></td>
+						<td><button id="226" onclick="buyTimeStudy(226)" style="font-size: 8px;">You gain extra RGs based on your max RGs.<span>Cost: 900 Time Theorems<span id="226req"></span></button></td>
+						<td><button id="227" onclick="buyTimeStudy(227)" style="font-size: 8px;">Sacrifice affects the 4th Time Dimension with reduced effect.<span id="227desc"></span><span>Cost: 900 Time Theorems<span id="227req"></span></button></td>
+						<td><button id="228" onclick="buyTimeStudy(228)" style="font-size: 8px;">Sacrifice scales better.<span>Cost: 900 Time Theorems<span id="228req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -328,7 +338,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy1" onclick="buyDilationStudy(1, 5e3)">Unlock time dilation<span>Requirement: 5 Eternity Challenge 11 and 12 completions<span>Cost: 5000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy1" onclick="buyDilationStudy(1, (player.aarexModifications.ngp3c?3e3:5e3))">Unlock time dilation<span>Requirement: 5 Eternity Challenge 11 and 12 completions<span>Cost: 5000 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -652,6 +662,17 @@
 						</td>
 						<td>
 							<button id="eter9" class="eternityupbtn" onclick="buyEternityUpgrade(9, new Decimal('1e3000'))">Dilated time gain is boosted by eternity points<br>Currently: Xx<br>Cost: 1e3000 EP</button>
+						</td>
+					</tr>
+					<tr id="eterrowcond">
+						<td>
+							<button id="eter10" class="eternityupbtn" onclick="buyEternityUpgrade(10, new Decimal('1e625'))">You can buy all studies in all three-way splits<br>Cost: 1e625 EP</button>
+						</td>
+						<td>
+							<button id="eter11" class="eternityupbtn" onclick="buyEternityUpgrade(11, new Decimal('1e900'))">You can buy all black & white studies, and TS35 has no requirement<br>Cost: 1e900 EP</button>
+						</td>
+						<td>
+							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12, new Decimal('1e1500'))">The Replicated Condenser cost formula is weaker<br>Cost: 1e1500 EP</button>
 						</td>
 					</tr>
 					<tr>
@@ -3444,6 +3465,7 @@
 			</div>
 			<div id="eternitychallenges" class="challengeTab">
 				<div>Complete Eternity Challenges again for a bigger reward, maximum of 5 times.</div>
+				Total Completions: <span id="ecComps"></span>
 				<button class="storebtn" onclick="autoECToggle()" id="autoEC" style="width:150px; height: 40px; font-size: 10px; margin: auto">Don't auto-respec studies and auto-reunlock ECs</button>
 				<table  class="table" style="margin: 0 auto">
 					<tr>
@@ -3603,7 +3625,7 @@
 					<tr>
 						<td>
 							<div class="eterchallengediv" id="eterc11div" style="height: 140px; display: none">
-								<span>All Dimension multipliers are disabled, except for the multipliers from Infinity Power and Dimension Boosts to Normal Dimensions.</span>
+								<span id="eterc11desc">All Dimension multipliers are disabled, except for the multipliers from Infinity Power and Dimension Boosts to Normal Dimensions.</span>
 								<br>
 								<br>
 								<div class="outer">

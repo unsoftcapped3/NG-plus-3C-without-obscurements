@@ -627,6 +627,11 @@ function eternityUpgradesDisplay(){
 		document.getElementById("eter8").innerHTML = "Dilated time gain is boosted by Infinity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e2000"))+" EP"
 		document.getElementById("eter9").innerHTML = "Dilated time gain is boosted by Eternity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.eternityPoints.log(10))) / 10).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e3000"))+" EP"
 	}
+	if (player.aarexModifications.ngp3c) {
+		document.getElementById("eter10").innerHTML = "You can buy all studies in all three-way splits<br>Cost: "+shortenCosts(new Decimal("1e625"))+" EP"
+		document.getElementById("eter11").innerHTML = "You can buy all black & white studies, and TS35 has no requirement<br>Cost: "+shortenCosts(new Decimal("1e900"))+" EP"
+		document.getElementById("eter12").innerHTML = "The Replicated Condenser cost formula is weaker<br>Cost: "+shortenCosts(new Decimal("1e1500"))+" EP"
+	}
 }
 
 function uponDilationDisplay(){
@@ -762,8 +767,9 @@ function initialTimeStudyDisplay(){
 	document.getElementById("151desc").textContent = shortenCosts(1e4) + "x multiplier on all Time Dimensions"
 	document.getElementById("161desc").textContent = shortenCosts(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) *  ( player.aarexModifications.newGameExpVersion ? 5 : 1))) + "x multiplier on all normal dimensions"
 	document.getElementById("162desc").textContent = shortenCosts(Decimal.pow(10, (player.galacticSacrifice ? 234 : 11) * (player.aarexModifications.newGameExpVersion ? 5 : 1))) + "x multiplier on all Infinity dimensions"
-	document.getElementById("192desc").textContent = "You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have"
-	document.getElementById("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, getEternitied())).min("1e13000")) + "x"
+	document.getElementById("191desc").textContent = "You bank 5% of your Infinities on Eternity"+(player.aarexModifications.ngp3c?", and the Infinity Power effect is stronger based on your infinities (^5.95 -> ^"+shorten(5.95+ts191Eff())+")":"")+"."
+	document.getElementById("192desc").textContent = player.aarexModifications.ngp3c?("The Replicanti limit is multiplied by your Time Shards."):("You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have")
+	document.getElementById("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, Decimal.div(getEternitied(), player.aarexModifications.ngp3c?1e6:1))).min("1e13000")) + "x"
 	document.getElementById("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	document.getElementById("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
 	document.getElementById("metaCost").textContent = shortenCosts(getMetaUnlCost());
@@ -800,7 +806,7 @@ function eternityChallengeUnlockDisplay(){
 function mainTimeStudyDisplay(){
 	initialTimeStudyDisplay()
 	eternityChallengeUnlockDisplay()
-	document.getElementById("dilstudy1").innerHTML = "Unlock time dilation" + (player.dilation.studies.includes(1) ? "" : "<span>Requirement: 5 EC11 and EC12 completions and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")+"<span>Cost: " + getFullExpansion(5e3) + " Time Theorems"
+	document.getElementById("dilstudy1").innerHTML = "Unlock time dilation" + (player.dilation.studies.includes(1) ? "" : "<span>Requirement: 5 EC11 and EC12 completions and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")+"<span>Cost: " + getFullExpansion(player.aarexModifications.ngp3c?(1/0):5e3) + " Time Theorems"
 	if (tmp.ngp3) {
 		var ts232display = tmp.ts232 * 100 - 100
 		document.getElementById("221desc").textContent = "Currently: "+shorten(Decimal.pow(1.0025, player.resets))+"x"
@@ -902,6 +908,7 @@ function ECCompletionsDisplay(){
 }
 
 function ECchallengePortionDisplay(){
+	document.getElementById("eterc11desc").textContent = player.aarexModifications.ngp3c?"All Dimension multipliers are disabled, except for the multipliers from Infinity Power, Dimension Boosts, and Normal Condensers to Normal Dimensions.":"All Dimension multipliers are disabled, except for the multipliers from Infinity Power and Dimension Boosts to Normal Dimensions."
 	let ec12TimeLimit = Math.round(getEC12TimeLimit() * 10) / 100
 	for (var c=1;c<15;c++) document.getElementById("eterc"+c+"goal").textContent = "Goal: "+shortenCosts(getECGoal("eterc"+c))+" IP"+(c==12?" in "+ec12TimeLimit+" second"+(ec12TimeLimit==1?"":"s")+" or less.":c==4?" in "+Math.max((16-(ECTimesCompleted("eterc4")*4)),0)+" infinities or less.":"")
 }

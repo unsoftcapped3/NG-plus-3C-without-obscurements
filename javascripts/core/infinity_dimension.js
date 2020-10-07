@@ -295,9 +295,12 @@ function getInfinityPowerEffectExp() {
 	}
 	if (x > 100) x = 50 * Math.log10(x)
 	if (hasPU(34)) x *= puMults[34]()
+	if (player.aarexModifications.ngp3c) {
+		x *= 0.85
+		if (player.timestudy.studies.includes(191)) x += ts191Eff()
+	}
 	if (player.dilation.upgrades.includes("ngmm5")) x += getDil44Mult()
-	
-	if (player.aarexModifications.ngp3c) x *= 0.85
+
 	return x
 }
 
@@ -368,7 +371,7 @@ function getEU3Mult() {
 
 function updateInfPower() {
 	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
-	if (player.galacticSacrifice && player.pSac == undefined) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
+	if ((player.galacticSacrifice && player.pSac == undefined)||player.aarexModifications.ngp3c) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
 	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
 	else {

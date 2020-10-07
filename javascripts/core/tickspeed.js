@@ -73,6 +73,7 @@ function getGalaxyEff(bi) {
 	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
 	if (player.timestudy.studies.includes(212)) eff *= tsMults[212]()
 	if (player.timestudy.studies.includes(232) && bi) eff *= tmp.ts232
+	if (player.aarexModifications.ngp3c) eff *= getECReward(11)
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.ngp3) eff *= colorBoosts.r

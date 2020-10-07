@@ -105,14 +105,19 @@ function updateTheoremButtons() {
 	document.getElementById("61desc").textContent = shorten(tsMults[61]())+"x EP gain"+(player.aarexModifications.ngp3c?" (based on your Replicanti)":"")
 	document.getElementById("151req").textContent = player.aarexModifications.ngp3c?"Req: 195 Total Time Theorems":""
 	document.getElementById("171req").textContent = player.aarexModifications.ngp3c?"Req: 200 Total Time Theorems":""
+	for (let i=1;i<=8;i++) {
+		document.getElementById("22"+i+"req").textContent = player.aarexModifications.ngp3c?"Req: 4,500 Total Time Theorems":""
+	}
 	if (player.aarexModifications.ngp3c) {
 		document.getElementById("13eff").textContent = "Currently: "+shorten(ts13Eff())+"x"
 		document.getElementById("25eff").textContent = "Currently: /"+shorten(ts25Eff())
 		document.getElementById("35eff").textContent = "Currently: "+shorten(ts35Eff())+"x"
-		document.getElementById("35req").textContent = "Req: "+shortenCosts(new Decimal("1e9000"))+" IP"
+		document.getElementById("35req").textContent = (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c)?"":("Req: "+shortenCosts(new Decimal("1e9000"))+" IP")
 		document.getElementById("63eff").textContent = "Currently: "+shorten(ts63Eff())+"x later"
 		document.getElementById("152eff").textContent = "The Dimension Boost base is multiplied by "+shorten(ts152Eff())+" (based on Normal Galaxies)"
 		document.getElementById("172eff").textContent = "Currently: "+shorten(ts172Eff())+"x"
+		document.getElementById("202eff").textContent = "Currently: /"+shorten(ts202Eff())
+		document.getElementById("203eff").textContent = "Currently: /"+shorten(ts203Eff())
 	}
 }
 
@@ -158,7 +163,7 @@ function buyTimeStudy(name, check, quickBuy) {
 }
 
 function getDilationTotalTTReq() {
-	return tmp.ngex ? 12950 : 13000
+	return player.aarexModifications.ngp3c? 13500 : (tmp.ngex ? 12950 : 13000)
 }
 
 function buyDilationStudy(name, cost) {
@@ -192,11 +197,7 @@ function canBuyStudy(name) {
 	var row = Math.floor(name / 10)
 	var col = name % 10
 	let total = getTotalTT(player)
-	let totalChalls;
-	let l = Object.values(player.eternityChalls).length
-	if (l==0) totalChalls = 0;
-	else if (l==1) totalChalls = Object.values(player.eternityChalls)[0]
-	else totalChalls = Object.values(player.eternityChalls).reduce((a,c) => (a||0)+(c||0));
+	let totalChalls = getTotalECComps()
 	
 	if (name == 12) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(11)
@@ -220,7 +221,7 @@ function canBuyStudy(name) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(22)
 	}
 	if (name == 35) {
-		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(34) && player.infinityPoints.gte("1e9000")
+		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(34) && (player.infinityPoints.gte("1e9000")||(player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c))
 	}
 	if (name == 43) {
 		return player.aarexModifications.ngp3c && player.timestudy.studies.includes(33)
@@ -256,6 +257,10 @@ function canBuyStudy(name) {
 		return player.aarexModifications.ngp3c && total>=250 && player.timestudy.studies.includes(111)
 	}
 	
+	if (name == 113) {
+		return player.aarexModifications.ngp3c && total>=1800 && player.timestudy.studies.includes(112)
+	}
+	
 	if (name == 151 && player.aarexModifications.ngp3c) {
 		return total>=195 && (player.timestudy.studies.includes(141)||player.timestudy.studies.includes(142)||player.timestudy.studies.includes(143))
 	}
@@ -278,7 +283,22 @@ function canBuyStudy(name) {
 	if (name == 181) {
 		return player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)
 	}
+	
+	if (name == 194) {
+		return player.timestudy.studies.includes(191) && player.aarexModifications.ngp3c;
+	}
+	if (name == 195) {
+		return player.timestudy.studies.includes(193) && player.aarexModifications.ngp3c;
+	}
+	if (name == 196) {
+		return player.timestudy.studies.includes(194) && player.aarexModifications.ngp3c;
+	}
+	if (name == 197) {
+		return player.timestudy.studies.includes(195) && player.aarexModifications.ngp3c;
+	}
 	if (name == 201) return player.timestudy.studies.includes(192) && !player.dilation.upgrades.includes(8)
+	if (name == 202) return player.timestudy.studies.includes(194) && player.aarexModifications.ngp3c
+	if (name == 203) return player.timestudy.studies.includes(195) && player.aarexModifications.ngp3c
 	if (name == 211 || name == 212) return player.timestudy.studies.includes(191)
 	if (name == 213 || name == 214) return player.timestudy.studies.includes(193)
 	switch(row) {
@@ -305,11 +325,12 @@ function canBuyStudy(name) {
 			if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
 			break;
 		case 12:
-			if (hasRow(row-1) && (!hasRow(row) || (player.masterystudies ? player.masterystudies.includes("t272") : false))) return true; else return false
+			if (hasRow(row-1) && (!hasRow(row) || (player.eternityUpgrades.includes(10) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t272") : false))) return true; else return false
 			break;
 		case 7:
 			if (!player.timestudy.studies.includes(61)) return false;
 			if (player.dilation.upgrades.includes(8)) return true;
+			if (player.eternityUpgrades.includes(10) && player.aarexModifications.ngp3c) return true;
 			var have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
 			if (player.timestudy.studies.includes(201)) return have < 2;
 			return have < 1;
@@ -320,17 +341,18 @@ function canBuyStudy(name) {
 			break;
 
 		case 22:
-			return player.timestudy.studies.includes(210 + Math.round(col/2)) && (((name%2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1)) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
+			if (player.aarexModifications.ngp3c && total<4500) return false;
+			return player.timestudy.studies.includes(210 + Math.round(col/2)) && (((name%2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1)) || (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
 			break;
 
 		case 23:
-			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
+			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
 			break;
 	}
 }
 
-var all = [11, 12, 13, 25, 23, 21, 22, 24, 33, 31, 32, 34, 35, 43, 41, 42, 44, 52, 51, 63, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 112, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 152, 161, 162, 172, 171, 173, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 6, 5, 20, 6, 3, 2, 7, 2, 3, 2, 5, 10, 4, 4, 6, 2, 9, 3, 7, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 25, 7, 7, 10, 15, 25, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 12, 13, 25, 23, 21, 22, 24, 33, 31, 32, 34, 35, 43, 41, 42, 44, 52, 51, 63, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 112, 113, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 152, 161, 162, 172, 171, 173, 181, 196, 194, 191, 192, 193, 195, 197, 202, 201, 203, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
+var studyCosts = [1, 6, 5, 20, 6, 3, 2, 7, 2, 3, 2, 5, 10, 4, 4, 6, 2, 9, 3, 7, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 12, 24, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 25, 7, 7, 10, 15, 25, 200, 450, 375, 400, 730, 300, 375, 500, 200, 900, 200, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 var performedTS
 function updateTimeStudyButtons(changed, forceupdate = false) {
 	if (!forceupdate && (changed ? player.dilation.upgrades.includes(10) : performedTS && !player.dilation.upgrades.includes(10))) return
@@ -390,13 +412,16 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 				}
 			}
 			document.getElementById(all[i]).className = className
-			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==25||all[i]==34||all[i]==35||all[i]==43||all[i]==44||all[i]==52||all[i]==63||all[i]==112||all[i]==152||all[i]==172||all[i]==173) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
+			if (all[i]==12||all[i]==13||all[i]==23||all[i]==24||all[i]==25||all[i]==34||all[i]==35||all[i]==43||all[i]==44||all[i]==52||all[i]==63||all[i]==112||all[i]==113||all[i]==152||all[i]==172||all[i]==173||all[i]==194||all[i]==195||all[i]==196||all[i]==197||all[i]==202||all[i]==203) document.getElementById(all[i]).style.visibility = player.aarexModifications.ngp3c?"visible":"hidden"
 		}
 	}
+	
+	let DIL_STUDY_COSTS = [null, 5e3, 1e6, 1e7, 1e8, 1e9, 1e24]
+	if (player.aarexModifications.ngp3c) DIL_STUDY_COSTS[1] = 1/0
 
 	for (var i = 1; i < 7; i++) {
 		if (player.dilation.studies.includes(i)) document.getElementById("dilstudy"+i).className = "dilationupgbought"
-		else if (player.timestudy.theorem >= ([null, 5e3, 1e6, 1e7, 1e8, 1e9, 1e24])[i] && (player.dilation.studies.includes(i - 1) || (i < 2 && ECTimesCompleted("eterc11") > 4 && ECTimesCompleted("eterc12") > 4 && getTotalTT(player) >= 13e3))) document.getElementById("dilstudy" + i).className = "dilationupg"
+		else if (player.timestudy.theorem >= DIL_STUDY_COSTS[i] && (player.dilation.studies.includes(i - 1) || (i < 2 && ECTimesCompleted("eterc11") > 4 && ECTimesCompleted("eterc12") > 4 && getTotalTT(player) >= 13e3))) document.getElementById("dilstudy" + i).className = "dilationupg"
 		else document.getElementById("dilstudy" + i).className = "timestudylocked"
 	}
 	document.getElementById("dilstudy6").style.display = player.meta ? "" : "none"
@@ -862,7 +887,9 @@ let tsMults = {
 		return Decimal.pow(10, log)
 	},
 	32: function() {
-		return Math.pow(Math.max(player.resets, 1), player.aarexModifications.newGameMult ? 4 : 1)
+		let ret = Math.pow(Math.max(player.resets, 1), player.aarexModifications.newGameMult ? 4 : 1);
+		if (player.timestudy.studies.includes(197) && player.aarexModifications.ngp3c) ret = Math.pow(ret, 3)
+		return ret;
 	},
 	41: function() {
 		return player.aarexModifications.ngp3c ? 1.1 : (player.aarexModifications.newGameExpVersion ? 1.5 : 1.2)
@@ -887,11 +914,11 @@ let tsMults = {
 	},
 	212: function() {
 		let r = player.timeShards.max(2).log2()
-		if (player.aarexModifications.newGameExpVersion) return Math.min(Math.pow(r, 0.006), 1.15)
+		if (player.aarexModifications.newGameExpVersion||player.aarexModifications.ngp3c) return Math.min(Math.pow(r, 0.006), 1.15)
 		return Math.min(Math.pow(r, 0.005), 1.1)
 	},
 	213: function() {
-		return tmp.ngex ? 10 : 20
+		return player.aarexModifications.ngp3c ? 2 : (tmp.ngex ? 10 : 20)
 	},
 	222: function() {
 		return player.galacticSacrifice === undefined ? 2 : tmp.ngp3l ? 0 : .5

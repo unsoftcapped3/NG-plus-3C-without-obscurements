@@ -47,7 +47,7 @@ function getNormalDimensionVanillaTimeStudyBonus(tier){
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (player.timestudy.studies.includes(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
 	if (player.timestudy.studies.includes(234) && tier == 1) mult = mult.times(tmp.sacPow)
-	if (player.timestudy.studies.includes(193)) mult = mult.times(Decimal.pow(1.03, getEternitied()).min("1e13000"))
+	if (player.timestudy.studies.includes(193)) mult = mult.times(Decimal.pow(1.03, Decimal.div(getEternitied(), player.aarexModifications.ngp3c?1e6:1)).min("1e13000"))
 	if (tier == 8 && player.timestudy.studies.includes(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
 	return mult
 }

@@ -230,6 +230,7 @@ function getSupersonicStart() {
 function getSupersonicMultIncrease() {
 	if (inQC(5)) return 20
 	let r = 4
+	if (player.timestudy.studies.includes(194) && player.aarexModifications.ngp3c) r = 2
 	if (player.masterystudies) if (player.masterystudies.includes("t331")) r = 1
 	return r
 }
