@@ -417,7 +417,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	}
 	
 	let DIL_STUDY_COSTS = [null, 5e3, 1e6, 1e7, 1e8, 1e9, 1e24]
-	if (player.aarexModifications.ngp3c) DIL_STUDY_COSTS[1] = 1/0
+	if (player.aarexModifications.ngp3c) DIL_STUDY_COSTS[1] = 3e3;
 
 	for (var i = 1; i < 7; i++) {
 		if (player.dilation.studies.includes(i)) document.getElementById("dilstudy"+i).className = "dilationupgbought"

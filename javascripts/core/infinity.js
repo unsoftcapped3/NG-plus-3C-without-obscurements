@@ -41,8 +41,9 @@ function gainedInfinityPoints(next) {
 	else if (player.achievements.includes("r103")) div = 307.8;
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined) div -= galIP()
 
-	if (player.infinityUpgradesRespecced == undefined) var ret = Decimal.pow(10, player.money.e / div - 0.75).times(getIPMult())
-	else var ret = player.money.div(Number.MAX_VALUE).pow(2 * (1 - Math.log10(2)) / Decimal.log10(Number.MAX_VALUE)).times(getIPMult())
+	let uIPM = player.dilation.upgrades.includes("ngp3c5")&&player.aarexModifications.ngp3c
+	if (player.infinityUpgradesRespecced == undefined) var ret = Decimal.pow(10, player.money.e / div - 0.75).times(uIPM?1:getIPMult())
+	else var ret = player.money.div(Number.MAX_VALUE).pow(2 * (1 - Math.log10(2)) / Decimal.log10(Number.MAX_VALUE)).times(uIPM?1:getIPMult())
 	if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(tsMults[41](), player.galaxies + player.replicanti.galaxies))
 	if (player.timestudy.studies.includes(51)) ret = ret.times(tsMults[51]())
 	if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
@@ -61,6 +62,7 @@ function gainedInfinityPoints(next) {
 	if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cIP")
 	if (player.infinityUpgrades.includes("postinfi80")) ret = ret.times(getPostInfi80Mult())
 	if (player.aarexModifications.ngp3c) ret = ret.times(getIDReplMult())
+	if (uIPM) ret = ret.times(getIPMult())
 	return ret.floor()
 }
 

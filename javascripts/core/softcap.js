@@ -440,6 +440,12 @@ var softcap_data = {
 			pow: 1/7,
 			derv: false,
 		},
+		4: {
+			func: "pow",
+			start: new Decimal("1e25000000"),
+			pow: 1/11,
+			derv: false,
+		},
 	},
 	ngp3cTS: {
 		1: {
@@ -492,6 +498,12 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal("1e100000"),
 			pow: 1/5,
+			derv: false,
+		},
+		5: {
+			func: "pow",
+			start: new Decimal("1e950000"),
+			pow: 1/23,
 			derv: false,
 		},
 	},
@@ -550,6 +562,12 @@ var softcap_data = {
 			pow: 1/4,
 			derv: false,
 		},
+		4: {
+			func: "pow",
+			start: new Decimal("1e800"),
+			pow: 1/7,
+			derv: false,
+		},
 	},
 	ngp3cIDs: {
 		1: {
@@ -570,6 +588,40 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal("1e5000"),
 			pow: 1/3,
+			derv: false,
+		},
+	},
+	ngp3cDT: {
+		1: {
+			func: "pow",
+			start: new Decimal(1e6),
+			pow: 1/2,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(1e100),
+			pow: 1/3,
+			derv: false,
+		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e2000"),
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	ngp3cTP: {
+		1: {
+			func: "pow",
+			start: new Decimal(1e10),
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/4,
 			derv: false,
 		},
 	},

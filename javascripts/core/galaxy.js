@@ -186,6 +186,7 @@ function getRemoteScalingStart(galaxies) {
 		if (player.challenges.includes("postcngm3_1")) n += tmp.cp / 2
 	}
 	else if (player.galacticSacrifice != undefined) n += 1e7
+	if (player.dilation.upgrades.includes(5) && player.aarexModifications.ngp3c) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t < 254; t++) if (player.masterystudies.includes("t" + t)) n += getMTSMult(t)
 		if (player.masterystudies.includes("t301")) n += getMTSMult(301)

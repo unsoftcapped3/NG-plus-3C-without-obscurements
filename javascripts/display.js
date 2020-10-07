@@ -621,7 +621,7 @@ function eternityUpgradesDisplay(){
 	document.getElementById("eter3").innerHTML = "Infinity Dimension multiplier based on "+(player.boughtDims ? "Time Shards (x/"+shortenCosts(1e12)+"+1)":"sum of Infinity Challenge times")+"<br>Currently: "+shortenMoney(getEU3Mult())+"x<br>Cost: "+shortenCosts(50e3)+" EP"
 	document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: "+shortenCosts(1e16)+" EP"
 	document.getElementById("eter5").innerHTML = "Time Dimensions gain a multiplier based on your unspent Time Theorems"+"<br>Cost: "+shortenCosts(1e40)+" EP"
-	document.getElementById("eter6").innerHTML = "Time Dimensions gain a multiplier based on days played"+"<br>Cost: "+shortenCosts(1e50)+" EP"
+	document.getElementById("eter6").innerHTML = "Time Dimensions gain a multiplier based on days played"+(player.aarexModifications.ngp3c?", and you can buy max RGs":"")+"<br>Cost: "+shortenCosts(1e50)+" EP"
 	if (player.exdilation != undefined && player.dilation.studies.includes(1)) {
 		document.getElementById("eter7").innerHTML = "Dilated time gain is boosted by antimatter<br>Currently: "+(1 + Math.log10(Math.max(1, player.money.log(10))) / 40).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e1500"))+" EP"
 		document.getElementById("eter8").innerHTML = "Dilated time gain is boosted by Infinity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e2000"))+" EP"
@@ -629,8 +629,8 @@ function eternityUpgradesDisplay(){
 	}
 	if (player.aarexModifications.ngp3c) {
 		document.getElementById("eter10").innerHTML = "You can buy all studies in all three-way splits<br>Cost: "+shortenCosts(new Decimal("1e625"))+" EP"
-		document.getElementById("eter11").innerHTML = "You can buy all black & white studies, and TS35 has no requirement<br>Cost: "+shortenCosts(new Decimal("1e900"))+" EP"
-		document.getElementById("eter12").innerHTML = "The Replicated Condenser cost formula is weaker<br>Cost: "+shortenCosts(new Decimal("1e1500"))+" EP"
+		document.getElementById("eter11").innerHTML = "You can buy all black & white studies, and TS35 has no requirement<br>Cost: "+shortenCosts(new Decimal("1e870"))+" EP"
+		document.getElementById("eter12").innerHTML = "The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: "+shortenCosts(new Decimal("1e1350"))+" EP"
 	}
 }
 
@@ -638,7 +638,7 @@ function uponDilationDisplay(){
 	let gain = getDilGain()
 	let msg = "Disable dilation"
 	if (player.infinityPoints.lt(Number.MAX_VALUE)||inQCModifier("ad")) {}
-	else if (player.dilation.totalTachyonParticles.gt(gain)) msg += ".<br>Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon particles"
+	else if (player.dilation.totalTachyonParticles.gt(gain)) msg += ".<br>"+player.aarexModifications.ngp3c?("<br>Get more antimatter to gain more Tachyon Particles"):("Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon particles")
 	else msg += " for " + shortenMoney(gain.sub(player.dilation.totalTachyonParticles)) + " Tachyon particles"
 	document.getElementById("enabledilation").innerHTML = msg + "."
 }
@@ -727,7 +727,7 @@ function replicantiDisplay() {
 		var replGalName = player.replicanti.gal < 3e3 ? "Max Replicanti galaxies" : (player.replicanti.gal < 58200 ? "Distant" : "Further") + " Replicated Galaxies"
 		var replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		document.getElementById("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(player.replicanti.gal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
-		document.getElementById("replicantireset").innerHTML = (!tmp.ngp3l && player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16") ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ")+"1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
+		document.getElementById("replicantireset").innerHTML = (!tmp.ngp3l && player.achievements.includes("ng3p67") ? "Get " : (player.achievements.includes("ngpp16")||(player.aarexModifications.ngp3c && player.eternityUpgrades.includes(6))) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ")+"1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
 		document.getElementById("replicantiapprox").innerHTML = tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
 			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
@@ -738,7 +738,7 @@ function replicantiDisplay() {
 		document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
-		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (tmp.ngp3l || !player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
+		document.getElementById("replicantireset").style.height = ((player.achievements.includes("ngpp16")||(player.aarexModifications.ngp3c && player.eternityUpgrades.includes(6))) && (tmp.ngp3l || !player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
 		document.getElementById("replDesc").textContent = player.aarexModifications.ngp3c?"multiplier to IP gain (after obscurements) & all Normal Dimensions":"multiplier on all infinity dimensions"
 		document.getElementById("replNGP3C").style.display = player.aarexModifications.ngp3c?"":"none"
 		if (player.aarexModifications.ngp3c) updateReplCond()
@@ -806,7 +806,7 @@ function eternityChallengeUnlockDisplay(){
 function mainTimeStudyDisplay(){
 	initialTimeStudyDisplay()
 	eternityChallengeUnlockDisplay()
-	document.getElementById("dilstudy1").innerHTML = "Unlock time dilation" + (player.dilation.studies.includes(1) ? "" : "<span>Requirement: 5 EC11 and EC12 completions and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")+"<span>Cost: " + getFullExpansion(player.aarexModifications.ngp3c?(1/0):5e3) + " Time Theorems"
+	document.getElementById("dilstudy1").innerHTML = "Unlock time dilation" + (player.dilation.studies.includes(1) ? "" : "<span>Requirement: 5 EC11 and EC12 completions and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")+"<span>Cost: " + getFullExpansion(player.aarexModifications.ngp3c?(3e3):5e3) + " Time Theorems"
 	if (tmp.ngp3) {
 		var ts232display = tmp.ts232 * 100 - 100
 		document.getElementById("221desc").textContent = "Currently: "+shorten(Decimal.pow(1.0025, player.resets))+"x"

@@ -1977,8 +1977,8 @@ function updateEternityUpgrades() {
 	if (player.aarexModifications.ngp3c) {
 		document.getElementById("eterrowcond").style.display = ""
 		document.getElementById("eter10").className = (player.eternityUpgrades.includes(10)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e625")) ? "eternityupbtn" : "eternityupbtnlocked"
-		document.getElementById("eter11").className = (player.eternityUpgrades.includes(11)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e900")) ? "eternityupbtn" : "eternityupbtnlocked"
-		document.getElementById("eter12").className = (player.eternityUpgrades.includes(12)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1500")) ? "eternityupbtn" : "eternityupbtnlocked"
+		document.getElementById("eter11").className = (player.eternityUpgrades.includes(11)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e870")) ? "eternityupbtn" : "eternityupbtnlocked"
+		document.getElementById("eter12").className = (player.eternityUpgrades.includes(12)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1350")) ? "eternityupbtn" : "eternityupbtnlocked"
 	} else {
 		document.getElementById("eterrowcond").style.display = "none"
 	}
@@ -2140,7 +2140,7 @@ function toggleRepresentation() {
 }
 
 function updateMilestones() {
-	var moreUnlocked = tmp.ngp3 && (player.dilation.upgrades.includes("ngpp3") || quantumed)
+	var moreUnlocked = tmp.ngp3 && (player.dilation.upgrades.includes("ngpp3") || quantumed || (player.aarexModifications.ngp3c&&nG(player.eternities, 1e9)))
 	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 2e10, 4e11, 1e13]
 	for (i=0; i<(moreUnlocked ? 28 : 24); i++) {
 		var name = "reward" + i;
@@ -2628,7 +2628,8 @@ function getEPGainBase() {
 }
 
 function gainedEternityPoints() {
-	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(player.epmult)
+	let uEPM = player.dilation.upgrades.includes("ngp3c7") && player.aarexModifications.ngp3c
+	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(uEPM?1:player.epmult)
 	if (player.aarexModifications.newGameExpVersion) ret = ret.times(10)
 	if (player.timestudy.studies.includes(61)) ret = ret.times(tsMults[61]())
 	if (player.timestudy.studies.includes(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
@@ -2644,6 +2645,7 @@ function gainedEternityPoints() {
 	}
 	if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cEP")
 	if (player.timestudy.studies.includes(172) && player.aarexModifications.ngp3c) ret = ret.times(ts172Eff())
+	if (uEPM) ret = ret.times(player.epmult)
 	return ret.floor()
 }
 
@@ -4086,6 +4088,7 @@ function gainEternitiedStat() {
 	if (quantumed && player.eternities < 1e5) ret = Math.max(ret, 20)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
+	if (player.aarexModifications.ngp3c & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10()+1, exp))
 	if (typeof(ret) == "number") ret = Math.floor(ret)
 	return ret
 }
@@ -4665,7 +4668,7 @@ function updateNGpp17Reward(){
 }
 
 function updateNGpp16Reward(){
-	document.getElementById('replicantibulkmodetoggle').style.display=player.achievements.includes("ngpp16")?"inline-block":"none"
+	document.getElementById('replicantibulkmodetoggle').style.display=(player.achievements.includes("ngpp16")||(player.aarexModifications.ngp3c && player.eternityUpgrades.includes(6)))?"inline-block":"none"
 }
 
 function notifyQuantumMilestones(){
@@ -5536,7 +5539,7 @@ function doEternityButtonDisplayUpdating(diff){
 	if (document.getElementById("eternitybtn").style.display == "inline-block") {
 		document.getElementById("eternitybtnFlavor").textContent = (((!player.dilation.active&&gainedEternityPoints().lt(1e6))||player.eternities<1||player.currentEternityChall!==""||(player.options.theme=="Aarex's Modifications"&&player.options.notation!="Morse code"))
 									    ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities>0 ? "" : "Other times await...") + " I need to become Eternal.") : "")
-		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) document.getElementById("eternitybtnEPGain").innerHTML = "Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon Particles."
+		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) document.getElementById("eternitybtnEPGain").innerHTML = player.aarexModifications.ngp3c?("Get more antimatter to gain more Tachyon Particles."):("Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon Particles.")
 		else {
 			if ((EPminpeak.lt(Decimal.pow(10,9)) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.lt(Decimal.pow(10, 1e9)))) {
 				document.getElementById("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall==""||player.options.theme=="Aarex's Modifications"))

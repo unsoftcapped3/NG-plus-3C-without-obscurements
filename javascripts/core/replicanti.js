@@ -68,6 +68,7 @@ function getReplicantiCap() {
 		let lim = getReplicantiLimit();
 		if (player.timestudy.studies.includes(52)) lim = Decimal.pow(lim, ts52Eff())
 		if (player.timestudy.studies.includes(192)) lim = Decimal.mul(lim, player.timeShards.plus(1))
+		if (player.dilation.upgrades.includes("ngp3c4")) lim = Decimal.mul(lim, player.dilation.dilatedTime.plus(1).pow(2500))
 		return lim;
 	}
 	return getReplicantiLimit();
@@ -92,13 +93,15 @@ function getRGCost(offset = 0, costChange) {
 			if (player.currentEternityChall == "eterc6") increase = offset * ((offset + player.replicanti.gal * 2) + 3)
 			else increase = offset * (2.5 * (offset + player.replicanti.gal * 2) + 22.5)
 			if (player.replicanti.gal + offset > 99) increase += (offset - Math.max(99 - player.replicanti.gal, 0)) * (25 * (offset - Math.max(99 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 99) * 2) - 4725)
-			if (player.replicanti.gal + offset > 399) {
-				if (player.exdilation != undefined) for (var g = Math.max(player.replicanti.gal, 399); g < player.replicanti.gal + offset; g++) increase += Math.pow(g - 389, 2)
+			
+			let scaleStart = player.aarexModifications.ngp3c?250:400
+			if (player.replicanti.gal + offset > (scaleStart-1)) {
+				if (player.exdilation != undefined) for (var g = Math.max(player.replicanti.gal, scaleStart-1); g < player.replicanti.gal + offset; g++) increase += Math.pow(g - scaleStart-11, 2)
 				if (player.meta != undefined || player.aarexModifications.ngp3c) {
 					var isReduced = false
 					if (player.masterystudies != undefined) if (player.masterystudies.includes("t266")) isReduced = true
 					if (isReduced) {
-						increase += (offset - Math.max(399 - player.replicanti.gal, 0)) * (1500 * (offset - Math.max(399 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 399) * 2) - 1183500)
+						increase += (offset - Math.max(scaleStart-1 - player.replicanti.gal, 0)) * (1500 * (offset - Math.max(scaleStart-1 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, scaleStart-1) * 2) - 1183500)
 						if (player.replicanti.gal + offset > 2998) increase += (offset - Math.max(2998 - player.replicanti.gal, 0)) * (5e3 * (offset - Math.max(2998 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 2998) * 2) - 29935e3)
 						if (player.replicanti.gal + offset > 58198) increase += (offset - Math.max(58199 - player.replicanti.gal, 0)) * (1e6 * (offset - Math.max(58199 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 58199) * 2) - 58199e6)
 						if (player.replicanti.gal + offset >= 200000) {
@@ -108,7 +111,7 @@ function getRGCost(offset = 0, costChange) {
 						if (player.replicanti.gal + offset >= 250000) increase += 1e12 * (offset - Math.max(249999 - player.replicanti.gal, 0))
 						if (player.replicanti.gal + offset >= 300000) increase += 1e13 * (offset - Math.max(299999 - player.replicanti.gal, 0))
 						if (player.replicanti.gal + offset >= 350000) increase += 1e14 * (offset - Math.max(349999 - player.replicanti.gal, 0))
-					} else for (var g = Math.max(player.replicanti.gal, 399); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - 394))
+					} else for (var g = Math.max(player.replicanti.gal, scaleStart-1); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - (scaleStart-6)))
 				}
 			}
 			ret = ret.times(Decimal.pow(10, increase))
@@ -308,8 +311,8 @@ function notContinuousReplicantiUpdating() {
 }
 
 function continuousReplicantiUpdating(diff){
-	if (player.timestudy.studies.includes(192) && !player.aarexModifications.ngp3c && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
-	else if (player.timestudy.studies.includes(192)&&!player.aarexModifications.ngp3c) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
+	if ((player.timestudy.studies.includes(192)||Decimal.gte(getReplicantiCap(), getReplicantiLimit())) && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)).min(getReplicantiCap())
+	else if (player.timestudy.studies.includes(192)||Decimal.gte(getReplicantiCap(), getReplicantiLimit())) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)).min(getReplicantiCap())
 	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiCap())
 	replicantiTicks = 0
 }

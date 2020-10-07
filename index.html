@@ -669,10 +669,10 @@
 							<button id="eter10" class="eternityupbtn" onclick="buyEternityUpgrade(10, new Decimal('1e625'))">You can buy all studies in all three-way splits<br>Cost: 1e625 EP</button>
 						</td>
 						<td>
-							<button id="eter11" class="eternityupbtn" onclick="buyEternityUpgrade(11, new Decimal('1e900'))">You can buy all black & white studies, and TS35 has no requirement<br>Cost: 1e900 EP</button>
+							<button id="eter11" class="eternityupbtn" onclick="buyEternityUpgrade(11, new Decimal('1e870'))">You can buy all black & white studies, and TS35 has no requirement<br>Cost: 1e870 EP</button>
 						</td>
 						<td>
-							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12, new Decimal('1e1500'))">The Replicated Condenser cost formula is weaker<br>Cost: 1e1500 EP</button>
+							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12, new Decimal('1e1350'))">The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: 1e1350 EP</button>
 						</td>
 					</tr>
 					<tr>
@@ -875,6 +875,9 @@
 						<td>
 							<button id="dil14" onclick="buyDilationUpgrade(14)"><span id="dil14desc"></span><br><span id="dil14cost"></span></button>
 						</td>
+						<td>
+							<button id="dil16" onclick="buyDilationUpgrade(16)">Purchase a Dilation Condenser<br><span id="dil16cost"></span></button>
+						</td>
 					</tr>
 				</table>
 				<table>
@@ -902,7 +905,7 @@
 							<button id="dil21" onclick="buyDilationUpgrade(21)">Gain twice as many free galaxies.<br><span id="dil21cost"></span></button>
 						</td>
 						<td>
-							<button id="dil22" onclick="buyDilationUpgrade(22)">Time Dimensions are affected by replicanti multiplier ^ 0.1.<br><span id="dil22cost"></span></button>
+							<button id="dil22" onclick="buyDilationUpgrade(22)"><span id="dil22desc"></span><br><span id="dil22cost"></span></button>
 						</td>
 						<td>
 							<button id="dil23" onclick="buyDilationUpgrade(23)">Normal Dimensions gain a multiplier based on dilated time, unaffected by time dilation.<br><span id="dil23cost"></span></button>
@@ -913,6 +916,9 @@
 						<td>
 							<button id="dil24" onclick="buyDilationUpgrade(24)">Replicanti increases faster based on dilated time.<br><span id="dil24cost"></span></button>
 						</td>
+						<td>
+							<button id="dil26" onclick="buyDilationUpgrade(26)" style="font-size: 8px;">Time Condensers are stronger based on your Tachyon Particles, and Dilated Time is gained 50x faster (after obscurements).<br><span id="dil26desc"></span><br><span id="dil26cost"></span></button>
+						</td>
 					</tr>
 				</table>
 				<table>
@@ -921,7 +927,7 @@
 							<button id="dil31" onclick="buyDilationUpgrade(31)">Gain a multiplier to IP based on dilated time.<br><span id="dil31desc"></span><br><span id="dil31cost"></span></button>
 						</td>
 						<td>
-							<button id="dil32" onclick="buyDilationUpgrade(32)">Unlock the ability to pick all the study paths from the first split.<br><span id="dil32cost"></span></button>
+							<button id="dil32" onclick="buyDilationUpgrade(32)"><span id="dil32desc">Unlock the ability to pick all the study paths from the first split.</span><br><span id="dil32cost"></span></button>
 						</td>
 						<td>
 							<button id="dil33" onclick="buyDilationUpgrade(33)">Reduce the dilation penalty. (^ 1.05 after reduction)<br><span id="dil33cost"></span></button>
@@ -930,9 +936,30 @@
 							<button id="dil35" onclick="buyDilationUpgrade(35)">Dilation penalty doesn't affect the Replicantis boost to Time Dimensions.<br><span id="dil35cost"></span></button>
 						</td>
 						<td>
-							<button id="dil34" onclick="buyDilationUpgrade(34)">Eternities and dilated time power up each other.<br><span id="dil34cost"></span></button>
+							<button id="dil34" onclick="buyDilationUpgrade(34)"><span id="dil34desc"></span><br><span id="dil34cost"></span></button>
+						</td>
+						<td>
+							<button id="dil36" onclick="buyDilationUpgrade(36)" style="font-size: 7px;">Get free Infinity/Time Condensers based on your Dilated Time, Infinity Condensers are thrice as strong, and Dilated Time is gained 100x faster (after obscurements).<br><span id="dil36desc"></span><br><span id="dil36cost"></span></button>
 						</td>
 					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<button id="dil81" onclick="buyDilationUpgrade(81)">The Replicanti limit is multiplied by your Dilated Time ^2,500<br><span id="dil81cost"></span></button>
+						</td>
+						<td>
+							<button id="dil82" onclick="buyDilationUpgrade(82)">The IP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil82cost"></span></button>
+						</td>
+						<td>
+							<button id="dil83" onclick="buyDilationUpgrade(83)" style="font-size: 10px;">Unspent EP boosts TP gain (unaffected by Obscurements)<br><span id="dil83desc"></span><br><span id="dil83cost"></span></button>
+						</td>
+						<td>
+							<button id="dil84" onclick="buyDilationUpgrade(84)">The EP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil84cost"></span></button>
+						</td>
+						<td>
+							<button id="dil85" onclick="buyDilationUpgrade(85)" style="font-size: 9px;">All Repeatable Dilation Upgrades and Dilated Condensers are all stronger based on your TP<br><span id="dil85desc"></span><br><span id="dil85cost"></span></button>
+						</td>
 				</table>
 				<table>
 					<tr>
@@ -988,6 +1015,9 @@
 						</td>
 						<td id="n4">
 							<button id="dil45" onclick="buyDilationUpgrade(45)" style='font-size:10px'>Replicantis boost per-10 Infinity Dimensions multiplier.<br><span id="dil45desc">Currently: ???</span><br><span id="dil45cost"></span></button>
+						</td>
+						<td>
+							<button id="dil46" onclick="buyDilationUpgrade(46)" style="font-size: 9px;">TS25 is stronger based on your Dilated Time, and you gain 10x more TP (after obscurements).<br><span id="dil46desc"></span><br><span id="dil46cost"></span></button>
 						</td>
 				</table>
 				<table>
@@ -4669,7 +4699,7 @@
 				<button class="storebtn" id="replicantibulkmodetoggle" onclick="replicantiGalaxyBulkModeToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Galaxy bulk mode: single</button>
 				<div id="replNGP3C" style="display: none;">
 					<br><br><span style="font-size: 15px;">You have <span id="replCond"  style="font-size:23px; color: black"></span> Replicated Condensers, which are making Replicanti reduce their interval by <span id="replCond1"  style="font-size:23px; color: black"></span>x and raise their base effect ^<span id="replCond2"  style="font-size:23px; color: black"></span>.</span><br><br>
-					<button id="replCondense" class="storebtn" onclick="replCondense()"  style="width: 200px; height: 70px; font-size: 12px">Create a Replicated Condenser<br>Req: <span id="replCondenseReq"></span> Replicanti</button>
+					<button id="replCondense" class="storebtn" onclick="replCondense()"  style="width: 200px; height: 70px; font-size: 12px">Create a Replicated Condenser<br>Req: <span id="replCondenseReq"></span> Replicanti</button><br><br>
 				</div>
 				<div id="replicantigalaxypowerdiv" style="display: none;">
 				  <p>For next eternity:</p>

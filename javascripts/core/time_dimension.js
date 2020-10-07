@@ -90,7 +90,7 @@ function getTimeDimensionPower(tier) {
 	if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(getECReward(10))
 	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galMults.u43())
-	if (!player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
+	if (!player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && !player.aarexModifications.ngp3c && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
 	if (inQC(6)) ret = ret.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
 	ret = dilates(ret, 2)
@@ -98,7 +98,7 @@ function getTimeDimensionPower(tier) {
 
 	ret = dilates(ret, 1)
 	if (quantumed && !tmp.ngp3l) ret = ret.times(colorBoosts.dim.b)
-	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
+	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && !player.aarexModifications.ngp3c && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
 	
 	if (player.aarexModifications.ngp3c && tmp.cnd) ret = ret.times(tmp.cnd.time[tier])
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -201,11 +201,13 @@ var timeDimCostMults = [[null, 3, 9, 27, 81, 243, 729, 2187, 6561], [null, 1.5, 
 var timeDimStartCosts = [[null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"], [null, 10, 20, 40, 80, 160, 1e8, 1e12, 1e18]]
 
 function timeDimCost(tier, bought) {
-	var cost = Decimal.pow(timeDimCostMults[0][tier], bought).times(timeDimStartCosts[0][tier])
+	let start = timeDimStartCosts[0][tier]
+	if (player.aarexModifications.ngp3c && tier>4) start = Decimal.pow(start, 1/4)
+	var cost = Decimal.pow(timeDimCostMults[0][tier], bought).times(start)
 	if (player.galacticSacrifice !== undefined) return cost
-	if (cost.gte(Number.MAX_VALUE)) cost = Decimal.pow(timeDimCostMults[0][tier]*1.5, bought).times(timeDimStartCosts[0][tier])
-	if (cost.gte("1e1300")) cost = Decimal.pow(timeDimCostMults[0][tier]*2.2, bought).times(timeDimStartCosts[0][tier])
-	if (tier > 4) cost = Decimal.pow(timeDimCostMults[0][tier]*100, bought).times(timeDimStartCosts[0][tier])
+	if (cost.gte(Number.MAX_VALUE)) cost = Decimal.pow(timeDimCostMults[0][tier]*1.5, bought).times(start)
+	if (cost.gte("1e1300")) cost = Decimal.pow(timeDimCostMults[0][tier]*2.2, bought).times(start)
+	if (tier > 4) cost = Decimal.pow(timeDimCostMults[0][tier]*100, bought).times(start)
 	if (cost.gte(tier > 4 ? "1e300000" : "1e20000")) {
 		// rather than fixed cost scaling as before, quadratic cost scaling
 		// to avoid exponential growth
