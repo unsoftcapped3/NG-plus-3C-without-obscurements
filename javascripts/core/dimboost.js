@@ -138,32 +138,27 @@ function setInitialDimensionPower() {
 function maxBuyDimBoosts(manual) {
 	let tier = player.pSac != undefined ? 6 : 8
 	if (inQC(6)) return
-	if (player.autobuyers[9].priority >= getAmount(tier) || player.galaxies >= player.overXGalaxies || getShiftRequirement(0).tier < tier || manual) {
-		var bought = Math.min(getAmount(getShiftRequirement(0).tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
-		var r
-		if (player.currentEternityChall == "eterc5") {
-			r = 1
-			while (bought >= getShiftRequirement(r).amount) r++
-		} else {
-			var scaling = 4
-			if (player.galacticSacrifice && player.tickspeedBoosts === undefined && player.galacticSacrifice.upgrades.includes(21)) scaling = 6
-			var firstReq = getShiftRequirement(scaling - player.resets)
-			var supersonicStart = getSupersonicStart()
-			r = (bought - firstReq.amount) / firstReq.mult + scaling + 1
-			if (r > supersonicStart - 1) {
-				var a = getSupersonicMultIncrease() / 2
-				var b = firstReq.mult + a
-				var skips = (Math.sqrt(b * b + 4 * a * (bought - getShiftRequirement(supersonicStart - player.resets - 1).amount) / 4e4) - b) / (2 * a)
-				var setPoint = supersonicStart + Math.floor(skips) * 4e4
-				var pointReq = getShiftRequirement(setPoint - player.resets)
-				r = (bought - pointReq.amount) / pointReq.mult + setPoint + 1
-			}
-			r = Math.floor(r - player.resets) 
+	let maxamount = Math.min(getAmount(getShiftRequirement(0).tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
+	
+	if (player.autobuyers[9].priority >= getAmount(tier) || player.galaxies >= player.overXGalaxies || manual) {
+		// O(log(x)) is not much worse than O(sqrt(log(x))) so :shrug:
+		let x = 1
+		let r = 0
+		while (maxamount >= getFixedShiftReq(player.resets + x * 2 - 1)) x *= 2
+		while (x >= 1) {
+			if (maxamount >= getFixedShiftReq(player.resets + x + r - 1)) r += x
+			x /= 2
 		}
-
+		
 		if (r >= 750) giveAchievement("Costco sells dimboosts now")
 		if (r >= 1) softReset(r)
+	} else if (getShiftRequirement(0).tier < tier) {
+		if (getShiftRequirement(0).amount <= maxamount) softReset(1)
 	}
+}
+
+function getFixedShiftReq(n){
+	return getShiftRequirement(n - player.resets).amount
 }
 
 function getShiftRequirement(bulk) {
@@ -171,7 +166,7 @@ function getShiftRequirement(bulk) {
 	let mult = getDimboostCostIncrease()
 	var resetNum = player.resets + bulk
 	var maxTier = inNC(4) || player.pSac != undefined ? 6 : 8
-	tier = Math.min(resetNum + 4, maxTier)
+	let tier = Math.min(resetNum + 4, maxTier)
 	if (player.aarexModifications.ngmX > 3 && player.pSac == undefined) amount = 10
 	if (tier == maxTier) amount += Math.max(resetNum + (player.galacticSacrifice && player.tickspeedBoosts === undefined && player.galacticSacrifice.upgrades.includes(21) ? 2 : 4) - maxTier, 0) * mult
 	var costStart = getSupersonicStart()
