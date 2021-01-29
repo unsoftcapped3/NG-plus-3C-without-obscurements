@@ -547,25 +547,41 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: 1e10,
-			pow: 1/2,
+			pow() {
+				let ret = 1/2;
+				if (player.dilation.upgrades.includes("ngp3c9")) ret = Math.pow(ret, 0.6);
+				return ret;
+			},
 			derv: false,
 		},
 		2: {
 			func: "pow",
 			start: 1e100,
-			pow: 1/3,
+			pow() {
+				let ret = 1/3;
+				if (player.dilation.upgrades.includes("ngp3c9")) ret = Math.pow(ret, 0.6);
+				return ret;
+			},
 			derv: false,
 		},
 		3: {
 			func: "pow",
 			start: new Decimal(Number.MAX_VALUE),
-			pow: 1/4,
+			pow() {
+				let ret = 1/4;
+				if (player.dilation.upgrades.includes("ngp3c9")) ret = Math.pow(ret, 0.6);
+				return ret;
+			},
 			derv: false,
 		},
 		4: {
 			func: "pow",
 			start: new Decimal("1e800"),
-			pow: 1/7,
+			pow() {
+				let ret = 1/7;
+				if (player.dilation.upgrades.includes("ngp3c9")) ret = Math.pow(ret, 0.6);
+				return ret;
+			},
 			derv: false,
 		},
 	},
@@ -595,7 +611,18 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: new Decimal(1e6),
-			pow: 1/2,
+			pow() {
+				let ret = 1/2;
+				if (player.dilation.upgrades.includes("ngp3c9")) {
+					let mag = 1 + player.dilation.upgrades.filter(function(x) {
+						let ngpp = String(x).split("ngpp")[1];
+						if (ngpp ? (Number(ngpp) ? Number(ngpp)>=3 : false) : false) return true;
+						else return false;
+					}).length/5;
+					ret = Math.pow(ret, Math.pow(0.9, mag));
+				}
+				return ret;
+			},
 			derv: false,
 		},
 		2: {
@@ -615,7 +642,18 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: new Decimal(1e10),
-			pow: 1/3,
+			pow() {
+				let ret = 1/3;
+				if (player.dilation.upgrades.includes("ngp3c9")) {
+					let mag = 1 + player.dilation.upgrades.filter(function(x) {
+						let ngpp = String(x).split("ngpp")[1];
+						if (ngpp ? (Number(ngpp) ? Number(ngpp)>=3 : false) : false) return true;
+						else return false;
+					}).length/5;
+					ret = Math.pow(ret, Math.pow(0.9, mag));
+				}
+				return ret;
+			},
 			derv: false,
 		},
 		2: {

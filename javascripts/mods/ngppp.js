@@ -62,7 +62,10 @@ function doAutoMetaTick() {
 	for (var d = 1; d <= 8; d++) {
 		var dim = d
 		if (tmp.ngp3l) dim = 9 - d
-		if (player.autoEterOptions["md" + dim] && speedrunMilestonesReached >= 6 + dim) buyMaxMetaDimension(dim)
+		if (player.autoEterOptions["md" + dim] && speedrunMilestonesReached >= 6 + dim) {
+			if (player.aarexModifications.ngp3c) maxMetaCondense(dim);
+			buyMaxMetaDimension(dim)
+		}
 	}
 	if (player.autoEterOptions.metaboost && speedrunMilestonesReached > 14) metaBoost()
 }

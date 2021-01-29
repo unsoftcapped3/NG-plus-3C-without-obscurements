@@ -954,10 +954,13 @@
 				<table>
 					<tr>
 						<td>
+							<button id="dil56" onclick="buyDilationUpgrade(56)" style='font-size:7px'>The Replicanti limit is multiplied based on your meta antimatter, all of OS_EP 1-4 are 40% weaker, and OS_DT_1 & OS_TP_1 are 10% weaker (+2% for each additional upgrade in this row)<br><span id="dil56desc"></span><br><span id="dil56cost"></span></button>
+						</td>
+						<td>
 							<button id="dil51" onclick="buyDilationUpgrade(51)" style='font-size:10px'>Meta Dimensions gain a multiplier based on tickspeed.<br>(1+log(1+log(x)))<br><span id="dil51desc"></span><br><span id="dil51cost"></span></button>
 						</td>
 						<td>
-							<button id="dil52" onclick="buyDilationUpgrade(52)" style='font-size:10px'>Meta-dimension shifts, boosts, and per-ten upgrades are boosted by dilated time.<span id="dil52formula"> (log(log(x))+1)</span><br><span id="dil52desc"></span><br><span id="dil52cost"></span></button>
+							<button id="dil52" onclick="buyDilationUpgrade(52)" style='font-size:10px'>Meta-dimension shifts, boosts, and per-ten upgrades are boosted by dilated time<span id="dil52ngp3cdesc"></span>.<span id="dil52formula"> (log(log(x))+1)</span><br><span id="dil52desc"></span><br><span id="dil52cost"></span></button>
 						</td>
 						<td>
 							<button id="dil53" onclick="buyDilationUpgrade(53)">The meta-antimatter effect on dimension boosts is stronger.<br>(^8 -> ^9)<br><span id="dil53cost"></span></button>
@@ -1674,6 +1677,9 @@
 						  <td align="right" width="10%">
 							  <button id="metaMax1" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
 						  </td>
+						  <td id="metaCndCont1" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd1" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(1)">Cost: 10</button>
+						  </td>
 					  </tr>
 					  <tr id="2MetaRow" style="display: none; font-size: 15px">
 						  <td id="2MetaD" class="rel">
@@ -1687,6 +1693,9 @@
 						  </td>
 						  <td align="right" width="10%">
 							  <button id="metaMax2" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
+						  </td>
+						  <td id="metaCndCont2" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd2" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(2)">Cost: 10</button>
 						  </td>
 					  </tr>
 					  <tr id="3MetaRow" style="display: none; font-size: 15px">
@@ -1702,6 +1711,9 @@
 						  <td align="right" width="10%">
 							  <button id="metaMax3" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
 						  </td>
+						  <td id="metaCndCont3" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd3" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(3)">Cost: 10</button>
+						  </td>
 					  </tr>
 					  <tr id="4MetaRow" style="display: none; font-size: 15px">
 						  <td id="4MetaD" class="rel">
@@ -1715,6 +1727,9 @@
 						  </td>
 						  <td align="right" width="10%">
 							  <button id="metaMax4" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
+						  </td>
+						  <td id="metaCndCont4" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd4" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(4)">Cost: 10</button>
 						  </td>
 					  </tr>
 					  <tr id="5MetaRow" style="display: none; font-size: 15px">
@@ -1730,6 +1745,9 @@
 						  <td align="right" width="10%">
 							  <button id="metaMax5" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
 						  </td>
+						  <td id="metaCndCont5" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd5" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(5)">Cost: 10</button>
+						  </td>
 					  </tr>
 					  <tr id="6MetaRow" style="display: none; font-size: 15px">
 						  <td id="6MetaD" class="rel">
@@ -1743,6 +1761,9 @@
 						  </td>
 						  <td align="right" width="10%">
 							  <button id="metaMax6" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
+						  </td>
+						  <td id="metaCndCont6" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd6" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(6)">Cost: 10</button>
 						  </td>
 					  </tr>
 					  <tr id="7MetaRow" style="display: none; font-size: 15px">
@@ -1758,6 +1779,9 @@
 						  <td align="right" width="10%">
 							  <button id="metaMax7" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
 						  </td>
+						  <td id="metaCndCont7" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd7" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(7)">Cost: 10</button>
+						  </td>
 					  </tr>
 					  <tr id="8MetaRow" style="display: none; font-size: 15px">
 						  <td id="8MetaD" class="rel">
@@ -1771,6 +1795,9 @@
 						  </td>
 						  <td align="right" width="10%">
 							  <button id="metaMax8" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn">Cost: 10</button>
+						  </td>
+						  <td id="metaCndCont8" style="display: none;" align="right" width="10%">
+							  <button id="metaCnd8" style="color:black; width:135px; height:25px; font-size: 10px" class="storebtn" align="right" onclick="condenseMetaDim(8)">Cost: 10</button>
 						  </td>
 					  </tr>
 					</tbody>

@@ -248,6 +248,7 @@ const DIL_UPG_COSTS = {
 	  ngpp6_usp: 1e100,
 	  ngpp1_p3c: 1e18,
 	  ngpp2_p3c: 5e18,
+	  ngpp4_p3c: 1e56,
 	  ngmm1: 5e16,
 	  ngmm2: 1e19,
 	  ngmm3: 1e20,
@@ -271,6 +272,7 @@ const DIL_UPG_COSTS = {
 	  ngp3c6: 4e21,
 	  ngp3c7: 3e23,
 	  ngp3c8: 1e24,
+	  ngp3c9: 1e45,
 }
 
 const DIL_UPG_OLD_POS_IDS = {
@@ -299,7 +301,7 @@ const DIL_UPG_POS_IDS = {
 	21: 4,        22: 5,        23: 6,        25: "ngmm1",  24: "ngpp1",  26: "ngp3c1",
 	31: 7,        32: 8,        33: 9,        35: "ngmm2",  34: "ngpp2",  36: "ngp3c2",
 	81: "ngp3c4", 82: "ngp3c5", 83: "ngp3c6", 84: "ngp3c7",               85: "ngp3c8",
-	51: "ngpp3",  52: "ngpp4",  53: "ngpp5",  55: "ngmm7",  54: "ngpp6",
+	56: "ngp3c9", 51: "ngpp3",  52: "ngpp4",  53: "ngpp5",  55: "ngmm7",  54: "ngpp6",
 	71: "ngmm8",  72: "ngmm9",  73: "ngmm10", 74: "ngmm11", 75: "ngmm12",
 	41: 10,       42: "ngmm3",  43: "ngmm4",  44: "ngmm5",  45: "ngmm6",  46: "ngp3c3",
 	61: "ngud1",  62: "ngud2",  63: "ngusp1", 64: "ngusp2", 65: "ngusp3",
@@ -332,7 +334,7 @@ function isDilUpgUnlocked(id) {
 	id = toString(id)
 	let ngpp = id.split("ngpp")[1]
 	let ngmm = id.split("ngmm")[1]
-	let ngc = id.split("ngc")[1]
+	let ngc = id.split("ngp3c")[1]
 	if (id == "r4") return player.meta !== undefined
 	if (id == "r5") return player.galacticSacrifice !== undefined && !tmp.ngp3l
 	if (id == "r6") return player.aarexModifications.ngp3c
@@ -359,7 +361,7 @@ function isDilUpgUnlocked(id) {
 		return r
 	}
 	if (ngc) {
-		let r = player.aarexModifications.ngp3c
+		let r = player.aarexModifications.ngp3c !== undefined
 		return r;
 	}
 	return true
@@ -375,7 +377,7 @@ function getDilUpgCost(id) {
 		if (ngpp >= 3 && player.aarexModifications.nguspV !== undefined) cost = DIL_UPG_COSTS[id + "_usp"]
 	}
 	if (player.aarexModifications.ngp3c && ngpp) {
-		if (ngpp < 3) cost = DIL_UPG_COSTS[id + "_p3c"]
+		if (DIL_UPG_COSTS[id + "_p3c"]) cost = DIL_UPG_COSTS[id + "_p3c"]
 	}
 	return cost
 }
@@ -487,6 +489,7 @@ function updateDilationUpgradeButtons() {
 	if (player.dilation.studies.includes(6)) {
 		document.getElementById("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		document.getElementById("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
+		document.getElementById("dil52ngp3cdesc").textContent = player.aarexModifications.ngp3c?", and get 1 of each time & meta condenser for free":""
 		document.getElementById("dil54formula").textContent = "(log(x)^0.5" + (tmp.ngp3 ? ")" : "/2)")
 		document.getElementById("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}
@@ -507,6 +510,7 @@ function updateDilationUpgradeButtons() {
 		document.getElementById("dil26desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
 		document.getElementById("dil36desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
 		document.getElementById("dil46desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
+		document.getElementById("dil56desc").textContent = "Currently: "+shortenMoney(getDil56Mult())+"x"
 		document.getElementById("dil83desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
 		document.getElementById("dil85desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
 	}

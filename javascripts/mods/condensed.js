@@ -2,12 +2,13 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (!player.aarexModifications.ngp3c) return;
 	// Load Stuff
 	let preVer = player.aarexModifications.ngp3c||0
-	player.aarexModifications.ngp3c = 1.1;
+	player.aarexModifications.ngp3c = 1.2;
 	if (player.condensed === undefined) {
 		player.condensed = {
 			normal: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			inf: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			time: [null, 0, 0, 0, 0, 0, 0, 0, 0],
+			meta: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			repl: 0,
 			obsc: {},
 		}
@@ -15,6 +16,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (player.condensed.inf === undefined) player.condensed.inf = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.condensed.repl === undefined) player.condensed.repl = 0
 	if (player.condensed.time === undefined) player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+	if (player.condensed.meta === undefined) player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.infchallengeTimes[9] === undefined) {
 		player.infchallengeTimes.push(600*60*24*31)
 		player.infchallengeTimes.push(600*60*24*31)
@@ -31,6 +33,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	}
 	if (resetNum>=5) {
 		player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+		player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	}
 	
 	if (preVer<1.1) {
@@ -253,7 +256,7 @@ document.getElementById("postinfi82").onclick = function() {
 
 function getReplCondenserCostSuperBase() {
 	let base = 2
-	if (player.eternityUpgrades.includes(12)) base = 1.5
+	if (player.eternityUpgrades.includes(12)) base -= .5
 	return base;
 }
 
@@ -347,6 +350,7 @@ function getTimeCondenserPow() {
 function getFreeTimeConds() {
 	let cond = 0
 	if (player.dilation.upgrades.includes("ngp3c2")) cond += getDil36Mult()
+	if (player.dilation.upgrades.includes("ngpp4")) cond++;
 	return cond;
 }
 
@@ -497,8 +501,7 @@ const OBSCUREMENTS = {
 		title: "Tachyon Particle Gain",
 		scID: "TP",
 		osID: "TP",
-		res() { return getDilGain() },
-		unl() { return player.dilation.active },
+		res() { return player.dilation.totalTachyonParticles },
 	},
 }
 
@@ -545,6 +548,11 @@ function getDil46Mult() {
 	return mult;
 }
 
+function getDil56Mult() {
+	let mult = Decimal.pow(10, Math.sqrt(player.meta.antimatter.plus(1).log10())*1e4)
+	return mult;
+}
+
 function getDil83Mult() {
 	let mult = Decimal.pow(player.eternityPoints.plus(1).log10()+1, 0.75);
 	return mult;
@@ -555,4 +563,68 @@ function getDil85Mult() {
 	if (tp.gte(Number.MAX_VALUE)) tp = tp.sqrt().times(Decimal.sqrt(Number.MAX_VALUE))
 	let mult = Math.pow(tp.plus(1).log10()+1, 0.165)
 	return mult;
+}
+
+function updateMetaCondenser(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	let cost = getMetaCondenserCost(x)
+	let resource = player.meta.antimatter
+	document.getElementById("metaCndCont"+x).style.display = ""
+	document.getElementById("metaCnd"+x).textContent = (quantumed ? '' : "Condense: ")+shortenCosts(cost)
+	document.getElementById("metaCnd"+x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+}
+
+function getMetaCondenserCostDiv() {
+	let div = new Decimal(1)
+	return div
+}
+
+function getMetaCondenserCostScaling() {
+	let scaling = 1
+	return scaling;
+}
+
+function getMetaCondenserCost(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(1/0);
+	let bought = player.condensed.meta[x]
+	return Decimal.pow(Decimal.pow(CONDENSER_BASE[x], getMetaCondenserCostScaling()), Decimal.pow(bought, 4)).times(CONDENSER_START[x]).div(getMetaCondenserCostDiv())
+}
+
+function getMetaCondenserTarget(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(0);
+	let res = player.meta.antimatter
+	return Math.floor(Math.pow(res.times(getMetaCondenserCostDiv()).div(CONDENSER_START[x]).max(1).log10()/Decimal.log10(Decimal.pow(CONDENSER_BASE[x], getMetaCondenserCostScaling())), 1/4)+1)
+}
+
+function getMetaCondenserPow() {
+	let ret = new Decimal(1)
+	return ret;
+}
+
+function getFreeMetaConds() {
+	let cond = 0
+	if (player.dilation.upgrades.includes("ngpp4")) cond++;
+	return cond;
+}
+
+function getMetaCondenserEff(x) {
+	return Decimal.pow(player.meta.antimatter.plus(1).log10()+1, Decimal.mul(player.condensed.meta[x]+getFreeMetaConds(), getMetaCondenserPow()))
+}
+
+function condenseMetaDim(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	let res = player.meta.antimatter
+	let cost = getMetaCondenserCost(x)
+	if (res.lt(cost)) return;
+	player.meta.antimatter = player.meta.antimatter.sub(cost)
+	player.condensed.meta[x]++;
+}
+
+function maxMetaCondense(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	let res = player.meta.antimatter
+	let cost = getMetaCondenserCost(x)
+	if (res.lt(cost)) return;
+	player.condensed.meta[x] = Math.max(player.condensed.meta[x], getMetaCondenserTarget(x))
+	player.meta.antimatter = player.meta.antimatter.sub(cost)
 }

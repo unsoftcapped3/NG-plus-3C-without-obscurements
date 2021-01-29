@@ -7,8 +7,8 @@ function getMetaAntimatterStart(bigRip) {
 }
 
 function getDilationMetaDimensionMultiplier() {
-	let pow = 0.1
-	let div = 1e40
+	let pow = player.aarexModifications.ngp3c?0.04:0.1
+	let div = player.aarexModifications.ngp3c?1e45:1e40
 	if (isNanoEffectUsed("dt_to_ma_exp")) if (tmp.nf.effects.dt_to_ma_exp) pow = tmp.nf.effects.dt_to_ma_exp //this is a quick fix, but we need to fix this bug
 	if (player.aarexModifications.nguspV !== undefined) div = 1e50
 	if (player.aarexModifications.ngudpV && !player.aarexModifications.nguepV) {
@@ -41,6 +41,9 @@ function getMetaDimensionMultiplier(tier) {
 	if (tier == 8 && player.achievements.includes("ng3p22")) ret = ret.times(1 + Math.pow(player.meta[1].amount.plus(1).log10() / 10, 2))
 	if (tier == 1 && player.achievements.includes("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
 	if (!tmp.ngp3l && tier == 1 && player.achievements.includes("ng3p17")) ret = ret.times(Math.max(1,Math.log10(player.totalmoney.plus(10).log10())))
+	
+	// NG+3C:
+	if (player.aarexModifications.ngp3c) ret = ret.times(getMetaCondenserEff(tier));
 	
 	ret = dilates(dilates(ret.max(1), 2), "meta")
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
@@ -129,6 +132,7 @@ function clearMetaDimensions () { //Resets costs and amounts
 		player.meta[i].bought = 0;
 		player.meta[i].cost = new Decimal(initCost[i]);
 	}
+	if (player.condensed) player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 }
 
 function getMetaShiftRequirement() { 
@@ -136,6 +140,7 @@ function getMetaShiftRequirement() {
 	var data = {tier: Math.min(8, mdb + 4), amount: 20}
 	var inQC4 = inQC(4)
 	data.mult = inQC4 ? 5.5 : 15
+	if (player.aarexModifications.ngp3c) data.mult *= 1.5
 	if (tmp.ngp3) if (player.masterystudies.includes("t312")) data.mult -= 1
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (tmp.ngp3) if (player.masterystudies.includes("d13")) data.amount -= getTreeUpgradeEffect(1)
@@ -216,6 +221,7 @@ function getMetaCost(tier, boughtTen) {
 }
 
 function getMetaCostScalingStart() {
+	if (player.aarexModifications.ngp3c) return "10"
 	return tmp.ngp3l ? "1e1100" : "1e900"
 }
 
@@ -299,7 +305,10 @@ for (let i = 1; i <= 8; i++) {
 }
 
 document.getElementById("metaMaxAll").onclick = function () {
-	for (let i = 1; i <= 8; i++) buyMaxMetaDimension(i)
+	for (let i = 1; i <= 8; i++) {
+		if (player.aarexModifications.ngp3c) maxMetaCondense(i);
+		buyMaxMetaDimension(i)
+	}
 }
 
 document.getElementById("metaSoftReset").onclick = function () {
@@ -378,6 +387,7 @@ function updateMetaDimensions () {
 		showDim = showDim || canBuyMetaDimension(tier)
 		document.getElementById(tier + "MetaRow").style.display = showDim ? "" : "none"
 		if (showDim) {
+			if (player.aarexModifications.ngp3c) updateMetaCondenser(tier);
 			document.getElementById(tier + "MetaD").textContent = DISPLAY_NAMES[tier] + " Meta Dimension x" + formatValue(player.options.notation, getMetaDimensionMultiplier(tier), 2, 1)
 			document.getElementById("meta" + tier + "Amount").textContent = getMetaDimensionDescription(tier)
 			document.getElementById("meta" + tier).textContent = speedrunMilestonesReached > tier + 5 ? "Auto: " + (player.autoEterOptions["md" + tier] ? "ON" : "OFF") : "Cost: " + formatValue(player.options.notation, player.meta[tier].cost, useTwo, 0) + " MA"
