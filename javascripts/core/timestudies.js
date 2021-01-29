@@ -5,7 +5,7 @@ presets={}
 function buyWithAntimatter() {
 	if (player.money.gte(player.timestudy.amcost)) {
 		player.money = player.money.minus(player.timestudy.amcost)
-		player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e20000"))
+		player.timestudy.amcost = player.timestudy.amcost.times(new Decimal("1e19000"))
 		player.timestudy.theorem += 1
 		updateTimeStudyButtons(true)
 		return true
@@ -15,7 +15,7 @@ function buyWithAntimatter() {
 function buyWithIP() {
 	if (player.infinityPoints.gte(player.timestudy.ipcost)) {
 		player.infinityPoints = player.infinityPoints.minus(player.timestudy.ipcost)
-		player.timestudy.ipcost = player.timestudy.ipcost.times(1e100)
+		player.timestudy.ipcost = player.timestudy.ipcost.times(1e90)
 		player.timestudy.theorem += 1
 		updateTimeStudyButtons(true)
 		return true
@@ -29,7 +29,7 @@ function buyWithEP() {
 	}
 	if (player.eternityPoints.gte(player.timestudy.epcost)) {
 		player.eternityPoints = player.eternityPoints.minus(player.timestudy.epcost)
-		player.timestudy.epcost = player.timestudy.epcost.times(2)
+		player.timestudy.epcost = player.timestudy.epcost.times(1.9)
 		player.timestudy.theorem += 1
 		updateTimeStudyButtons(true)
 		updateEternityUpgrades()
