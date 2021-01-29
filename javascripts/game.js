@@ -617,7 +617,7 @@ function updateNewPlayer(reseted) {
 			auto: [false, false, false]
 		},
 		timestudy: {
-			theorem: modesChosen.ngm ? -1 : 5,
+			theorem: modesChosen.ngm ? -4 : 1,
 			amcost: new Decimal("1e20000"),
 			ipcost: new Decimal(modesChosen.ngm ? 1e-13 : 1),
 			epcost: new Decimal(1),
