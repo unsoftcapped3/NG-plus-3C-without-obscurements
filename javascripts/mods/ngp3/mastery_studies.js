@@ -2,6 +2,7 @@ var masteryStudies = {
 	initCosts: {
 		time: {241: 2e71, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76, 291: 2.143347050754458e77, 292: 2.143347050754458e77, 301: 8.573388203017832e77, 302: 2.6791838134430725e78, 303: 8.573388203017832e77, 311: 8.573388203017832e77, 312: 8.573388203017832e77, 321: 2.6791838134430727e76, 322: 9.324815538194444e77, 323: 2.6791838134430727e76, 331: 1.0172526041666666e79, 332: 1.0172526041666666e79, 341: 9.5367431640625e78, 342: 1.0172526041666666e79, 343: 1.0172526041666666e79, 344: 9.5367431640625e78, 351: 2.1192762586805557e79, 361: 1.5894571940104167e79, 362: 1.5894571940104167e79, 371: 2.1192762586805557e79, 372: 6.622738308376736e79, 373: 2.1192762586805557e79, 381: 6.622738308376736e79, 382: 6.622738308376736e79, 383: 6.622738308376736e79, 391: 8.27842288547092e79, 392: 8.27842288547092e79, 393: 8.27842288547092e79, 401: 4.967053731282552e80, 402: 8.278422885470921e80, 411: 1.3245476616753473e71, 412: 1.655684577094184e71, 421: 1.9868214925130208e72, 431: 1.1037897180627893e75},
 		time_legacy: {241: 1e71, 251: 2e71, 252: 2e71, 253: 2e71, 261: 5e71, 262: 5e71, 263: 5e71, 264: 5e71, 265: 5e71, 266: 5e71},
+		time_cond: {241: 1e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		ec_legacy: {13: 1e72, 14: 1e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e94, 14: 1e97},
@@ -15,6 +16,13 @@ var masteryStudies = {
 		dil: {}
 	},
 	costMult: 1,
+	hasStudyReq: [241],
+	studyReqDisplays: {
+		241: function() { return "Wait until a future update..." },
+	},
+	studyReqConditions: {
+		241: function() { return false },
+	},
 	ecReqs: {
 		13: function() {
 			let comps = ECTimesCompleted("eterc13")
@@ -466,6 +474,7 @@ function setupMasteryStudiesHTML() {
 		var name = masteryStudies.timeStudies[id]
 		var html = "<span id='ts" + name + "Desc'></span>"
 		if (masteryStudies.hasStudyEffect.includes(name)) html += "<br>Currently: <span id='ts" + name + "Current'></span>"
+		if (masteryStudies.hasStudyReq.includes(name)) html += "<br><span id='ts" + name + "Req'></span>"
 		html += "<br>Cost: <span id='ts" + name + "Cost'></span> Time Theorems"
 		document.getElementById("timestudy" + name).innerHTML = html
 	}
@@ -523,7 +532,7 @@ function addSpentableMasteryStudies(x) {
 function setMasteryStudyCost(id,type) {
 	let d = masteryStudies.initCosts
 	let type2 = masteryStudies.types[type]
-	masteryStudies.costs[type2][id] = ((tmp.ngp3l && d[type2+"_legacy"][id])||d[type2][id]||0) * (type == "d" ? 1 : masteryStudies.costMult)
+	masteryStudies.costs[type2][id] = ((player.aarexModifications.ngp3c && (d[type2+"_cond"]!==undefined) && d[type2+"_cond"][id])||(tmp.ngp3l && d[type2+"_legacy"][id])||d[type2][id]||0) * (type == "d" ? 1 : masteryStudies.costMult)
 }
 
 function getMasteryStudyCostMult(id) {
@@ -659,6 +668,7 @@ function canBuyMasteryStudy(type, id) {
 		if (inQCModifier("sm") && masteryStudies.bought >= 20) return false
 		if (player.timestudy.theorem < masteryStudies.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !masteryStudies.timeStudies.includes(id)) return false
 		if (masteryStudies.latestBoughtRow > Math.floor(id / 10)) return false
+		if (!(masteryStudies.studyReqConditions[id] && masteryStudies.studyReqConditions[id]())) return false
 		if (!masteryStudies.spentable.includes(id)) return false
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < masteryStudies.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
@@ -716,6 +726,7 @@ function updateMasteryStudyTextDisplay() {
 		var name = masteryStudies.timeStudies[id]
 		if (!masteryStudies.unlocked.includes(name)) break
 		document.getElementById("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
+		if (masteryStudies.hasStudyReq.includes(name)) document.getElementById("ts" + name + "Req").textContent = "Requirement: " + masteryStudies.studyReqDisplays[name]()
 	}
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("ec"+id)) break

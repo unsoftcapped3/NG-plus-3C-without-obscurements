@@ -249,6 +249,7 @@ const DIL_UPG_COSTS = {
 	  ngpp1_p3c: 1e18,
 	  ngpp2_p3c: 5e18,
 	  ngpp4_p3c: 1e56,
+	  ngpp5_p3c: 1e64,
 	  ngmm1: 5e16,
 	  ngmm2: 1e19,
 	  ngmm3: 1e20,
@@ -490,6 +491,7 @@ function updateDilationUpgradeButtons() {
 		document.getElementById("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		document.getElementById("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
 		document.getElementById("dil52ngp3cdesc").textContent = player.aarexModifications.ngp3c?", and get 1 of each time & meta condenser for free":""
+		document.getElementById("dil53desc").textContent = "(^8 -> ^"+(player.aarexModifications.ngp3c?"12), and it also multiplies Infinity & Time Dimensions (unaffected by Obscurements).":"9)")
 		document.getElementById("dil54formula").textContent = "(log(x)^0.5" + (tmp.ngp3 ? ")" : "/2)")
 		document.getElementById("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}

@@ -2079,6 +2079,7 @@ function setSomeQuantumAutomationDisplay(){
         document.getElementById("dil14desc").textContent = player.aarexModifications.nguspV ? "The TP multiplier upgrade is more powerful." : "Increase the exponent of the TP formula."
         document.getElementById("dil52").style["font-size"] = player.aarexModifications.ngp3c ? "8px" : (player.masterystudies == undefined || player.aarexModifications.nguspV !== undefined ? "10px" : "9px")
         document.getElementById("dil52formula").style.display = player.masterystudies == undefined || player.aarexModifications.nguspV !== undefined ? "none" : ""
+		document.getElementById("dil53").style["font-size"] = player.aarexModifications.ngp3c ? "8px" : "10px"
         document.getElementById("exDilationDesc").innerHTML = player.aarexModifications.nguspV ? 'making galaxies <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% stronger in dilation.' : 'making dilation <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% less severe.'
         document.getElementById("metaAntimatterEffectType").textContent=inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
         if (player.meta) {

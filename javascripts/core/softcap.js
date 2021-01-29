@@ -617,8 +617,8 @@ var softcap_data = {
 					let mag = 1 + player.dilation.upgrades.filter(function(x) {
 						let ngpp = String(x).split("ngpp")[1];
 						if (ngpp ? (Number(ngpp) ? Number(ngpp)>=3 : false) : false) return true;
-						else return false;
-					}).length/5;
+						else return false
+					}).length/(player.dilation.upgrades.includes("ngpp5")?3:5);
 					ret = Math.pow(ret, Math.pow(0.9, mag));
 				}
 				return ret;
@@ -627,7 +627,7 @@ var softcap_data = {
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(1e100),
+			start: new Decimal(1e94),
 			pow: 1/3,
 			derv: false,
 		},
@@ -649,7 +649,7 @@ var softcap_data = {
 						let ngpp = String(x).split("ngpp")[1];
 						if (ngpp ? (Number(ngpp) ? Number(ngpp)>=3 : false) : false) return true;
 						else return false;
-					}).length/5;
+					}).length/(player.dilation.upgrades.includes("ngpp5")?3:5);
 					ret = Math.pow(ret, Math.pow(0.9, mag));
 				}
 				return ret;
@@ -658,8 +658,14 @@ var softcap_data = {
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
+			start: new Decimal(1e75),
 			pow: 1/4,
+			derv: false,
+		},
+		3: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/5,
 			derv: false,
 		},
 	},

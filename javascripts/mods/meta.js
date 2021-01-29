@@ -2,7 +2,7 @@
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
 	if (speedrunMilestonesReached >= 19 && !bigRip) x = 1e25
-	else if (player.achievements.includes("ngpp12")) x = 100
+	else if (player.achievements.includes("ngpp12")) x = player.aarexModifications.ngp3c?110:100
 	return new Decimal(x)
 }
 
@@ -352,7 +352,7 @@ function getExtraDimensionBoostPowerExponent(ma) {
 		if (!tmp.ngp3l && power > 1e8) power = Math.pow(power * 1e6, 4/7)
 		return power
 	}
-	if (player.dilation.upgrades.includes("ngpp5")) power++
+	if (player.dilation.upgrades.includes("ngpp5")) power+=player.aarexModifications.ngp3c?4:1
 	power += getECReward(13)
 	if (tmp.ngp3) {
 		if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
