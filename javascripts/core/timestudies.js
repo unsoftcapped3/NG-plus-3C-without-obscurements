@@ -505,7 +505,7 @@ function respecTimeStudies(force, presetLoad) {
 			}
 			if (player.masterystudies) if (player.timestudy.studies.length>1) player.quantum.wasted = false
 			player.timestudy.studies = bru7activated ? [192] : []
-			var ECCosts = [null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 750, 1, 1]
+			var ECCosts = [null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1]
 			player.timestudy.theorem += ECCosts[player.eternityChallUnlocked]
 			
 		}
