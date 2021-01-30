@@ -2,7 +2,7 @@
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
 	if (speedrunMilestonesReached >= 19 && !bigRip) x = 1e25
-	else if (player.achievements.includes("ngpp12")) x = player.aarexModifications.ngp3c?110:100
+	else if (player.achievements.includes("ngpp12")) x = 100
 	return new Decimal(x)
 }
 

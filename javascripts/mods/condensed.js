@@ -613,6 +613,7 @@ function getMetaCondenserEff(x) {
 
 function condenseMetaDim(x) {
 	if (!player.aarexModifications.ngp3c) return;
+	if (player.meta[x].bought<=0) return;
 	let res = player.meta.antimatter
 	let cost = getMetaCondenserCost(x)
 	if (res.lt(cost)) return;
@@ -622,6 +623,7 @@ function condenseMetaDim(x) {
 
 function maxMetaCondense(x) {
 	if (!player.aarexModifications.ngp3c) return;
+	if (player.meta[x].bought<=0) return;
 	let res = player.meta.antimatter
 	let cost = getMetaCondenserCost(x)
 	if (res.lt(cost)) return;
