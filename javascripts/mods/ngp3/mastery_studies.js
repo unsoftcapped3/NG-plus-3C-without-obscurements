@@ -2,9 +2,10 @@ var masteryStudies = {
 	initCosts: {
 		time: {241: 2e71, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76, 291: 2.143347050754458e77, 292: 2.143347050754458e77, 301: 8.573388203017832e77, 302: 2.6791838134430725e78, 303: 8.573388203017832e77, 311: 8.573388203017832e77, 312: 8.573388203017832e77, 321: 2.6791838134430727e76, 322: 9.324815538194444e77, 323: 2.6791838134430727e76, 331: 1.0172526041666666e79, 332: 1.0172526041666666e79, 341: 9.5367431640625e78, 342: 1.0172526041666666e79, 343: 1.0172526041666666e79, 344: 9.5367431640625e78, 351: 2.1192762586805557e79, 361: 1.5894571940104167e79, 362: 1.5894571940104167e79, 371: 2.1192762586805557e79, 372: 6.622738308376736e79, 373: 2.1192762586805557e79, 381: 6.622738308376736e79, 382: 6.622738308376736e79, 383: 6.622738308376736e79, 391: 8.27842288547092e79, 392: 8.27842288547092e79, 393: 8.27842288547092e79, 401: 4.967053731282552e80, 402: 8.278422885470921e80, 411: 1.3245476616753473e71, 412: 1.655684577094184e71, 421: 1.9868214925130208e72, 431: 1.1037897180627893e75},
 		time_legacy: {241: 1e71, 251: 2e71, 252: 2e71, 253: 2e71, 261: 5e71, 262: 5e71, 263: 5e71, 264: 5e71, 265: 5e71, 266: 5e71},
-		time_cond: {241: 1e76},
+		time_cond: {241: 1e75, 251: 5e75, 252: 5e75, 253: 5e75, 260: 1e76, 261: 5e75, 262: 5e75, 263: 1e76, 264: 1e76, 265: 5e75, 266: 5e75, 267: 1e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		ec_legacy: {13: 1e72, 14: 1e72},
+		ec_cond: {13: 2.5e75, 14: 2.5e75},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e94, 14: 1e97},
 		dil_legacy: {7: 2e82, 8: 2e84, 9: 4e85, 10: 4e87, 11: 3e90, 12: 3e92, 13: 1e95, 14: 1e98}
 	},
@@ -12,25 +13,33 @@ var masteryStudies = {
 		time: {},
 		time_mults: {241: 1, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4, 291: 1, 292: 1, 301: 2, 302: 131072, 303: 2, 311: 64, 312: 64, 321: 2, 322: 2, 323: 2, 331: 2, 332: 2, 341: 1, 342: 1, 343: 1, 344: 1, 351: 4, 361: 1, 362: 1, 371: 2, 372: 2, 373: 2, 381: 1, 382: 1, 383: 2, 391: 1, 392: 1, 393: 1, 401: 1e10, 402: 1e10, 411: 1, 412: 1, 421: 1, 431: 1},
 		time_mults_legacy: {},
+		time_mults_cond: {251: 1.5, 252: 1.5, 253: 1.5, 260: 5, 261: 3, 262: 3, 263: 3, 264: 3, 265: 3, 266: 3, 267: 5},
 		ec: {},
 		dil: {}
 	},
 	costMult: 1,
-	hasStudyReq: [241],
+	condensedOnly: [260, 267],
+	hasStudyReq: [252, 260, 267],
 	studyReqDisplays: {
-		241: function() { return "Wait until a future update..." },
+		252: function() { return "3 Normal Mastery Studies bought" },
+		260: function() { return "7 Normal Mastery Studies bought" },
+		267: function() { return "7 Normal Mastery Studies bought" },
 	},
 	studyReqConditions: {
-		241: function() { return false },
+		252: function() { return masteryStudies.bought>=3 },
+		260: function() { return masteryStudies.bought>=7 },
+		267: function() { return masteryStudies.bought>=7 },
 	},
 	ecReqs: {
 		13: function() {
+			let start = player.aarexModifications.ngp3c?110e3:728e3
 			let comps = ECTimesCompleted("eterc13")
-			return 728e3 + (tmp.ngp3l ? 6000 : (1500 + 3000 * comps)) * comps
+			return start + (tmp.ngp3l ? 6000 : (1500 + 3000 * comps)) * comps
 		},
 		14: function() {
+			let start = player.aarexModifications.ngp3c?1e6:255e5
 			let comps = ECTimesCompleted("eterc14")
-			return 255e5 + (tmp.ngp3l ? 9e5 : (4e6 + 2e6 * comps)) * comps
+			return start + (tmp.ngp3l ? 9e5 : (4e6 + 2e6 * comps)) * comps
 		}
 	},
 	ecReqsStored: {},
@@ -100,7 +109,7 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251: function(){
 			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
-			return Math.floor(player.resets / 3e3)
+			return Math.floor(player.resets / (player.aarexModifications.ngp3c?500:3e3))
 		},
 		252: function(){
 			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
@@ -112,12 +121,13 @@ var masteryStudies = {
 			return Math.floor(getTotalRG()/4)
 		},
 		262: function(){
+			let start = player.aarexModifications.ngp3c?5e4:5e5;
 			let r = 1
 			let exp = 1
 			if (tmp.ngp3l) r = Math.max(player.resets / 15e3 - 19, 1)
 			else {
-				r = Math.max(player.resets / 5e4 - 10, 1)
-				exp = Math.sqrt(Math.max(player.resets / 1e5 - 5.5, 1))
+				r = Math.max(player.resets / (start/10) - 10, 1)
+				exp = Math.sqrt(Math.max(player.resets / (start/5) - 5.5, 1))
 			}
 			if (r > 1e4) r = Math.pow(6 + Math.log10(r), 4)
 			if (player.aarexModifications.newGameExpVersion) exp *= 2
@@ -126,6 +136,7 @@ var masteryStudies = {
 		263: function(){
 			let x = player.meta.resets
 			if (!tmp.ngp3l) x = x * (x + 10) / 60
+			if (player.aarexModifications.ngp3c) return Decimal.pow(2, x).times(Decimal.pow(x + 1, 20))
 			return x + 1
 		},
 		264: function(){
@@ -133,6 +144,7 @@ var masteryStudies = {
 			if (tmp.ngp3l) r = Math.pow(player.galaxies + 1, 0.25) * 2
 			else r = player.galaxies / 100 + 1
 			if (player.aarexModifications.newGameExpVersion) return Math.pow(r, 2)
+			if (player.aarexModifications.ngp3c) return Decimal.pow(r, 16)
 			return r
 		},
 		273: function(uses){
@@ -274,17 +286,23 @@ var masteryStudies = {
 	},
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.2x per upgrade.",
-		251: "Remote galaxy scaling starts 1 galaxy later per 3,000 dimension boosts.",
+		251: function() { 
+			return"Remote galaxy scaling starts 1 galaxy later per "+(player.aarexModifications.ngp3c?"500":"3,000")+" dimension boosts."
+		},
 		252: "Remote galaxy scaling starts 1 galaxy later per 7 free galaxies.",
 		253: function() {
-			return "Remote galaxy scaling starts "+(tmp.ngp3l?"20 galaxies later per 9 extra replicated galaxies.":"1 galaxy later per 4 total replicated galaxies.")
+			return "Remote galaxy scaling starts "+(tmp.ngp3l?"20 galaxies later per 9 extra RGs.":"1 galaxy later per 4 total RGs.")
 		},
-		261: "Dimension Boost costs scale by another 1 less.",
+		260: "OS_ID_1, OS_ID_2, & OS_TD_1 are 95% weaker.",
+		261: function() { 
+			return "Dimension Boost costs scale by another "+(player.aarexModifications.ngp3c?"0.5":"1")+" less."
+		},
 		262: "Dimension Boosts boost Meta Dimensions at a reduced rate.",
 		263: "Meta-dimension boosts boost dilated time production.",
 		264: "Gain more tachyon particles based on your normal galaxies.",
 		265: "Replicate chance upgrades can go over 100%.",
 		266: "Reduce the post-400 max replicated galaxy cost scaling.",
+		267: "Normal, Infinity, Time, Replicated, Dilated, and Meta Condensers are all 50% stronger.",
 		271: "You can buy beyond 1ms interval upgrades, but the cost begins to increase faster.",
 		272: "You can buy all Time Studies in all 3-way splits.",
 		273: "Replicate chance boosts itself.",
@@ -363,6 +381,7 @@ var masteryStudies = {
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
 	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: [291, 292, 302], 291: [301], 292: [303], 301: [311], 302: ["d10"], 303: [312], 311: [321], 312: [323], d10: [322], 322: [331, 332], 331: [342], 332: [343], 342: [341], 343: [344], 344: [351], 351: ["d11"], d11: [361, 362], 361: [371], 362: [373], 371: [372], 372: [381], 373: [382], 381: [391], 382: [383], 383: [393], 391: [392], 393: [392], 392: ["d12"], d12: [401, 402], 401: [411], 402: [412], 411: [421], 412: ["d13"], 421: ["d13"], d13: [431], 431: ["d14"]},
+	condensedConnections: {251: [260, 261, 262], 253: [265, 266, 267]},
 	allConnections_legacy: {252: [263, 264, "d7"], ec13: [], ec14: []},
 	allUnlocks: {
 		d7: function() {
@@ -481,7 +500,7 @@ function setupMasteryStudiesHTML() {
 }
 
 function getMasteryStudyConnections(id) {
-	return (tmp.ngp3l && masteryStudies.allConnections_legacy[id]) || masteryStudies.allConnections[id]
+	return (!(!player.condensed) && masteryStudies.condensedConnections[id]) || (tmp.ngp3l && masteryStudies.allConnections_legacy[id]) || masteryStudies.allConnections[id]
 }
 
 function updateUnlockedMasteryStudies() {
@@ -491,6 +510,7 @@ function updateUnlockedMasteryStudies() {
 	for (var x = 0; x < masteryStudies.studies.length; x++) {
 		var id = masteryStudies.studies[x]
 		var divid = convertMasteryStudyIdToDisplay(id)
+		if (masteryStudies.condensedOnly.includes(id) && !player.aarexModifications.ngp3c) unl = false;
 		if (Math.floor(id / 10) > rowNum) {
 			rowNum = Math.floor(id / 10)
 			if (masteryStudies.allUnlocks["r"+rowNum] && !masteryStudies.allUnlocks["r"+rowNum]()) unl = false
@@ -536,7 +556,7 @@ function setMasteryStudyCost(id,type) {
 }
 
 function getMasteryStudyCostMult(id) {
-	return (tmp.ngp3l && masteryStudies.costs.time_mults_legacy[id]) || masteryStudies.costs.time_mults[id] || 1
+	return ((player.aarexModifications.ngp3c && masteryStudies.costs.time_mults_cond[id])||tmp.ngp3l && masteryStudies.costs.time_mults_legacy[id]) || masteryStudies.costs.time_mults[id] || 1
 }
 
 function buyingD7Changes(){
@@ -667,8 +687,8 @@ function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
 		if (inQCModifier("sm") && masteryStudies.bought >= 20) return false
 		if (player.timestudy.theorem < masteryStudies.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !masteryStudies.timeStudies.includes(id)) return false
-		if (masteryStudies.latestBoughtRow > Math.floor(id / 10)) return false
-		if (!(masteryStudies.studyReqConditions[id] && masteryStudies.studyReqConditions[id]())) return false
+		if (masteryStudies.latestBoughtRow > Math.floor(id / 10) && !player.aarexModifications.ngp3c) return false
+		if (!(masteryStudies.studyReqConditions[id] ? masteryStudies.studyReqConditions[id]() : true) && player.aarexModifications.ngp3c) return false
 		if (!masteryStudies.spentable.includes(id)) return false
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < masteryStudies.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
@@ -726,7 +746,7 @@ function updateMasteryStudyTextDisplay() {
 		var name = masteryStudies.timeStudies[id]
 		if (!masteryStudies.unlocked.includes(name)) break
 		document.getElementById("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
-		if (masteryStudies.hasStudyReq.includes(name)) document.getElementById("ts" + name + "Req").textContent = "Requirement: " + masteryStudies.studyReqDisplays[name]()
+		if (masteryStudies.hasStudyReq.includes(name) && player.aarexModifications.ngp3c) document.getElementById("ts" + name + "Req").textContent = "Requirement: " + masteryStudies.studyReqDisplays[name]()
 	}
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("ec"+id)) break

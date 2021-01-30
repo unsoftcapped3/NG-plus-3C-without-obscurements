@@ -2010,9 +2010,11 @@ function setTSDisplay(){
 
 function updateNGp3DisplayStuff(){
         displayNonlegacyStuff()
+		setupMasteryStudiesHTML()
         for (var i=0;i<masteryStudies.timeStudies.length;i++) {
                 var t=masteryStudies.timeStudies[i]
                 var d=masteryStudies.timeStudyDescs[t]
+				if (masteryStudies.condensedOnly.includes(id) && !player.aarexModifications.ngp3c) continue;
                 document.getElementById("ts"+t+"Desc").innerHTML=(typeof(d)=="function"?d():d)||"Unknown desc."
         }
         updateMasteryStudyCosts()

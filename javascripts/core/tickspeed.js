@@ -307,7 +307,13 @@ function getWorkingTickspeed(){
 	if (player.aarexModifications.ngp3c) {
 		for (let i=1;i<=4;i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
 		if (player.infinityUpgrades.includes("postinfi82")) tick = tick.div(getTotalSacrificeBoost())
-		if (player.timestudy.studies.includes(12)) tick = tick.div(Decimal.pow(getDimensionBoostPower(), player.resets))
+		if (player.timestudy.studies.includes(12)) {
+			let pow = getDimensionBoostPower();
+			let r = player.resets;
+			if (Decimal.gte(pow, "1e2225")) pow = Decimal.mul(pow, "1e2225").sqrt()
+			if (r>=9e4) r = Math.log10(r)*9e4/Math.log10(9e4)
+			tick = tick.div(Decimal.pow(pow, r))
+		}
 		tick = softcap(tick.pow(-1), "ngp3cTS").pow(-1)
 		if (player.currentEternityChall=="eterc7") return new Decimal(1000)
 	}

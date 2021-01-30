@@ -67,7 +67,10 @@ function toggleAutoEter(id) {
 function doAutoEterTick() {
 	if (!player.meta) return
 	if (player.achievements.includes("ngpp17")) {
-		if (player.masterystudies == undefined || tmp.be || !tmp.qu.bigRip.active) for (var d = 1; d < 9; d++) if (player.autoEterOptions["td" + d]) buyMaxTimeDimension(d)
+		if (player.masterystudies == undefined || tmp.be || !tmp.qu.bigRip.active) for (var d = 1; d < 9; d++) if (player.autoEterOptions["td" + d]) {
+			if (player.aarexModifications.ngp3c) maxTimeCondense(d)
+			buyMaxTimeDimension(d)
+		}
 		if (player.autoEterOptions.epmult) buyMaxEPMult()
 		if (player.autoEterOptions.blackhole) {
 			buyMaxBlackholeDimensions()

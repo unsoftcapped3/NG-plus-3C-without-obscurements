@@ -1742,6 +1742,11 @@ function updateChallenges() {
 		document.getElementById("postc3").className = "onchallengebtn";
 		document.getElementById("postc3").textContent = "Trapped in"
 	}
+	
+	if (isIC10Trapped()) {
+		document.getElementById("postcngc_2").className = "onchallengebtn";
+		document.getElementById("postcngc_2").textContent = "Trapped in"
+	}
 
 	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
 	for (c=0;c<order.length;c++) document.getElementById(order[c]).parentElement.parentElement.style.display=player.postChallUnlocked<c+1?"none":""
@@ -4328,6 +4333,7 @@ var ecExpData = {
 		eterc10_ngc: 12225,
 		eterc11_ngc: 67000,
 		eterc12_ngc: 256000,
+		eterc13_ngc: 1257500,
 	},
 	increases: {
 		eterc1: 200,
@@ -4393,7 +4399,7 @@ function getECGoal(x) {
 	return Decimal.pow(10, exp)
 }
 
-function getECReward(x) {
+function getECReward(x, alt=false) {
 	let m2 = player.galacticSacrifice !== undefined
 	let pc = !(!player.aarexModifications.ngp3c)
 	let c=ECTimesCompleted("eterc" + x)
@@ -4425,13 +4431,18 @@ function getECReward(x) {
 	if (x == 10) return Decimal.pow(getInfinitied(), m2 ? 2 : .9).times(Math.pow(c, pc?10:1) * (m2 ? 0.02 : 0.000002)).add(1).pow(player.timestudy.studies.includes(31) ? 4 : 1)
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2)*(player.totalTickGained+(Math.max(c, 1)-1)*5e4))/1e5+1)/(4-c/2)+1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
-	if (x == 13) {
+	if (x == 13 && !alt) {
 		var data={
 			main:[0, 0.25, 0.5, 0.7, 0.85, 1],
-			legacy:[0, 0.2, 0.4, 0.6, 0.8, 1]
+			legacy:[0, 0.2, 0.4, 0.6, 0.8, 1],
+			cnd: [0, 1.5, 2.5, 3.2, 3.65, 4],
 		}
-		var dataUsed = data[tmp.ngp3l ? "legacy" : "main"]
+		var dataUsed = data[pc ? "cnd" : (tmp.ngp3l ? "legacy" : "main")]
 		return dataUsed[c]
+	}
+	if (x == 13 && alt) {
+		if (!pc) return 1;
+		return Decimal.pow(10, Math.pow(Decimal.mul(tmp.rep.chance, c).plus(1).log10(), 2)).pow(6e3+2e3*c);
 	}
 	if (x == 14) return getIC3EffFromFreeUpgs()
 }
@@ -5818,7 +5829,7 @@ function ECRewardDisplayUpdating(){
 	document.getElementById("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
 	document.getElementById("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x"+(player.aarexModifications.ngp3c?", and galaxies are "+shorten((getECReward(11)-1)*100)+"% stronger (based on free tickspeed upgrades)":" ")
 	document.getElementById("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
-	document.getElementById("ec13reward").textContent = "Reward: Increase the exponent of meta-antimatter's effect. (" + (getECReward(13)+9) + "x)"
+	document.getElementById("ec13reward").textContent = "Reward: Increase the exponent of "+(player.aarexModifications.ngp3c?"infinity power and ":"")+"meta-antimatter's effect (+" + getECReward(13) + ")"+(player.aarexModifications.ngp3c?(", and replicate chance increases the replicanti limit ("+shorten(getECReward(13, true))+"x)"):"")
 	document.getElementById("ec14reward").textContent = "Reward: Free tickspeed upgrades boost the IC3 reward to be " + getIC3EffFromFreeUpgs().toFixed(0) + "x stronger."
 
 	document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"

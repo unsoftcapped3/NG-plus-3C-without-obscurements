@@ -97,6 +97,7 @@ function getCondenserPow() {
 	if (player.infinityUpgrades.includes("postinfi72")) pow = pow.times(getPostInfi72Mult())
 	if (player.challenges.includes("postc4")) pow = pow.times(1.25)
 	if (player.challenges.includes("postcngc_2")) pow = pow.times(1.15)
+	if (player.masterystudies.includes("t267")) pow = pow.times(1.5)
 	return pow
 }
 
@@ -174,6 +175,7 @@ function getInfCondenserPow() {
 	if (player.challenges.includes("postcngc_2")) ret = ret.times(1.15)
 	if (player.timestudy.studies.includes(13)) ret = ret.times(ts13Eff())
 	if (player.dilation.upgrades.includes("ngp3c2")) ret = ret.times(3)
+	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
 	return ret;
 }
 
@@ -297,6 +299,7 @@ function getReplCondPow() {
 	if (player.timestudy.studies.includes(33)) pow *= 1.1
 	if (player.timestudy.studies.includes(43)) pow *= ts43Eff()
 	if (player.dilation.upgrades.includes(8)) pow *= 1.15
+	if (player.masterystudies.includes("t267")) pow *= 1.5
 	return pow;
 }
 
@@ -344,6 +347,7 @@ function getTimeCondenserPow() {
 	let ret = new Decimal(1)
 	if (player.timestudy.studies.includes(195)) ret = ret.times(50)
 	if (player.dilation.upgrades.includes("ngp3c1")) ret = ret.times(getDil26Mult())
+	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
 	return ret;
 }
 
@@ -598,6 +602,7 @@ function getMetaCondenserTarget(x) {
 
 function getMetaCondenserPow() {
 	let ret = new Decimal(1)
+	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
 	return ret;
 }
 
@@ -629,4 +634,8 @@ function maxMetaCondense(x) {
 	if (res.lt(cost)) return;
 	player.condensed.meta[x] = Math.max(player.condensed.meta[x], getMetaCondenserTarget(x))
 	player.meta.antimatter = player.meta.antimatter.sub(cost)
+}
+
+function isIC10Trapped() {
+	return player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c
 }

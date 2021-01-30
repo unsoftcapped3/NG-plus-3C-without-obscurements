@@ -82,6 +82,7 @@ function getDilUpgPower(x) {
 	if (player.aarexModifications.nguspV) r += exDilationUpgradeStrength(x)
 	else if (player.exdilation != undefined && !player.aarexModifications.ngudpV) r *= exDilationUpgradeStrength(x)
 	if (player.dilation.upgrades.includes("ngp3c8") && player.aarexModifications.ngp3c && x!=3) r *= getDil85Mult()
+	if (x==6 && player.masterystudies.includes("t267")) r *= 1.5
 	return r
 }
 
@@ -187,6 +188,10 @@ function dilates(x, m) {
 	}
 	if (player.galacticSacrifice !== undefined && m != 1) {
 		e *= dilationPowerStrength()
+		a = true
+	}
+	if (player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c) {
+		e *= Math.pow(dilationPowerStrength(), 2)
 		a = true
 	}
 	if (a) {

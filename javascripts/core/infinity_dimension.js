@@ -128,7 +128,7 @@ function getStartingIDPower(tier){
 
 function DimensionPower(tier) {
   	var dim = player["infinityDimension" + tier]
-  	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || player.currentEternityChall == "eterc13") return new Decimal(0)
+  	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || (player.currentEternityChall == "eterc13"&&!player.aarexModifications.ngp3c)) return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
   	if (player.currentEternityChall == 'eterc14') return player.aarexModifications.ngp3c?new Decimal(1):getIDReplMult()
   	if (inQC(3)) return getExtraDimensionBoostPower()
@@ -150,7 +150,7 @@ function DimensionPower(tier) {
 	
 	if (player.aarexModifications.ngp3c) {
 		mult = mult.times(tmp.cnd?tmp.cnd.inf[tier]:1)
-		if (player.currentChallenge == "postcngc_2") return tmp.cnd?tmp.cnd.inf[tier]:1
+		if (player.currentChallenge == "postcngc_2" || isIC10Trapped()) return tmp.cnd?tmp.cnd.inf[tier]:1
 	}
 	
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
@@ -224,6 +224,7 @@ function getIDCostMult(tier) {
 }
 
 function getInfBuy10Mult(tier) {
+	if (player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c) return new Decimal(1);
 	let ret = infPowerMults[player.galacticSacrifice!==undefined&&player.tickspeedBoosts===undefined ? 1 : 0][tier]
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
 	if (player.dilation.upgrades.includes("ngmm6")) ret *= getDil45Mult()
@@ -303,6 +304,7 @@ function getInfinityPowerEffectExp() {
 		if (player.timestudy.studies.includes(191)) x += ts191Eff()
 	}
 	if (player.dilation.upgrades.includes("ngmm5")) x += getDil44Mult()
+	if (player.aarexModifications.ngp3c) x += getECReward(13)
 
 	return x
 }

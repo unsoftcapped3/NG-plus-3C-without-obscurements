@@ -56,12 +56,12 @@ function maxTheorems() {
 		player.infinityPoints = player.infinityPoints.sub(player.timestudy.ipcost.div("1e70"))
 	}
 	
-	gainTT = Math.floor(player.eternityPoints.div(player.timestudy.epcost).plus(1).log2())
+	gainTT = Math.floor(player.eternityPoints.div(player.timestudy.epcost).plus(1).log(1.7))
 	if (gainTT > 0 && canBuyTTWithEP()) {
 		player.timestudy.theorem += gainTT
-		player.eternityPoints = player.eternityPoints.sub(Decimal.pow(2, gainTT).sub(1).times(player.timestudy.epcost))
+		player.eternityPoints = player.eternityPoints.sub(Decimal.pow(1.7, gainTT).sub(1).times(player.timestudy.epcost))
 		if (!break_infinity_js && isNaN(player.eternityPoints.logarithm)) player.eternityPoints = new Decimal(0)
-		player.timestudy.epcost = player.timestudy.epcost.times(Decimal.pow(2, gainTT))
+		player.timestudy.epcost = player.timestudy.epcost.times(Decimal.pow(1.7, gainTT))
 	}
 	updateTimeStudyButtons(true)
 	updateEternityUpgrades()
@@ -549,7 +549,7 @@ function respecUnbuyableTimeStudies() {
 	for (var t = 0; t < all.length; t++) {
 		var id = all[t]
 		if (player.timestudy.studies.includes(id)) {
-			if (!inQCModifier("sm") && (id < 120 || id > 150 || !secondSplitPick || secondSplitPick == id % 10 || player.masterystudies.includes("t272")) && (id < 220 || !earlyDLStudies.includes(id % 2 > 0 ? id + 1 : id - 1) || player.masterystudies.includes("t302"))) {
+			if (!inQCModifier("sm") && (id < 120 || id > 150 || !secondSplitPick || secondSplitPick == id % 10 || ((player.eternityUpgrades.includes(10) && player.aarexModifications.ngp3c)||player.masterystudies.includes("t272"))) && (id < 220 || !earlyDLStudies.includes(id % 2 > 0 ? id + 1 : id - 1) || ((player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || player.masterystudies.includes("t302")))) {
 				respecedTS.push(id)
 				if (id > 120 && id < 130) secondSplitPick = id % 10
 				if (id > 220) earlyDLStudies.push(id)

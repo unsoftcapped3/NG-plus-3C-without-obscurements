@@ -70,6 +70,7 @@ function getReplicantiCap() {
 		if (player.timestudy.studies.includes(192)) lim = Decimal.mul(lim, player.timeShards.plus(1))
 		if (player.dilation.upgrades.includes("ngp3c4")) lim = Decimal.mul(lim, player.dilation.dilatedTime.plus(1).pow(2500))
 		if (player.dilation.upgrades.includes("ngp3c9")) lim = Decimal.mul(lim, getDil56Mult())
+		lim = Decimal.mul(lim, getECReward(13, true));
 		return lim;
 	}
 	return getReplicantiLimit();
