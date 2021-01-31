@@ -4334,6 +4334,7 @@ var ecExpData = {
 		eterc11_ngc: 67000,
 		eterc12_ngc: 256000,
 		eterc13_ngc: 1257500,
+		eterc14_ngc: 3023500,
 	},
 	increases: {
 		eterc1: 200,
@@ -4375,6 +4376,7 @@ var ecExpData = {
 		eterc10_ngc: 525,
 		eterc11_ngc: 850,
 		eterc12_ngc: 16000,
+		eterc13_ngc: 22250,
 	}
 }
 
@@ -4435,7 +4437,7 @@ function getECReward(x, alt=false) {
 		var data={
 			main:[0, 0.25, 0.5, 0.7, 0.85, 1],
 			legacy:[0, 0.2, 0.4, 0.6, 0.8, 1],
-			cnd: [0, 1.5, 2.5, 3.2, 3.65, 4],
+			cnd: [0, 1.5, 3.5, 6, 7.2, 8],
 		}
 		var dataUsed = data[pc ? "cnd" : (tmp.ngp3l ? "legacy" : "main")]
 		return dataUsed[c]
@@ -4444,7 +4446,11 @@ function getECReward(x, alt=false) {
 		if (!pc) return 1;
 		return Decimal.pow(10, Math.pow(Decimal.mul(tmp.rep.chance, c).plus(1).log10(), 2)).pow(6e3+2e3*c);
 	}
-	if (x == 14) return getIC3EffFromFreeUpgs()
+	if (x == 14 && !alt) return getIC3EffFromFreeUpgs()
+	if (x == 14 && alt) {
+		if (!pc) return 1;
+		return Math.log10(player.galaxies*Math.pow(c, 2)+1)/4.3+1
+	}
 }
 
 function startEternityChallenge(n) {
@@ -5830,7 +5836,7 @@ function ECRewardDisplayUpdating(){
 	document.getElementById("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x"+(player.aarexModifications.ngp3c?", and galaxies are "+shorten((getECReward(11)-1)*100)+"% stronger (based on free tickspeed upgrades)":" ")
 	document.getElementById("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
 	document.getElementById("ec13reward").textContent = "Reward: Increase the exponent of "+(player.aarexModifications.ngp3c?"infinity power and ":"")+"meta-antimatter's effect (+" + getECReward(13) + ")"+(player.aarexModifications.ngp3c?(", and replicate chance increases the replicanti limit ("+shorten(getECReward(13, true))+"x)"):"")
-	document.getElementById("ec14reward").textContent = "Reward: Free tickspeed upgrades boost the IC3 reward to be " + getIC3EffFromFreeUpgs().toFixed(0) + "x stronger."
+	document.getElementById("ec14reward").textContent = "Reward: Free tickspeed upgrades boost the IC3 reward to be " + getIC3EffFromFreeUpgs().toFixed(0) + "x stronger"+(player.aarexModifications.ngp3c?(", and normal galaxies make dilated & meta condensers "+((getECReward(14, true)-1)*100).toFixed(2)+"% stronger"):"")
 
 	document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 	document.getElementById("eterc7ts").textContent = player.aarexModifications.ngp3c?"does nothing":"affects all dimensions normally"

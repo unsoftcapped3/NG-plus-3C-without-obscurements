@@ -33,12 +33,14 @@ var masteryStudies = {
 	ecReqs: {
 		13: function() {
 			let start = player.aarexModifications.ngp3c?110e3:728e3
-			let comps = ECTimesCompleted("eterc13")
-			return start + (tmp.ngp3l ? 6000 : (1500 + 3000 * comps)) * comps
+			let mult = player.aarexModifications.ngp3c?0.75:1
+			let comps = ECTimesCompleted("eterc13") * mult
+			return Math.floor(start + (tmp.ngp3l ? 6000 : (1500 + 3000 * comps)) * comps)
 		},
 		14: function() {
-			let start = player.aarexModifications.ngp3c?1e6:255e5
-			let comps = ECTimesCompleted("eterc14")
+			let start = player.aarexModifications.ngp3c?225e3:255e5
+			let mult = player.aarexModifications.ngp3c?0.01:1
+			let comps = ECTimesCompleted("eterc14") * mult
 			return start + (tmp.ngp3l ? 9e5 : (4e6 + 2e6 * comps)) * comps
 		}
 	},

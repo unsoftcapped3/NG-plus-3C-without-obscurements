@@ -287,7 +287,7 @@ function infinityUpgradesDisplay(){
 	if (player.infinityUpgrades.includes("skipResetGalaxy")) document.getElementById("infi44").className = "infinistorebtnbought"
 	else if (player.infinityUpgrades.includes("skipReset3") && player.infinityPoints.gte(500)) document.getElementById("infi44").className = "infinistorebtn4"
 	else document.getElementById("infi44").className = "infinistorebtnlocked"
-	document.getElementById("infi11").innerHTML = "Normal Dimensions gain a multiplier based on time played "+(player.aarexModifications.ngp3c?"and your Antimatter":"")+"<br>Currently: " + (infUpg11Pow()).toFixed(2) + "x<br>Cost: 1 IP"
+	document.getElementById("infi11").innerHTML = "Normal Dimensions gain a multiplier based on time played "+(player.aarexModifications.ngp3c?"and your Antimatter":"")+"<br>Currently: " + shorten(infUpg11Pow()) + "x<br>Cost: 1 IP"
 	document.getElementById("infi12").innerHTML = "First and Eighth Dimensions"+(player.aarexModifications.ngp3c?", and Tickspeed":"")+" gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
 	document.getElementById("infi13").innerHTML = "Third and Sixth Dimensions"+(player.aarexModifications.ngp3c?", and Tickspeed":"")+" gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
 	document.getElementById("infi22").innerHTML = "Second and Seventh Dimensions"+(player.aarexModifications.ngp3c?", and Tickspeed":"")+" gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"

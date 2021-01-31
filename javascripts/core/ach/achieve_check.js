@@ -87,7 +87,7 @@ function checkUniversalHarmony() {
 
 function checkEPReqAchieve(){
 	if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
-	if (player.eternityPoints.gte("1e40000")) giveAchievement("In the grim darkness of the far endgame")
+	if (player.eternityPoints.gte(player.aarexModifications.ngp3c?"1e2550":"1e40000")) giveAchievement("In the grim darkness of the far endgame")
 	if (player.eternityPoints.gte("9e99999999")) giveAchievement("This achievement doesn't exist 3")
 }
 

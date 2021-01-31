@@ -82,7 +82,10 @@ function getDilUpgPower(x) {
 	if (player.aarexModifications.nguspV) r += exDilationUpgradeStrength(x)
 	else if (player.exdilation != undefined && !player.aarexModifications.ngudpV) r *= exDilationUpgradeStrength(x)
 	if (player.dilation.upgrades.includes("ngp3c8") && player.aarexModifications.ngp3c && x!=3) r *= getDil85Mult()
-	if (x==6 && player.masterystudies.includes("t267")) r *= 1.5
+	if (x==6) {
+		if (player.masterystudies.includes("t267")) r *= 1.5
+		r *= getECReward(14, true)
+	}
 	return r
 }
 

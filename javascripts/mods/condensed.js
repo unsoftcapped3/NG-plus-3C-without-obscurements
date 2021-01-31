@@ -603,6 +603,7 @@ function getMetaCondenserTarget(x) {
 function getMetaCondenserPow() {
 	let ret = new Decimal(1)
 	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
+	ret = ret.times(getECReward(14, true))
 	return ret;
 }
 

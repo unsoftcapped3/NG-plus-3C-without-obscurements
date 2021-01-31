@@ -286,7 +286,7 @@ function setR14Tooltip(){
 
 	//ACHIEVEMENT ROW 14 (NG++)
 	noninth.setAttribute('ach-tooltip', "Buy an Eighth Meta Dimension. Reward: All meta-dimensions are 10% stronger, and you start with 100 meta-antimatter on reset.")
-	onlywar.setAttribute('ach-tooltip', "Reach "+shortenMoney(new Decimal('1e40000'))+" EP."+(onlywarReward!=""?" Reward: " + onlywarReward + ".":""))
+	onlywar.setAttribute('ach-tooltip', "Reach "+shortenMoney(new Decimal(player.aarexModifications.ngp3c?'1e2550':'1e40000'))+" EP."+(onlywarReward!=""?" Reward: " + onlywarReward + ".":""))
 	thecap.setAttribute('ach-tooltip', "Get "+shortenDimensions(1e12)+" eternities. Reward: Eternity Upgrade 2 uses a better formula.")
 	neverenough.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e100000"))+" replicanti. "+(player.aarexModifications.ngp3c?("Reward: You can always buy max RGs."):("Reward: You unlock the option to buy the maximum Replicanti Galaxies available.")))
 	harmony.setAttribute('ach-tooltip', player.meta?"Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger.":"Get the same amount (at least 300) of normal, replicanti, and free galaxies.")

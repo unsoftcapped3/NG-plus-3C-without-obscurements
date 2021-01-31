@@ -506,7 +506,7 @@ function infUpg11Pow() {
 	if (player.aarexModifications.ngp3c) pow *= Math.log10(player.money.plus(1).log10()+1)*3+1
 	
 	if (player.galacticSacrifice) return Math.max(Math.pow(player.totalTimePlayed / 864e3, 0.75*pow), 1)
-	else return Math.max(Math.pow(player.totalTimePlayed / 1200, 0.15*pow), 1)
+	else return Math.min(Math.max(Math.pow(player.totalTimePlayed / 1200, 0.15*pow), 1), Number.MAX_VALUE)
 }
 
 function infUpg13Pow() {
