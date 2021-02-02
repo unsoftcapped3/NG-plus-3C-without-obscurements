@@ -105,6 +105,7 @@ function doQuantumResetStuff(bigRip, challid){
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
 	player.eternityUpgrades = isRewardEnabled(3) && (!bigRip || player.quantum.bigRip.upgrades.includes(12)) ? [1,2,3,4,5,6] : []
+	if (isRewardEnabled(3) && (!bigRip || player.quantum.bigRip.upgrades.includes(12)) && player.aarexModifications.ngp3c) player.eternityUpgrades = [1,2,3,4,5,6,10,11,12]
 	player.epmult = new Decimal(1)
 	player.epmultCost = new Decimal(500)
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
@@ -179,6 +180,7 @@ function doQuantumResetStuff(bigRip, challid){
 			4: 0,
 		}
 	}
+	if (speedrunMilestonesReached > 5 && isRewardEnabled(4) && (!bigRip || tmp.qu.bigRip.upgrades.includes(12)) && player.aarexModifications.ngp3c) player.dilation.upgrades = [4,5,6,7,8,9,"ngpp1","ngpp2","ngp3c1","ngp3c2","ngp3c3","ngp3c4","ngp3c5","ngp3c6","ngp3c7","ngp3c8"]
 	player.exdilation = player.exdilation != undefined ? {
 		unspent: new Decimal(0),
 		spent: {
@@ -298,43 +300,43 @@ function doNormalChallengeResetStuff(){
 			
 function completelyResetTimeDimensions(){
 	player.timeDimension1 = {
-		cost: new Decimal(1),
+		cost: timeDimCost(1, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0
 	}
 	player.timeDimension2 = {
-		cost: new Decimal(5),
+		cost: timeDimCost(2, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0
 	}
 	player.timeDimension3 = {
-		cost: new Decimal(100),
+		cost: timeDimCost(3, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0
 	}
 	player.timeDimension4 = {
-		cost: new Decimal(1000),
+		cost: timeDimCost(4, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0
 	}
 	player.timeDimension5 = {
-		cost: new Decimal("1e2350"),
+		cost: timeDimCost(5, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0
 	}
 	player.timeDimension6 = {
-		cost: new Decimal("1e2650"),
+		cost: timeDimCost(6, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0
 	}
 	player.timeDimension7 = {
-		cost: new Decimal("1e3000"),
+		cost: timeDimCost(7, 0),
 		amount: new Decimal(0),
 		power: new Decimal(1),
 		bought: 0

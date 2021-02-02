@@ -161,6 +161,7 @@ function quarkGain() {
 function getQuarkMult() {
 	x = Decimal.pow(2, tmp.qu.multPower.total)
 	if (player.achievements.includes("ng3p93")) x = x.times(500)
+	if (player.masterystudies.includes("t270") && player.aarexModifications.ngp3c) x = x.times(2)
 	return x
 }
 
@@ -461,14 +462,16 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		ipMultPower = GUBought("gb3") ? 2.3 : player.masterystudies.includes("t241") ? 2.2 : 2
 		player.dilation.times = 0
 		if (!force) {
-			var u = tmp.qu.usedQuarks
-			var g = tmp.qu.gluons
-			var p = ["rg", "gb", "br"]
-			var d = []
-			for (var c = 0; c < 3; c++) d[c] = u[p[c][0]].min(u[p[c][1]])
-			for (var c = 0; c < 3; c++) {
-				g[p[c]] = g[p[c]].add(d[c]).round()
-				u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
+			if (!player.aarexModifications.ngp3c) {
+				var u = tmp.qu.usedQuarks
+				var g = tmp.qu.gluons
+				var p = ["rg", "gb", "br"]
+				var d = []
+				for (var c = 0; c < 3; c++) d[c] = u[p[c][0]].min(u[p[c][1]])
+				for (var c = 0; c < 3; c++) {
+					g[p[c]] = g[p[c]].add(d[c]).round()
+					u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
+				}
 			}
 			var qc = tmp.inQCs
 			var intensity = qc.length
@@ -601,6 +604,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		else tmp.qu.wasted = (!isRewardEnabled(11) || bigRip) && tmp.qu.bigRip.storedTS === undefined
 		if (bigRip ? tmp.qu.bigRip.upgrades.includes(12) : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
 			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !player.aarexModifications.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
+			if (player.aarexModifications.ngp3c) player.dilation.upgrades.push("ngp3c9")
 			if (player.aarexModifications.nguspV) {
 				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)
 				for (var i = 4; i < 23; i++) if (player.dilation.upgrades.includes(getDilUpgId(i))) player.dilation.autoUpgrades.push(i)

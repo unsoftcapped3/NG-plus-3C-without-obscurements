@@ -485,6 +485,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button class="timestudylocked" id="timestudy270" onclick='buyMasteryStudy("t", 270)' style="font-size: 9px"></button></td>
 						<td><button class="timestudylocked" id="dilstudy7" onclick='buyMasteryStudy("d", 7)'>Unlock Electrons</span><br><span id="ds7Cost"></span><span id="ds7Req"></span></button></td>
 					</tr>
 				</table>
@@ -4903,13 +4904,13 @@
 				<table class='qtable' id="colorDimTranslations">
 					<tr>
 						<td class="rqC">
-							Translated to <span class="red" id="redDimTranslation" style="font-size:35px">0.0</span>x faster normal Dimension productions.</p>
+							Translated to <span class="red" id="redDimTranslation" style="font-size:35px">0.0</span>x faster normal Dimension productions (boosted by antimatter).</p>
 						</td>
 						<td>
-							Translated to <span class="green" id="greenDimTranslation" style="font-size:35px">0</span>x faster Infinity Dimension productions.</p>
+							Translated to <span class="green" id="greenDimTranslation" style="font-size:35px">0</span>x faster Infinity Dimension productions (boosted by infinity power).</p>
 						</td>
 						<td class="bqC">
-							Translated to <span class="blue" id="blueDimTranslation" style="font-size:35px">1.0</span>x faster Time Dimension productions.</span>
+							Translated to <span class="blue" id="blueDimTranslation" style="font-size:35px">1.0</span>x faster Time Dimension productions (boosted by time shards).</span>
 						</td>
 					</tr><tr style="vertical-align: 0">
 						<td></td>
@@ -4923,9 +4924,9 @@
 			<div class='quantumtab' id='gluons'>
 				<div>Your quantum worth (sum of quarks, colored quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth2">0</b>.</div>
 				<table id='gluonupgrades'><tr>
-					<td class="rqC" colspan=2><p>You have <span id="rg" style="font-size:35px">0</span> red-green gluons.<br>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red quarks to <span id='rgnext'>0</span>.</p></td>
-					<td class="gqC" colspan=2><p>You have <span id="gb" style="font-size:35px">0</span> green-blue gluons.<br>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green quarks to <span id='gbnext'>0</span>.</p></td>
-					<td class="bqC" colspan=2><p>You have <span id="br" style="font-size:35px">0</span> blue-red gluons.<br>You will gain <span id='brgain'>0</span> on next quantum,<br>but reduce your blue quarks to <span id='brnext'>0</span>.</p></td>
+					<td class="rqC" colspan=2><p>You have <span id="rg" style="font-size:35px">0</span> red-green gluons.<span id="rggainCont"><br>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red quarks to <span id='rgnext'>0</span>.</span></p></td>
+					<td class="gqC" colspan=2><p>You have <span id="gb" style="font-size:35px">0</span> green-blue gluons.<span id="gbgainCont"><br>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green quarks to <span id='gbnext'>0</span>.</span></p></td>
+					<td class="bqC" colspan=2><p>You have <span id="br" style="font-size:35px">0</span> blue-red gluons.<span id="brgainCont"><br>You will gain <span id='brgain'>0</span> on next quantum,<br>but reduce your blue quarks to <span id='brnext'>0</span>.</span></p></td>
 				</tr><tr id="gluonCharger1">
 					<td colspan=6>You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quark energy, which allows you to generate up to <span id="quarkEnergyGluons" style="font-size:25px">0</span> gluons.</td>
 				</tr><tr id="gluonCharger2">

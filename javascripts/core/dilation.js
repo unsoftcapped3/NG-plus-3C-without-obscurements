@@ -50,7 +50,7 @@ function getDilTimeGainPerSecond() {
 }
 
 function getDTGainExp(){
-	let exp = GUBought("br3") ? 1.1 : 1
+	let exp = GUBought("br3") ? (player.aarexModifications.ngp3c ? 1.2 : 1.1) : 1
 	if (ghostified && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
 	return exp
 }
@@ -281,7 +281,7 @@ const DIL_UPG_COSTS = {
 	  ngp3c6: 4e21,
 	  ngp3c7: 3e23,
 	  ngp3c8: 1e24,
-	  ngp3c9: 1e45,
+	  ngp3c9: 1e40,
 }
 
 const DIL_UPG_OLD_POS_IDS = {
@@ -371,6 +371,7 @@ function isDilUpgUnlocked(id) {
 	}
 	if (ngc) {
 		let r = player.aarexModifications.ngp3c !== undefined
+		if (ngc >= 9) r = r && player.dilation.studies.includes(6)
 		return r;
 	}
 	return true

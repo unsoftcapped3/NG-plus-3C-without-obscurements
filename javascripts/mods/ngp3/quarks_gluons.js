@@ -178,6 +178,7 @@ function updateColorCharge() {
 function getColorPowerProduction(color) {
 	let ret = new Decimal(colorCharge[color])
 	if (!tmp.ngp3l) ret = ret.add(colorCharge.qwBonus)
+	if (player.masterystudies.includes("t270") && player.aarexModifications.ngp3c) ret = ret.times(getMTSMult(270));
 	return ret
 }
 
@@ -321,11 +322,14 @@ function getQuarkEnergyGain(ma) {
 	let x = (ma.log10() - Math.log10(Number.MAX_VALUE) * 1.4) / 280
 	if (x < 0) x = -Math.pow(-x, 1.5)
 	else x = Math.pow(x, 1.5)
+	if (x >= 1.5 && player.aarexModifications.ngp3c) x = Math.sqrt(x*1.5);
 	return Decimal.pow(10, x)
 }
 
 function getQuarkEnergyGainMult() {
-	return 0.75
+	let mult = new Decimal(0.75)
+	if (player.masterystudies.includes("t270") && player.aarexModifications.ngp3c) mult = mult.times(getMTSMult(270));
+	return mult;
 }
 
 function generateGluons(mix) {
@@ -423,10 +427,11 @@ function getBR1Effect() {
 }
 
 function getRG3Effect() {
-	if (tmp.ngp3l || !player.achievements.includes("ng3p24")) return player.resets
+	let baseExp = player.aarexModifications.ngp3c ? 2 : 1
+	if (tmp.ngp3l || !player.achievements.includes("ng3p24")) return Decimal.pow(player.resets, baseExp)
 	let exp = Math.sqrt(player.meta.resets)
 	if (exp > 36) exp = 6 * Math.sqrt(exp)
-	return Decimal.pow(player.resets, exp)
+	return Decimal.pow(player.resets, exp*baseExp)
 }
 
 function getGU8Effect(type) {
@@ -538,9 +543,13 @@ function updateQuarksTabOnUpdate(mode) {
 	var gl = tmp.qu.gluons
 	for (var p = 0; p < 3; p++) {
 		var pair = (["rg", "gb", "br"])[p]
-		var diff = uq[pair[0]].min(uq[pair[1]])
-		document.getElementById(pair + "gain").textContent = shortenDimensions(diff)
-		document.getElementById(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
+		document.getElementById(pair + "gainCont").style.display = player.aarexModifications.ngp3c ? "none" : ""
+		
+		if (!player.aarexModifications.ngp3c) {
+			var diff = uq[pair[0]].min(uq[pair[1]])
+			document.getElementById(pair + "gain").textContent = shortenDimensions(diff)
+			document.getElementById(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
+		}
 	}
 	document.getElementById("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
 	document.getElementById("bluePowerMDEffect").style.display = player.masterystudies.includes("t383") ? "" : "none"
