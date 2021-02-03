@@ -707,4 +707,7 @@ function updateCondenseTemp() {
 
 	tmp.cnd.ic9 = getIC9Eff()
 	tmp.cnd.extraInf = getExtraInfConds()
+	
+	if (!tmp.cnd.elec) tmp.cnd.elec = {}
+	tmp.cnd.elec.eff = getElecCondEff()
 }

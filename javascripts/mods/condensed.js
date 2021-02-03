@@ -10,6 +10,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 			time: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			meta: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			repl: 0,
+			elec: 0,
 			obsc: {},
 		}
 	}
@@ -17,6 +18,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (player.condensed.repl === undefined) player.condensed.repl = 0
 	if (player.condensed.time === undefined) player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.condensed.meta === undefined) player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+	if (player.condensed.elec === undefined) player.condensed.elec = 0
 	if (player.infchallengeTimes[9] === undefined) {
 		player.infchallengeTimes.push(600*60*24*31)
 		player.infchallengeTimes.push(600*60*24*31)
@@ -34,6 +36,9 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (resetNum>=5) {
 		player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 		player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+	}
+	if (resetNum>=6) {
+		player.condensed.elec = 0
 	}
 	
 	if (preVer<1.1) {
@@ -639,4 +644,39 @@ function maxMetaCondense(x) {
 
 function isIC10Trapped() {
 	return player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c
+}
+
+function updateElecCond() {
+	document.getElementById("elecCond").textContent = getFullExpansion(player.condensed.elec)
+	document.getElementById("elecCondEff").textContent = getFullExpansion(tmp.cnd?Math.round(tmp.cnd.elec.eff*100)/100:1)
+	let cost = getElecCondenseCost()
+	document.getElementById("elecCondenseReq").textContent = getFullExpansion(cost)
+	document.getElementById("elecCondense").className = "gluonupgrade "+((tmp.qu.electrons.amount>=cost)?"storebtn":"unavailablebtn")
+}
+
+function getElecCondenseCost() {
+	let lvl = player.condensed.elec;
+	if (lvl>=3) lvl = Math.pow(lvl, Math.log(lvl)/Math.log(3))
+	return Math.floor(3000*Math.pow(lvl+1, 0.3))
+}
+
+function getElecCondenseTarget() {
+	return 0
+}
+
+function elecCondense(max=false) {
+	if (!player.masterystudies.includes("d7")) return
+	if (!player.aarexModifications.ngp3c) return
+	let cost = getElecCondenseCost()
+	if (tmp.qu.electrons.amount<cost) return;
+	if (max) player.condensed.elec = Math.max(player.condensed.elec, getElecCondenseTarget())
+	else player.condensed.elec++;
+	if (!max) tmp.qu.electrons.amount -= cost;
+}
+
+function getElecCondEff() {
+	let e = tmp.qu.electrons.amount;
+	let c = player.condensed.elec;
+	if (c<=2) return Math.pow(Math.log(e+1)/Math.log(2)+1, c)
+	else return Math.pow(Math.log(e+1)/Math.log(2)+1, 2)*Math.sqrt(c-1)
 }

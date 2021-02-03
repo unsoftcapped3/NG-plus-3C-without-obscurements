@@ -492,14 +492,14 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy271" style='font-size:10px' onclick='buyMasteryStudy("t", 271)'></button></td>
-						<td><button class="timestudylocked" id="timestudy272" onclick='buyMasteryStudy("t", 272)'></button></td>
+						<td><button class="timestudylocked" id="timestudy272" style="font-size:10px" onclick='buyMasteryStudy("t", 272)'></button></td>
 						<td><button class="timestudylocked" id="timestudy273" onclick='buyMasteryStudy("t", 273)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy281" style='font-size:10px' onclick='buyMasteryStudy("t", 281)'></button></td>
-						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
+						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)' style="font-size: 10px">Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
 						<td><button class="timestudylocked" id="timestudy282" style='font-size:10px' onclick='buyMasteryStudy("t", 282)'></button></td>
 					</tr>
 				</table>
@@ -4947,7 +4947,7 @@
 						<button class="storebtn" id='rg4toggle' onclick='toggleRG4Upg()' style='width:142.5px; height:15px; font-size:9px'>Toggle: ON</button>
 					</td>
 					<td><button id='gbupg3' onclick='buyGluonUpg("gb",3)'>The IP mult multiplies IP gain by 2.3x per upgrade.<br>Cost: 4 GB gluons</button></td>
-					<td><button id='gbupg4' onclick='buyGluonUpg("gb",4)'>Massively decrease the tickspeed cost multiplier increase to 1.25x.<br>Cost: 100 GB gluons</button></td>
+					<td><button id='gbupg4' onclick='buyGluonUpg("gb",4)'>Massively decrease the tickspeed cost multiplier increase to <span id="gbupg4current">1.25</span>x.<br>Cost: 100 GB gluons</button></td>
 					<td><button id='brupg3' onclick='buyGluonUpg("br",3)'>Tachyon particles slightly boost dilated time production.<br>Cost: 4 BR gluons</button></td>
 					<td><button id='brupg4' onclick='buyGluonUpg("br",4)'>Multiplier per ten dimensions boosts Meta Dimensions.<br><span id='brupg4current'></span><br>Cost: 100 BR gluons</button></td>
 				</tr><tr id='gupgrow3'>
@@ -5035,7 +5035,11 @@
 					<td><button class='gluonupgrade storebtn' id='electronupg2' onclick='buyElectronUpg(2)'></button></td>
 					<td><button class='gluonupgrade storebtn' id='electronupg3' onclick='buyElectronUpg(3)'></button></td>
 					<td><button class='gluonupgrade storebtn' id='electronupg4' onclick='buyElectronUpg(4)'></button></td>
-				</tr></table>
+				</tr></table><br>
+				<div id="elecNGP3C" style="display: none;">
+					<br><br><span style="font-size: 15px;">You have <span id="elecCond"  style="font-size:23px; color: black"></span> Electron Condensers, which are making Electrons multiply their effect by <span id="elecCondEff"  style="font-size:23px; color: black"></span>.</span><br><br>
+					<button id="elecCondense" class="storebtn" onclick="elecCondense()"  style="width: 200px; height: 70px; font-size: 12px">Create an Electron Condenser<br>Cost: <span id="elecCondenseReq"></span> Electrons</button><br><br>
+				</div><br><br>
 			</div>
 			<div class='quantumtab' id='replicants'>
 				You have <span id="replicantiAmount2">1</span> replicantis.<br>

@@ -57,6 +57,7 @@ function getMetaDimensionGlobalMultiplier() {
 	if (tmp.ngp3) {
 		//Mastery Study Boosts
 		if (player.masterystudies.includes("t262")) ret = ret.times(getMTSMult(262))
+		if (player.aarexModifications.ngp3c && player.masterystudies.includes("t272")) ret = ret.times(Decimal.pow(2, masteryStudies.bought||0))
 		if (player.masterystudies.includes("t282")) ret = ret.times(getMTSMult(282))
 		if (player.masterystudies.includes("t303")) ret = ret.times(getMTSMult(303))
 		if (player.masterystudies.includes("t351")) ret = ret.times(getMTSMult(351))
@@ -65,7 +66,7 @@ function getMetaDimensionGlobalMultiplier() {
 		if (player.masterystudies.includes("t383")) ret = ret.times(getMTSMult(383))
 		if (player.masterystudies.includes("t393")) ret = ret.times(getMTSMult(393))
 		//Qunatum Upgrades
-		if (GUBought("br4")) ret = ret.times(Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1))
+		if (GUBought("br4")) ret = ret.times(getBR4Effect())
 		//QC Rewards
 		ret = ret.times(tmp.qcRewards[3])
 		ret = ret.times(tmp.qcRewards[6])

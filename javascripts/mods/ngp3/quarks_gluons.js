@@ -360,7 +360,7 @@ function buyGluonUpg(color, id) {
 		player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
 	}
 	if (name == "rg4" && !tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
-	if (name == "gb4") player.tickSpeedMultDecrease = 1.25
+	if (name == "gb4") player.tickSpeedMultDecrease = player.aarexModifications.ngp3c?1.1:1.25
 	updateQuantumWorth()
 	updateGluonsTabOnUpdate()
 }
@@ -375,11 +375,11 @@ function buyQuarkMult(name) {
 	tmp.qu.gluons[name] = tmp.qu.gluons[name].sub(cost).round()
 	tmp.qu.multPower[name]++
 	tmp.qu.multPower.total++
-	updateGluonsTab("spend")
 	if (tmp.qu.autobuyer.mode === 'amount') {
 		tmp.qu.autobuyer.limit = Decimal.times(tmp.qu.autobuyer.limit, 2)
 		document.getElementById("priorityquantum").value = formatValue("Scientific", tmp.qu.autobuyer.limit, 2, 0);
 	}
+	updateGluonsTabOnUpdate("spend")
 }
 
 function maxQuarkMult() {
@@ -434,6 +434,13 @@ function getRG3Effect() {
 	return Decimal.pow(player.resets, exp*baseExp)
 }
 
+function getBR4Effect() {
+	let exp = player.aarexModifications.ngp3c?0.00002:0.0003
+	let ret = Decimal.pow(getDimensionPowerMultiplier(hasNU(13) && "no-rg4"), exp).max(1)
+	if (player.aarexModifications.ngp3c) ret = Decimal.pow(10, Math.sqrt(ret.log10()))
+	return ret;
+}
+
 function getGU8Effect(type) {
 	return Math.pow(tmp.qu.gluons[type].div("1e565").add(1).log10() * 0.505 + 1, 1.5)
 }
@@ -471,7 +478,8 @@ function updateGluonsTab() {
 	document.getElementById("rgupg2current").textContent = "Currently: " + (Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25) * 100 - 100).toFixed(1) + "%"
 	document.getElementById("brupg2current").textContent = "Currently: " + shortenMoney(Decimal.pow(2.2, Math.pow(tmp.sacPow.log10() / 1e6, 0.25))) + "x"
 	document.getElementById("rgupg3current").textContent = "Currently: " + shorten(getRG3Effect()) + "x"
-	document.getElementById("brupg4current").textContent = "Currently: " + shortenMoney(Decimal.pow(getDimensionPowerMultiplier(hasNU(13) && "no-rg4"), 0.0003).max(1)) + "x"
+	document.getElementById("gbupg4current").textContent = player.aarexModifications.ngp3c?"1.1":"1.25"
+	document.getElementById("brupg4current").textContent = "Currently: " + shortenMoney(getBR4Effect()) + "x"
 	if (player.masterystudies.includes("d9")) {
 		document.getElementById("gbupg5current").textContent = "Currently: " + (Math.sqrt(player.replicanti.galaxies) / 5.5).toFixed(1) + "%"
 		document.getElementById("brupg5current").textContent = "Currently: " + Math.min(Math.sqrt(player.dilation.tachyonParticles.max(1).log10())*1.3,14).toFixed(1) + "%"
@@ -597,6 +605,7 @@ function updateGluonsTabOnUpdate(mode) {
 		}
 	}
 	if (mode == undefined || mode == "display") document.getElementById("qkmultcurrent").textContent = shortenDimensions(Decimal.pow(2, tmp.qu.multPower.total))
+	document.getElementById("rgupg4").innerHTML = player.aarexModifications.ngp3c?"Galaxies are 50% stronger.<br>Cost: 100 RG gluons":"Galaxies are 50% stronger, but electrons are 30% weaker and normal galaxies are 60% weaker.<br>Cost: 100 RG gluons"
 }
 
 //Quarks animation

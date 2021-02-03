@@ -5,6 +5,8 @@ function updateElectronsTab() {
 	document.getElementById("electronsGain").textContent = getFullExpansion(Math.floor(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0) * getElectronGainFinalMult()))
 	for (var u = 1; u < 5; u++) document.getElementById("electronupg" + u).className = "gluonupgrade " + (canBuyElectronUpg(u) ? "stor" : "unavailabl") + "ebtn"
 	if (tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	document.getElementById("elecNGP3C").style.display = player.aarexModifications.ngp3c?"":"none"
+	if (player.aarexModifications.ngp3c) updateElecCond()
 }
 
 function updateElectrons(retroactive) {
@@ -53,8 +55,9 @@ function getElectronBoost(mod) {
 	if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
 	
 	if (amount > 37460 + s) amount = Math.sqrt((amount-s) * 37460) + s
-	if (tmp.rg4 && mod != "no-rg4") amount *= 0.7
+	if (tmp.rg4 && mod != "no-rg4" && !player.aarexModifications.ngp3c) amount *= 0.7
 	if (player.masterystudies !== undefined && player.masterystudies.includes("d13") && mod != "noTree") amount *= getTreeUpgradeEffect(4)
+	if (player.aarexModifications.ngp3c && tmp.cnd) amount *= tmp.cnd.elec.eff
 	return amount + 1
 }
 
@@ -70,6 +73,7 @@ function getElectronGainFinalMult() {
 
 function getElectronUpgCost(u) {
 	var amount = tmp.qu.electrons.rebuyables[u-1]
+	if (player.aarexModifications.ngp3c && u==3) amount *= 2
 	if (hasBosonicUpg(33)) amount -= tmp.blu[33]
 	var base = amount * Math.max(amount - 1, 1) + 1
 	var exp = getElectronUpgCostScalingExp(u)
@@ -77,7 +81,8 @@ function getElectronUpgCost(u) {
 		if (base < 0) base = -Math.pow(-base, exp)
 		else base = Math.pow(base, exp)
 	}
-	base += ([null, 82, 153, 638, 26])[u]
+	if (player.aarexModifications.ngp3c) base += ([null, 82, 130, 599, 13])[u]
+	else base += ([null, 82, 153, 638, 26])[u]
 
 	if (u == 1) return Math.pow(10, base)
 	if (u == 4) return Math.max(Math.floor(base), 0)

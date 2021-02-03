@@ -566,7 +566,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		updateColorCharge()
 		updateColorDimPowers()
 		updateGluonsTabOnUpdate()
-		let dontshowrg4 = inQC(1) || QCIntensity(1) > 0 || ghostified
+		let dontshowrg4 = inQC(1) || QCIntensity(1) > 0 || ghostified || !tmp.ngp3l
 		document.getElementById('rg4toggle').style.display = dontshowrg4 ? "none" : ""
 		updateElectrons()
 		updateBankedEter()

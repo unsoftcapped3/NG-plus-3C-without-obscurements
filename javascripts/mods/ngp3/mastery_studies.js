@@ -2,36 +2,38 @@ var masteryStudies = {
 	initCosts: {
 		time: {241: 2e71, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76, 291: 2.143347050754458e77, 292: 2.143347050754458e77, 301: 8.573388203017832e77, 302: 2.6791838134430725e78, 303: 8.573388203017832e77, 311: 8.573388203017832e77, 312: 8.573388203017832e77, 321: 2.6791838134430727e76, 322: 9.324815538194444e77, 323: 2.6791838134430727e76, 331: 1.0172526041666666e79, 332: 1.0172526041666666e79, 341: 9.5367431640625e78, 342: 1.0172526041666666e79, 343: 1.0172526041666666e79, 344: 9.5367431640625e78, 351: 2.1192762586805557e79, 361: 1.5894571940104167e79, 362: 1.5894571940104167e79, 371: 2.1192762586805557e79, 372: 6.622738308376736e79, 373: 2.1192762586805557e79, 381: 6.622738308376736e79, 382: 6.622738308376736e79, 383: 6.622738308376736e79, 391: 8.27842288547092e79, 392: 8.27842288547092e79, 393: 8.27842288547092e79, 401: 4.967053731282552e80, 402: 8.278422885470921e80, 411: 1.3245476616753473e71, 412: 1.655684577094184e71, 421: 1.9868214925130208e72, 431: 1.1037897180627893e75},
 		time_legacy: {241: 1e71, 251: 2e71, 252: 2e71, 253: 2e71, 261: 5e71, 262: 5e71, 263: 5e71, 264: 5e71, 265: 5e71, 266: 5e71},
-		time_cond: {241: 1e75, 251: 5e75, 252: 5e75, 253: 5e75, 260: 1e76, 261: 5e75, 262: 5e75, 263: 1e76, 264: 1e76, 265: 5e75, 266: 5e75, 267: 1e76, 270: 1e81},
+		time_cond: {241: 1e75, 251: 5e75, 252: 5e75, 253: 5e75, 260: 1e76, 261: 5e75, 262: 5e75, 263: 1e76, 264: 1e76, 265: 5e75, 266: 5e75, 267: 1e76, 270: 1e81, 271: 5e76, 272: 2e77, 273: 5e76, 281: 1e77, 282: 1e77},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		ec_legacy: {13: 1e72, 14: 1e72},
 		ec_cond: {13: 2.5e75, 14: 2.5e75},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e94, 14: 1e97},
 		dil_legacy: {7: 2e82, 8: 2e84, 9: 4e85, 10: 4e87, 11: 3e90, 12: 3e92, 13: 1e95, 14: 1e98},
-		dil_cond: {7: 1e82},
+		dil_cond: {7: 1e82, 8: 1e83},
 	},
 	costs: {
 		time: {},
 		time_mults: {241: 1, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4, 291: 1, 292: 1, 301: 2, 302: 131072, 303: 2, 311: 64, 312: 64, 321: 2, 322: 2, 323: 2, 331: 2, 332: 2, 341: 1, 342: 1, 343: 1, 344: 1, 351: 4, 361: 1, 362: 1, 371: 2, 372: 2, 373: 2, 381: 1, 382: 1, 383: 2, 391: 1, 392: 1, 393: 1, 401: 1e10, 402: 1e10, 411: 1, 412: 1, 421: 1, 431: 1},
 		time_mults_legacy: {},
-		time_mults_cond: {251: 1.5, 252: 1.5, 253: 1.5, 260: 5, 261: 3, 262: 3, 263: 3, 264: 3, 265: 3, 266: 3, 267: 5, 270: 1.5},
+		time_mults_cond: {251: 1.5, 252: 1.5, 253: 1.5, 260: 5, 261: 3, 262: 3, 263: 3, 264: 3, 265: 3, 266: 3, 267: 5, 270: 1.5, 271: 1.5, 273: 1.5, 281: 1.5, 282: 1.5},
 		ec: {},
 		dil: {}
 	},
 	costMult: 1,
 	condensedOnly: [260, 267, 270],
-	hasStudyReq: [252, 260, 267, 270],
+	hasStudyReq: [252, 260, 267, 270, 272],
 	studyReqDisplays: {
 		252: function() { return "3 Normal Mastery Studies bought" },
 		260: function() { return "7 Normal Mastery Studies bought" },
 		267: function() { return "7 Normal Mastery Studies bought" },
 		270: function() { return "10 quantum worth" },
+		272: function() { return "12 Normal Mastery Studies bought" },
 	},
 	studyReqConditions: {
 		252: function() { return masteryStudies.bought>=3 },
 		260: function() { return masteryStudies.bought>=7 },
 		267: function() { return masteryStudies.bought>=7 },
 		270: function() { return quantumWorth.gte(10) },
+		272: function() { return masteryStudies.bought>=12 },
 	},
 	ecReqs: {
 		13: function() {
@@ -58,10 +60,10 @@ var masteryStudies = {
 	},
 	unlockReqConditions: {
 		7: function() {
-			return player.aarexModifications.ngp3c ? false : (tmp.ngp3l || quantumWorth.gte(50))
+			return (tmp.ngp3l&&!player.aarexModifications.ngp3c) || quantumWorth.gte(50)
 		},
 		8: function() {
-			return tmp.qu.electrons.amount >= 16750
+			return (tmp.qu.electrons.amount >= player.aarexModifications.ngp3c?8175:16750) && ((!player.aarexModifications.ngp3c) || /*quantumWorth.gte(1e3)*/ false)
 		},
 		9: function() {
 			return QCIntensity(8) >= 1
@@ -84,11 +86,10 @@ var masteryStudies = {
 	},
 	unlockReqDisplays: {
 		7: function() {
-			if (player.aarexModifications.ngp3c) return "Wait for a future update..."
-			if (!tmp.ngp3l) return "50 quantum worth"
+			if ((!tmp.ngp3l)||player.aarexModifications.ngp3c) return "50 quantum worth"
 		},
 		8: function() {
-			return getFullExpansion(16750) + " electrons"
+			return getFullExpansion(player.aarexModifications.ngp3c?8175:16750) + " electrons"+(player.aarexModifications.ngp3c?(/*" & "+shorten(1e3)+" quantum worth"*/" and wait for another update..."):"")
 		},
 		9: function() {
 			return "Complete Quantum Challenge 8"
@@ -165,7 +166,7 @@ var masteryStudies = {
 			return Decimal.max(Math.log10(player.replicanti.chance + 1), 1).pow(intensity)
 		},
 		281: function(){
-			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10 * (tmp.newNGP3E ? 2 : 1))
+			return Decimal.pow(player.aarexModifications.ngp3c?1e5:10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10 * (tmp.newNGP3E ? 2 : 1))
 		},
 		282: function(){
 			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 15 * (tmp.newNGP3E ? 2 : 1))
@@ -316,7 +317,9 @@ var masteryStudies = {
 		267: "Normal, Infinity, Time, Replicated, Dilated, and Meta Condensers are all 50% stronger.",
 		270: "Double Quark gain, and Quantum Worth boosts Color Power & Quark Energy gain.",
 		271: "You can buy beyond 1ms interval upgrades, but the cost begins to increase faster.",
-		272: "You can buy all Time Studies in all 3-way splits.",
+		272: function() { 
+			return player.aarexModifications.ngp3c?"Normal Mastery Studies double Meta Dimensions.":"You can buy all Time Studies in all 3-way splits."
+		},
 		273: "Replicate chance boosts itself.",
 		281: "Replicanti multiplier boosts DT production at a greatly reduced rate.",
 		282: "Replicanti multiplier boosts Meta Dimensions at a greatly reduced rate.",
