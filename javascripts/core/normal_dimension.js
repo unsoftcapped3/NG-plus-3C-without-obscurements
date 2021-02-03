@@ -106,7 +106,7 @@ function getStartingNDMult(tier){
 
 function getDimensionFinalMultiplier(tier) {
 	let mult = getStartingNDMult(tier)
-	if (player.aarexModifications.ngp3c) if (tmp.cnd.nrm) mult = mult.times(tmp.cnd.nrm[tier])
+	if (player.aarexModifications.ngp3c && tmp.cnd) if (tmp.cnd.nrm) mult = mult.times(tmp.cnd.nrm[tier])
 	
 	if ((tier == 8) || player.aarexModifications.ngp3c) mult = mult.times(getTotalSacrificeBoost())
 	
@@ -256,7 +256,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 		ret = Decimal.times(ret, Math.log10(player.resets + 1) + 1)
 		ret = Decimal.times(ret, Math.log10(Math.max(player.galaxies, 0) + 1) * 5 + 1)
 	}
-	return ret
+	return player.aarexModifications.ngp3c?softcap(ret, "ngp3cMPTD"):ret
 }
 	
 function getMPTBase(focusOn) {

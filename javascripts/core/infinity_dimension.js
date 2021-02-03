@@ -131,7 +131,11 @@ function DimensionPower(tier) {
   	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || (player.currentEternityChall == "eterc13"&&!player.aarexModifications.ngp3c)) return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
   	if (player.currentEternityChall == 'eterc14') return player.aarexModifications.ngp3c?new Decimal(1):getIDReplMult()
-  	if (inQC(3)) return getExtraDimensionBoostPower()
+  	if (inQC(3)) {
+		let ret = getExtraDimensionBoostPower()
+		if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cIDs")
+		return ret;
+	}
   	
 	var mult = getStartingIDPower(tier)
 	

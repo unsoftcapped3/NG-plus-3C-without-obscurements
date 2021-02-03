@@ -693,10 +693,18 @@ var softcap_data = {
 			derv: false,
 		},
 	},
+	ngp3cMPTD: {
+		1: {
+			func: "expPow",
+			start: new Decimal("1e8000000"),
+			pow: 0.95,
+		},
+	},
 }
 
 var softcap_vars = {
 	pow: ["start", "pow", "derv"],
+	expPow: ["start", "pow"],
 	log: ["pow", "mul", "add"],
 	logshift: ["shift", "pow", "add"]
 }
@@ -721,6 +729,26 @@ var softcap_funcs = {
 		if (Decimal.gt(x, start)) {
 			x = Decimal.div(x, start).pow(pow)
 			if (derv) x = x.sub(1).div(pow).add(1)
+			x = x.times(start)
+			return x
+		}
+		return x
+	},
+	expPow: function(x, start, pow) {
+		if (typeof start == "function") start = start()
+		if (typeof pow == "function") pow = pow()
+		if (x > start) {
+			x = Math.pow(10, Math.pow(Math.log10(x / start), pow))
+			x *= start
+			return x
+		} 
+		return x
+	},
+	expPow_decimal: function(x, start, pow) {
+		if (typeof start == "function") start = start()
+		if (typeof pow == "function") pow = pow()
+		if (Decimal.gt(x, start)) {
+			x = Decimal.pow(10, Decimal.pow(Decimal.div(x, start).log10(), pow))
 			x = x.times(start)
 			return x
 		}

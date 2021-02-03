@@ -1,6 +1,8 @@
 var quantumChallenges = {
 	costs:[0, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600],
-	goals:[0, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10]
+	goals:[0, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10],
+	cond_costs: [0, 8175, 9000, 10050, 10725, 25900, 28900, 31300, 33600],
+	cond_goals: [0, 4.34e8, 2.465e9, 2.6225e9, 2.045e9, 1.344e10, 5.61e8, 6.254e10, 2.925e10],
 }
 
 var assigned = []
@@ -90,6 +92,7 @@ function getQCGoal(num, bigRip) {
 	var c2 = 0
 	var mult = 1
 	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
+	let goalData = quantumChallenges[player.aarexModifications.ngp3c?"cond_goals":"goals"]
 	if (num == undefined) {
 		var data = tmp.inQCs
 		if (data[0]) c1 = data[0]
@@ -100,15 +103,15 @@ function getQCGoal(num, bigRip) {
 		c1 = tmp.qu.pairedChallenges.order[num - 8][0]
 		c2 = tmp.qu.pairedChallenges.order[num - 8][1]
 	}
-	if (c1 == 0) return quantumChallenges.goals[0] * mult
-	if (c2 == 0) return quantumChallenges.goals[c1] * mult
+	if (c1 == 0) return goalData[0] * mult
+	if (c2 == 0) return goalData[c1] * mult
 	var cs = [c1, c2]
 	mult *= mult
 	if (cs.includes(1) && cs.includes(3)) mult *= 1.6
 	if (cs.includes(2) && cs.includes(6)) mult *= 1.7
 	if (cs.includes(3) && cs.includes(7)) mult *= 2.68
 	if (!tmp.ngp3l && cs.includes(3) && cs.includes(6)) mult *= 3
-	return quantumChallenges.goals[c1] * quantumChallenges.goals[c2] / 1e11 * mult
+	return goalData[c1] * goalData[c2] / 1e11 * mult
 }
 
 function QCIntensity(num) {
@@ -197,7 +200,8 @@ let qcRewards = {
 			if (comps == 0) return 1
 			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
-			return Decimal.pow(10, Math.pow(base, exp) / 200)
+			let div = player.aarexModifications.ngp3c?(25/Math.pow(3, comps)):200
+			return Decimal.pow(10, Math.pow(base, exp) / div)
 		},
 		2: function(comps) {
 			if (comps == 0) return 1
@@ -205,9 +209,11 @@ let qcRewards = {
 		},
 		3: function(comps) {
 			if (comps == 0) return 1
+			let exp = Math.log10(player.quantum.gluons.gb.plus(1).log10()+1)*3+1
 			let ipow = player.infinityPower.plus(1).log10()
 			let log = Math.sqrt(ipow / 2e8) 
 			if (comps >= 2) log += Math.pow(ipow / 1e9, 4/9 + comps/9)
+			log *= exp;
 			
 			log = softcap(log, "qc3reward")
 			return Decimal.pow(10, log)
@@ -245,8 +251,9 @@ function updateQCRewardsTemp() {
 
 function getQCCost(num) {
 	if (player.achievements.includes("ng3p55")) return 0
-	if (num > 8) return quantumChallenges.costs[tmp.qu.pairedChallenges.order[num - 8][0]] + quantumChallenges.costs[tmp.qu.pairedChallenges.order[num - 8][1]]
-	return quantumChallenges.costs[num]
+	let costData = quantumChallenges[player.aarexModifications.ngp3c?"cond_costs":"costs"]
+	if (num > 8) return costData[tmp.qu.pairedChallenges.order[num - 8][0]] + costData[tmp.qu.pairedChallenges.order[num - 8][1]]
+	return costData[num]
 }
 
 function showQCModifierStats(id) {

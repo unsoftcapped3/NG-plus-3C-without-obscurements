@@ -6011,10 +6011,16 @@ function passiveQuantumLevelStuff(diff){
 function TTpassiveGain(diff){
 	if (player.dilation.upgrades.includes(10)) {
 		var speed = getPassiveTTGen()
-		var div = player.timestudy.theorem / speed
-		player.timestudy.theorem += diff * speed  
-		if (div < 3600 && player.achievements.includes("ng3p44")) player.timestudy.theorem += Math.min(diff * 9, 3600 - div) * speed
-		if (player.timestudy.theorem > 1e200) player.timestudy.theorem = 1e200
+		if (nG(nMx(speed, player.timestudy.theorem), 1e200)) {
+			player.timestudy.theorem = 1e200
+			// special stuff for post-1e200 tt goes here...
+		} else {
+			speed = new Decimal(speed).toNumber();
+			var div = player.timestudy.theorem / speed
+			player.timestudy.theorem += diff * speed  
+			if (div < 3600 && player.achievements.includes("ng3p44")) player.timestudy.theorem += Math.min(diff * 9, 3600 - div) * speed
+			if (player.timestudy.theorem > 1e200) player.timestudy.theorem = 1e200
+		}
 	}
 }
 

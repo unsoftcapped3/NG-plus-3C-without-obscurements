@@ -70,6 +70,7 @@ function getDilPower() {
 		if (player.achievements.includes("ng3p11") && !tmp.ngp3l) ret = ret.times(Math.max(getTotalRG() / 125, 1))
 		if (player.masterystudies.includes("t264")) ret = ret.times(getMTSMult(264))
 		if (GUBought("br1")) ret = ret.times(getBR1Effect())
+		if (player.aarexModifications.ngp3c) ret = ret.times(tmp.qcRewards[3])
 		if (player.masterystudies.includes("t341")) ret = ret.times(getMTSMult(341))
 	}
 	if (player.dilation.rebuyables[6] && player.aarexModifications.ngp3c) ret = ret.times(Decimal.pow(getDil6Base(), getDilUpgPower(6)))
@@ -457,12 +458,11 @@ function buyDilationUpgrade(pos, max, isId) {
 }
 
 function getPassiveTTGen() {
-	if (player.dilation.tachyonParticles.plus(player.dilation.bestTP).gt(Decimal.pow(10, 3333))) return 1e202
-	let r = getTTGenPart(player.dilation.tachyonParticles)
-	if (player.achievements.includes("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
-	if (tmp.ngex) r *= .8
-	r /= (player.achievements.includes("ng3p51") ? 200 : 2e4)
-	if (isLEBoostUnlocked(6)) r *= tmp.leBonus[6]
+	let r = nP(getTTGenPart(player.dilation.tachyonParticles))
+	if (player.achievements.includes("ng3p18") && !tmp.qu.bigRip.active) r += nD(getTTGenPart(player.dilation.bestTP), 50)
+	if (tmp.ngex) r = nM(r, .8)
+	r = nD(r, (player.achievements.includes("ng3p51") ? 200 : 2e4))
+	if (isLEBoostUnlocked(6)) r = nM(r, tmp.leBonus[6])
 	return r
 }
 
@@ -471,7 +471,7 @@ function getTTGenPart(x) {
 	x = x.max(1).log10()
 	let y = player.aarexModifications.ngudpV && !player.aarexModifications.nguepV ? 73 : 80
 	if (x > y) x = Math.sqrt((x - y + 5) * 5) + y - 5
-	return Math.pow(10,x)
+	return Decimal.pow(10,x)
 }
 
 function updateDilationUpgradeButtons() {
@@ -495,7 +495,7 @@ function updateDilationUpgradeButtons() {
 	document.getElementById("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
 	document.getElementById("dil32desc").textContent = player.aarexModifications.ngp3c?"Replicated Condensers are 15% stronger.":"Unlock the ability to pick all the study paths from the first split."
 	document.getElementById("dil34desc").textContent = player.aarexModifications.ngp3c?"Eternities, TP, & DT power up each other.":"Eternities and dilated time power up each other."
-	document.getElementById("dil41desc").textContent = "Currently: " + shortenMoney(player.achievements.includes("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
+	document.getElementById("dil41desc").textContent = "Currently: " + shortenMoney(player.achievements.includes("ng3p44") && nL(nD(player.timestudy.theorem, genSpeed), 3600) ? nM(genSpeed, 10) : genSpeed)+"/s"
 	if (player.dilation.studies.includes(6)) {
 		document.getElementById("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		document.getElementById("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';

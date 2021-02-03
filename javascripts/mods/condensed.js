@@ -464,6 +464,12 @@ const OBSCUREMENTS = {
 		osID: "ND",
 		res() { return getDimensionFinalMultiplier(1) },
 	},
+	mptd: {
+		title: "Mult per 10 Normal Dimensions",
+		scID: "MPTD",
+		osID: "MPTD",
+		res() { return getDimensionPowerMultiplier() },
+	},
 	ts: {
 		title: "Tickspeed",
 		scID: "TS",

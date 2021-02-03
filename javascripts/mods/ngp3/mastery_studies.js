@@ -63,7 +63,7 @@ var masteryStudies = {
 			return (tmp.ngp3l&&!player.aarexModifications.ngp3c) || quantumWorth.gte(50)
 		},
 		8: function() {
-			return (tmp.qu.electrons.amount >= player.aarexModifications.ngp3c?8175:16750) && ((!player.aarexModifications.ngp3c) || /*quantumWorth.gte(1e3)*/ false)
+			return (tmp.qu.electrons.amount >= player.aarexModifications.ngp3c?8175:16750) && ((!player.aarexModifications.ngp3c) || quantumWorth.gte(1e3))
 		},
 		9: function() {
 			return QCIntensity(8) >= 1
@@ -89,7 +89,7 @@ var masteryStudies = {
 			if ((!tmp.ngp3l)||player.aarexModifications.ngp3c) return "50 quantum worth"
 		},
 		8: function() {
-			return getFullExpansion(player.aarexModifications.ngp3c?8175:16750) + " electrons"+(player.aarexModifications.ngp3c?(/*" & "+shorten(1e3)+" quantum worth"*/" and wait for another update..."):"")
+			return getFullExpansion(player.aarexModifications.ngp3c?8175:16750) + " electrons"+(player.aarexModifications.ngp3c?(" & "+shorten(1e3)+" quantum worth"):"")
 		},
 		9: function() {
 			return "Complete Quantum Challenge 8"

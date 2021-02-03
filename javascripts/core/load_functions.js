@@ -2041,6 +2041,8 @@ function updateNGp3DisplayStuff(){
         document.getElementById("ratio_b").value = tmp.qu.assignAllRatios.b
         document.getElementById('autoAssign').textContent="Auto: O"+(tmp.qu.autoOptions.assignQK?"N":"FF")
         document.getElementById('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
+		document.getElementById('qcrg4label').style.display = tmp.ngp3l ? "block" : "none"
+		document.getElementById("qc3effdesc").textContent = (player.aarexModifications.ngp3c ? "GB Gluons make make Infinity Power boost" : "Infinity Power boosts")+" Meta Dimensions"+(player.aarexModifications.ngp3c ? " & TP gain" : "")+" at greatly reduced rate."
         document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
         document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
         document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
