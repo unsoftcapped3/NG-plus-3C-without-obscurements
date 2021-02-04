@@ -410,7 +410,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 			if (player.ghostify.milestones < 8) tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.round()
 			if (player.matter.gt("1e5000")) giveAchievement("Really?")
 		}
-		else if (inQC(6) && inQC(8) && player.money.gt(tmp.qu.pairedChallenges.pc68best)) {
+		else if (inQC(6, true) && inQC(8, true) && player.money.gt(tmp.qu.pairedChallenges.pc68best)) {
 			tmp.qu.pairedChallenges.pc68best = player.money
 			document.getElementById("bpc68").textContent = shortenMoney(player.money)
 		}

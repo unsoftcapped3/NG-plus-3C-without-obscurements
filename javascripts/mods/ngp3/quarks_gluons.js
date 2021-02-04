@@ -195,6 +195,10 @@ colorBoosts={
 
 function getCPLog(c) {
 	var x = Decimal.add(tmp.qu.colorPowers[c], 1).log10()
+	if (player.aarexModifications.ngp3c) {
+		let intensity = {r: 100, g: 0.5, b: 0.1}[c]
+		x *= Math.log10(QCIntensity(5)*(tmp.qu.colorDimPower || 0)+1)*intensity+1
+	}
 	return x
 }
 
@@ -276,8 +280,9 @@ function updateColorDimPowers(log) {
 
 function getColorDimPowerBase(color, log) {
 	if (log == undefined) log = getCPLogs()
-	let ret = Math.pow(log[color], 3/5)
-	ret *= Math.pow((tmp.qu.colorDimPower || 0) + 1, 2/5)
+	let expMult = player.aarexModifications.ngp3c?(QCIntensity(5)+1)/5:1/5
+	let ret = Math.pow(log[color], 3*expMult)
+	ret *= Math.pow((tmp.qu.colorDimPower || 0) + 1, 2*expMult)
 	return ret
 }
 

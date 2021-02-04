@@ -187,7 +187,7 @@ function getDimensionRateOfChange(tier) {
 	if (tier == 8 || (player.currentEternityChall == "eterc3" && tier > 3)) return 0;
 
 	let toGain = getDimensionProductionPerSecond(tier + 1)
-	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = DimensionProduction(1).times(10)
+	if (tier == 7 && (player.currentEternityChall == "eterc7" || inQC("8c"))) toGain = DimensionProduction(1).times(10)
 
 	var name = TIER_NAMES[tier];
 	if (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined) {

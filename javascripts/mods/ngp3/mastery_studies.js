@@ -8,7 +8,7 @@ var masteryStudies = {
 		ec_cond: {13: 2.5e75, 14: 2.5e75},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e94, 14: 1e97},
 		dil_legacy: {7: 2e82, 8: 2e84, 9: 4e85, 10: 4e87, 11: 3e90, 12: 3e92, 13: 1e95, 14: 1e98},
-		dil_cond: {7: 1e82, 8: 1e83},
+		dil_cond: {7: 1e82, 8: 1e83, 9: 5e83},
 	},
 	costs: {
 		time: {},
@@ -66,7 +66,7 @@ var masteryStudies = {
 			return (tmp.qu.electrons.amount >= player.aarexModifications.ngp3c?8175:16750) && ((!player.aarexModifications.ngp3c) || quantumWorth.gte(1e3))
 		},
 		9: function() {
-			return QCIntensity(8) >= 1
+			return QCIntensity(8) >= 1 && (!tmp.ngp3c || tmp.qu.electrons.amount >= 1/0)
 		},
 		10: function() {
 			return tmp.qu.pairedChallenges.completed == 4
@@ -92,7 +92,7 @@ var masteryStudies = {
 			return getFullExpansion(player.aarexModifications.ngp3c?8175:16750) + " electrons"+(player.aarexModifications.ngp3c?(" & "+shorten(1e3)+" quantum worth"):"")
 		},
 		9: function() {
-			return "Complete Quantum Challenge 8"
+			return "Complete Quantum Challenge 8"+(tmp.ngp3c?(" & "+/*getFullExpansion(16750)+" electrons"*/"wait for a future update"):"")
 		},
 		10: function() {
 			return "Complete Paired Challenge 4"

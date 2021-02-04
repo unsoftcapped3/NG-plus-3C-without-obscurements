@@ -401,6 +401,7 @@ function setEverythingPreNGp3onLoad(){
 	}
 	if (player.shameLevel === undefined) player.shameLevel = 0;
         document.getElementById("break").textContent = (player.break ? "FIX" : "BREAK") + " INFINITY"
+	
 }
 
 function setAarexModIfUndefined(){
@@ -445,6 +446,7 @@ function doNGp3Init1(){
         if (player.aarexModifications.newGame3PlusVersion >= 2.2) tmp.bl = player.ghostify.bl
 	tmp.ngp3=player.masterystudies!==undefined
 	tmp.ngp3l=player.aarexModifications.ngp3lV!==undefined
+	tmp.ngp3c=player.aarexModifications.ngp3c!==undefined
 	tmp.ngex=player.aarexModifications.ngexV!==undefined
 	tmp.newNGP3E=player.aarexModifications.newGameExpVersion!==undefined&&!tmp.ngp3l
 	setNonlegacyStuff()
@@ -1992,6 +1994,8 @@ function setOtherChallDisplay(){
         document.getElementById("ic7reward").textContent="Reward: The Dimension Boost multiplier "+(player.galacticSacrifice? "is squared":" is increased to 4x.")
         document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
         document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20&&!player.aarexModifications.ngp3c?" (disabled)":"")
+		
+		document.getElementById("ec5desc").textContent = player.aarexModifications.ngp3c ? "Dimension Boost cost scaling is massively increased." : "Galaxy cost increase scaling starts instantly (Normally at 100 galaxies). Dimension Boost cost scaling is massively increased."
 }
 
 function setTSDisplay(){
@@ -2043,6 +2047,10 @@ function updateNGp3DisplayStuff(){
         document.getElementById('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
 		document.getElementById('qcrg4label').style.display = tmp.ngp3l ? "block" : "none"
 		document.getElementById("qc3effdesc").textContent = (player.aarexModifications.ngp3c ? "GB Gluons make make Infinity Power boost" : "Infinity Power boosts")+" Meta Dimensions"+(player.aarexModifications.ngp3c ? " & TP gain" : "")+" at greatly reduced rate."
+		document.getElementById("qc5effdesc").textContent = player.aarexModifications.ngp3c?'"Upgrade all the Quark boosts to Dimensions" uses a better formula, and Dimension Boosts boost the multiplier per ten Dimensions.':"Dimension Boosts boost the multiplier per ten Dimensions."
+		document.getElementById("qc6effdesc").textContent = (player.aarexModifications.ngp3c?"RG Gluons make y":"Y")+"our achievement bonus "+(player.aarexModifications.ngp3c?"boost":"boosts")+" Meta Dimensions."
+		document.getElementById("qc7effdesc").textContent = (tmp.ngp3c?"OS_TS_1-4 are 25% weaker, and t":"T")+"he free tickspeed upgrade threshold increases slower."
+		document.getElementById("qc8effdesc").textContent = tmp.ngp3c?"BR Gluons make Normal, Infinity, Time, & Meta Condenser costs scale slower.":"You gain extra replicated galaxies faster after 100."
         document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
         document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
         document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")

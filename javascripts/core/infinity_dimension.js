@@ -47,7 +47,7 @@ function hideMaxIDButton(onLoad=false) {
 }
 
 function DimensionDescription(tier) {
-	if (tier > (inQC(4) || player.pSac != undefined ? 6 : 7) && (ECTimesCompleted("eterc7") === 0 || player.timeDimension1.amount.eq(0) || tier == 7) && player.currentEternityChall != "eterc7") return getFullExpansion(Math.round(player["infinityDimension" + tier].amount.toNumber()));
+	if (tier > (inQC(4) || player.pSac != undefined ? 6 : 7) && (ECTimesCompleted("eterc7") === 0 || player.timeDimension1.amount.eq(0) || tier == 7) && player.currentEternityChall != "eterc7" && !inQC("8c")) return getFullExpansion(Math.round(player["infinityDimension" + tier].amount.toNumber()));
 	else if (player.infinityPower.l > 1e7) return shortenDimensions(player['infinityDimension' + tier].amount)
 	else return shortenDimensions(player['infinityDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, DimensionRateOfChange(tier), 2, 2) + dimDescEnd;
 }
@@ -382,7 +382,7 @@ function updateInfPower() {
 	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
 	if ((player.galacticSacrifice && player.pSac == undefined)||player.aarexModifications.ngp3c) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
 	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
-	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
+	if (player.currentEternityChall == "eterc7" || inQC("8c")) document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
 	else {
 		let r = DimensionProduction(1)
 		if (player.pSac != undefined) r = r.div(getEC12Mult())

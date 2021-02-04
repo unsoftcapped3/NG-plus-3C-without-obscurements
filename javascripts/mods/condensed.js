@@ -72,6 +72,7 @@ function getCondenserCostScaling() {
 	let s = 1
 	if (player.infinityUpgrades.includes("postinfi70")) s *= 0.6
 	if (player.eternityUpgrades.includes(12)) s *= 2/3
+	s *= 1-tmp.qcRewards[8]
 	return s
 }
 
@@ -157,6 +158,7 @@ function getInfCondenserCostDiv() {
 function getInfCondenserCostScaling() {
 	let scaling = 1
 	if (player.eternityUpgrades.includes(12)) scaling *= 2/3
+	scaling *= 1-tmp.qcRewards[8]
 	return scaling;
 }
 
@@ -192,7 +194,8 @@ function getExtraInfConds() {
 }
 
 function getInfCondenserEff(x) {
-	return Decimal.pow(player.infinityPower.plus(1).log10()+1, Decimal.mul(player.condensed.inf[x]+tmp.cnd.extraInf, getInfCondenserPow()))
+	let res = inQC("8c")?player.infinityDimension1.amount:player.infinityPower
+	return Decimal.pow(res.plus(1).log10()+1, Decimal.mul(player.condensed.inf[x]+tmp.cnd.extraInf, getInfCondenserPow()))
 }
 
 function condenseInfDim(x) {
@@ -333,6 +336,7 @@ function getTimeCondenserCostDiv() {
 function getTimeCondenserCostScaling() {
 	let scaling = 1
 	if (player.eternityUpgrades.includes(12)) scaling *= 2/3
+	scaling *= 1-tmp.qcRewards[8]
 	return scaling;
 }
 
@@ -364,7 +368,8 @@ function getFreeTimeConds() {
 }
 
 function getTimeCondenserEff(x) {
-	return Decimal.pow(player.timeShards.plus(1).log10()+1, Decimal.mul(player.condensed.time[x]+getFreeTimeConds(), getTimeCondenserPow()))
+	let res = inQC("8c")?player.timeDimension1.amount:player.timeShards
+	return Decimal.pow(res.plus(1).log10()+1, Decimal.mul(player.condensed.time[x]+getFreeTimeConds(), getTimeCondenserPow()))
 }
 
 function condenseTimeDim(x) {
@@ -596,6 +601,7 @@ function getMetaCondenserCostDiv() {
 
 function getMetaCondenserCostScaling() {
 	let scaling = 1
+	scaling *= 1-tmp.qcRewards[8]
 	return scaling;
 }
 
@@ -615,6 +621,7 @@ function getMetaCondenserPow() {
 	let ret = new Decimal(1)
 	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
 	ret = ret.times(getECReward(14, true))
+	if (inQC("8c")) ret = ret.times(2.15)
 	return ret;
 }
 
@@ -649,7 +656,7 @@ function maxMetaCondense(x) {
 }
 
 function isIC10Trapped() {
-	return player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c
+	return (player.currentEternityChall == "eterc13" || inQC("8c")) && player.aarexModifications.ngp3c
 }
 
 function updateElecCond() {

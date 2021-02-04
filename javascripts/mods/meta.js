@@ -28,6 +28,7 @@ function getDilationMetaDimensionMultiplier() {
 
 function getMetaDimensionMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
+	if (inQC("8c")) return tmp.cnd.meta[tier]||new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
 	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier, 0)))
 	ret = ret.times(tmp.mdgm) //Global multiplier of all Meta Dimensions
@@ -380,7 +381,7 @@ function updateOverallMetaDimensionsStuff(){
 	document.getElementById("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && player.aarexModifications.nguspV === undefined && player.currentEternityChall != "eterc14" && ((inQC(3)&&!player.aarexModifications.ngp3c) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? 'Raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getExtraDimensionBoostPowerExponent(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, t' : "T"
 	setAndMaybeShow("bestMAOverGhostifies", ghostified, '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 	document.getElementById("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
-	document.getElementById("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.'
+	document.getElementById("metaAntimatterPerSec").innerHTML = inQC("8c")?('You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' Eighth Time Dimensions per second, and ' + shortenDimensions(getMetaDimensionProduction(3)) + ' meta-antimatter per second.'):('You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.')
 }
 
 function updateMetaDimensions () {

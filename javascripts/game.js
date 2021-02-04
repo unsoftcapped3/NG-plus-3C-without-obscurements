@@ -1852,6 +1852,12 @@ function updateEternityChallenges() {
 		document.getElementById(property).textContent=onchallenge?"Running":"Start"
 		document.getElementById(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
+	if (inQC("8c")) {
+		document.getElementById("eterc7").textContent = "Trapped In"
+		document.getElementById("eterc7").className = "onchallengebtn"
+		document.getElementById("eterc13").textContent = "Trapped In"
+		document.getElementById("eterc13").className = "onchallengebtn"
+	}
 	document.getElementById("eterctabbtn").parentElement.style.display = locked?"none":""
 	document.getElementById("autoEC").style.display=quantumed&&tmp.ngp3?"inline-block":"none"
 	if (quantumed&&tmp.ngp3) document.getElementById("autoEC").className=tmp.qu.autoEC?"timestudybought":"storebtn"
@@ -5369,8 +5375,13 @@ function quantumOverallUpdating(diff){
 }
 
 function metaDimsUpdating(diff){
-	player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
-	if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
+	if (inQC("8c")) {
+		player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(3).times(diff))
+		if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(3).times(diff))
+	} else {
+		player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
+		if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
+	}
 	if (tmp.ngp3 && !tmp.ngp3l && inQC(0)) gainQuarkEnergy(player.meta.bestAntimatter, player.meta.antimatter)
 	player.meta.bestAntimatter = player.meta.bestAntimatter.max(player.meta.antimatter)
 	if (tmp.ngp3) {
@@ -5405,14 +5416,16 @@ function dimensionPageTabsUpdating(){
 }
 
 function otherDimsUpdating(diff){
-	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff))
+	if (player.currentEternityChall !== "eterc7" && !inQC("8c")) player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff))
    	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(DimensionProduction(1).times(diff))
 
-   	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff))
+   	if (player.currentEternityChall == "eterc7" || inQC("8c")) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff))
    	else {
 		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(DimensionProduction(9).times(diff))
 		player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff)).max(getTimeDimensionProduction(1).times(0))
 	}
+	
+	if (inQC("8c")) player.timeDimension8.amount = player.timeDimension8.amount.plus(getMetaDimensionProduction(1).times(diff))
 }
 
 function ERFreeTickUpdating(){

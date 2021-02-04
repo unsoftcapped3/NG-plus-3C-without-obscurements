@@ -189,7 +189,7 @@ function autoBuyRG() {
 function updateExtraReplGalaxies() {
 	let ts225Eff = 0
 	let ts226Eff = 0
-	let speed = tmp.qcRewards[8] * 2
+	let speed = tmp.ngp3c?1:(tmp.qcRewards[8] * 2)
 	if (player.timestudy.studies.includes(225)) {
 		ts225Eff = Math.floor(player.replicanti.amount.e / 1e3)
 		if (ts225Eff > 99) ts225Eff = Math.floor(Math.sqrt(0.25 + (ts225Eff - 99) * speed) + 98.5)

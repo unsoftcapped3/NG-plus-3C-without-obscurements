@@ -1,8 +1,8 @@
 var quantumChallenges = {
 	costs:[0, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600],
 	goals:[0, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10],
-	cond_costs: [0, 8175, 9000, 10050, 10725, 25900, 28900, 31300, 33600],
-	cond_goals: [0, 4.34e8, 2.465e9, 2.6225e9, 2.045e9, 1.344e10, 5.61e8, 6.254e10, 2.925e10],
+	cond_costs: [0, 8175, 9000, 10050, 10725, 11685, 12640, 13920, 15325],
+	cond_goals: [0, 4.34e8, 2.465e9, 2.6225e9, 2.045e9, 1.4715e9, 9.58e8, 1.447e9, 7.125e6],
 }
 
 var assigned = []
@@ -57,8 +57,8 @@ function updateQuantumChallenges() {
 	for (var qc = 1; qc <= 8; qc++) {
 		var property = "qc" + qc
 		document.getElementById(property + "div").style.display = (qc < 2 || QCIntensity(qc - 1)) ? "inline-block" : "none"
-		document.getElementById(property).textContent = ((!assigned.includes(qc) && pcFocus) ? "Choose" : inQC(qc) ? "Running" : QCIntensity(qc) ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
-		document.getElementById(property).className = (!assigned.includes(qc) && pcFocus) ? "challengesbtn" : inQC(qc) ? "onchallengebtn" : QCIntensity(qc) ? "completedchallengesbtn" : "challengesbtn"
+		document.getElementById(property).textContent = ((!assigned.includes(qc) && pcFocus) ? "Choose" : inQC(qc, true) ? "Running" : QCIntensity(qc) ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
+		document.getElementById(property).className = (!assigned.includes(qc) && pcFocus) ? "challengesbtn" : inQC(qc, true) ? "onchallengebtn" : QCIntensity(qc) ? "completedchallengesbtn" : "challengesbtn"
 		document.getElementById(property + "cost").textContent = "Cost: " + getFullExpansion(getQCCost(qc)) + " electrons"
 		document.getElementById(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoal(qc))) + " antimatter"
 	}
@@ -69,10 +69,15 @@ function updateQCDisplaysSpecifics(){
 	document.getElementById("qc2reward").textContent = Math.round(tmp.qcRewards[2] * 100 - 100)
 	document.getElementById("qc7desc").textContent = "Dimension and Tickspeed cost multiplier increases are " + shorten(Number.MAX_VALUE) + "x. Multiplier per ten Dimensions and meta-Antimatter boost to Dimension Boosts are disabled."
 	document.getElementById("qc7reward").textContent = (100 - tmp.qcRewards[7] * 100).toFixed(2)
-	document.getElementById("qc8reward").textContent = tmp.qcRewards[8]
+	document.getElementById("qc8desc").textContent = tmp.ngp3c ? "You are trapped in EC7 & EC13, which also apply to Meta Dimensions. Third Meta Dimensions generate Meta Antimatter, and Infinity & Time Condensers are based on their respective first dimensions. However, Meta Condensers are 115% stronger." : "Infinity and Time Dimensions are disabled, and Meta-Dimension Boosts have no effect."
+	document.getElementById("qc8reward").textContent = tmp.ngp3c?(getFullExpansion(Math.round(tmp.qcRewards[8]*1e5)/1e3)+"% slower"):(tmp.qcRewards[8]+"x faster")
 }
 
-function inQC(num) {
+function inQC(num, direct=false) {
+	if (!direct) {
+		if (num==8) return tmp.inQCs.includes(8) && !tmp.ngp3c
+		else if (num=="8c") return tmp.inQCs.includes(8) && tmp.ngp3c
+	}
 	return tmp.inQCs.includes(num)
 }
 
@@ -231,15 +236,21 @@ let qcRewards = {
 		},
 		6: function(comps) {
 			if (comps == 0) return 1
-			return player.achPow.pow(comps * 2 - 1)
+			let mag = player.aarexModifications.ngp3c?((Math.log10(player.quantum.gluons.rg.plus(1).log10()+1)+1)*comps):comps
+			return player.achPow.pow(mag * 2 - 1)
 		},
 		7: function(comps) {
 			if (comps == 0) return 1
 			return Math.pow(0.975, comps)
 		},
 		8: function(comps) {
-			if (comps == 0) return 1
-			return comps + 2
+			if (comps == 0) return tmp.ngp3c?0:1;
+			if (tmp.ngp3c) {
+				let br = player.quantum.gluons.br
+				if (br.gte(1e10)) br = Decimal.mul(br.log10(), 1e9)
+				let ret = 1-1/(br.plus(1).log10()*comps+1)
+				return ret;
+			} else return comps + 2
 		}
 	}
 }

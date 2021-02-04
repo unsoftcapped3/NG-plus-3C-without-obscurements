@@ -74,7 +74,7 @@ function getTimeDimensionPower(tier) {
 	if (tmp.be) return getBreakEternityTDMult(tier)
 	var dim = player["timeDimension" + tier]
 
-	if (player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c) return tmp.cnd.time[tier];
+	if ((player.currentEternityChall == "eterc13" || inQC("8c")) && player.aarexModifications.ngp3c) return tmp.cnd.time[tier];
 	
 	var ret = dim.power.pow(player.boughtDims ? 1 : 2)
 
@@ -122,7 +122,7 @@ function getTimeDimensionProduction(tier) {
   	if (inQC(4) && tier == 1) ret = ret.plus(player.timeDimension2.amount.floor())
   	ret = ret.times(getTimeDimensionPower(tier))
   	if (player.aarexModifications.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
-  	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.aarexModifications.ngp3c?1:player.tickspeed.dividedBy(1000)))
+  	if (player.currentEternityChall == "eterc7" || inQC("8c")) ret = dilates(ret.dividedBy(player.aarexModifications.ngp3c?1:player.tickspeed.dividedBy(1000)))
   	if (player.aarexModifications.ngmX>3&&(tier>1||!player.achievements.includes("r12"))) ret = ret.div(100)
   	if (player.aarexModifications.ngexV) ret = ret.div(10 / tier)
   	if (player.currentEternityChall == "eterc1") return new Decimal(0)
@@ -163,8 +163,8 @@ function getTimeDimensionRateOfChange(tier) {
 }
 
 function getTimeDimensionDescription(tier) {
-	if (!isTDUnlocked(((inNC(7) && player.aarexModifications.ngmX > 3) || inQC(4) || player.pSac!=undefined ? 2 : 1) + tier)) return getFullExpansion(player['timeDimension' + tier].bought)
-	else if (player.timeShards.l > 1e7) return shortenDimensions(player['timeDimension' + tier].amount)
+	if (!isTDUnlocked(((inNC(7) && player.aarexModifications.ngmX > 3) || inQC(4) || player.pSac!=undefined ? 2 : 1) + tier) && !inQC("8c")) return getFullExpansion(player['timeDimension' + tier].bought)
+	else if (player.timeShards.l > 1e7 || tier==8) return shortenDimensions(player['timeDimension' + tier].amount)
 	else return shortenDimensions(player['timeDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, getTimeDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
 }
 
@@ -199,7 +199,7 @@ function updateTimeShards() {
 	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
 	document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)
-	if (player.currentEternityChall == "eterc7") document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
+	if (player.currentEternityChall == "eterc7" || inQC("8c")) document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
 	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Timeshards per second."
 }
 

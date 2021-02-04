@@ -218,7 +218,7 @@ function ngP3AchieveCheck(){
 	let ableToGetRid3 = ableToGetRid2 && tmp.qu.electrons.amount == 0	
 	let ableToGetRid4 = ableToGetRid2 && inQC(2)
 	let ableToGetRid5 = ableToGetRid4 && player.dontWant
-	let ableToGetRid6 = ableToGetRid2 && inQC(6) && inQC(8)
+	let ableToGetRid6 = ableToGetRid2 && inQC(6) && inQC(8, true)
 	let noTree = false
 	let minUQ = getMinimumUnstableQuarks()
 	for (var u = 1; u < 9; u++) {
@@ -245,7 +245,7 @@ function ngP3AchieveCheck(){
 			else if (player.money.log10() >= 1.6e12 && d == 8) giveAchievement("ERROR 404: DIMENSIONS NOT FOUND")
 		}
 	}
-	if (player.money.log10() >= 8e6 && inQC(6) && inQC(8)) giveAchievement("Impossible expectations")
+	if (player.money.log10() >= 8e6 && inQC(6) && inQC(8, true)) giveAchievement("Impossible expectations")
 	if (player.timestudy.theorem >= 1.1e7 && tmp.qu.wasted) giveAchievement("Studies are wasted")
 	if (tmp.qu.replicants.requirement.gte("1e12500000")) giveAchievement("Stop blocking me!")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")

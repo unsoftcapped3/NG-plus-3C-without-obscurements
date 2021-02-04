@@ -194,7 +194,7 @@ function dilates(x, m) {
 		e *= dilationPowerStrength()
 		a = true
 	}
-	if (player.currentEternityChall == "eterc13" && player.aarexModifications.ngp3c) {
+	if ((player.currentEternityChall == "eterc13" || inQC("8c")) && player.aarexModifications.ngp3c) {
 		e *= Math.pow(dilationPowerStrength(), 2)
 		a = true
 	}

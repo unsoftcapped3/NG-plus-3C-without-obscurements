@@ -505,7 +505,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy9" onclick='buyMasteryStudy("d", 9)'>Unlock Paired Challenges<br><span id="ds9Cost"></span><span id="ds9Req"></span></button></td>
+						<td><button class="timestudylocked" id="dilstudy9" onclick='buyMasteryStudy("d", 9)' style='font-size: 10px'>Unlock Paired Challenges<br><span id="ds9Cost"></span><span id="ds9Req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -3565,7 +3565,7 @@
 					<tr>
 						<td>
 							<div class="eterchallengediv" id="eterc5div" style="height: 140px; display: none">
-								<span>Galaxy cost increase scaling starts instantly (Normally at 100 galaxies). Dimension Boost cost scaling is massively increased.</span>
+								<span id="ec5desc">Galaxy cost increase scaling starts instantly (Normally at 100 galaxies). Dimension Boost cost scaling is massively increased.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3798,7 +3798,7 @@
 									<br>
 									<span id="qc5cost"></span><br>
 									<span id="qc5goal"></span><br>
-									Reward: Dimension Boosts boost the multiplier per ten Dimensions. Currently: <span id="qc5reward"></span>x
+									Reward: <span id="qc5effdesc"></span> Currently: <span id="qc5reward"></span>x
 								</div>
 							</div>
 						</td>
@@ -3812,7 +3812,7 @@
 									<br>
 									<span id="qc6cost"></span><br>
 									<span id="qc6goal"></span><br>
-									Reward: Your achievement bonus boosts Meta Dimensions. Currently: <span id="qc6reward"></span>x
+									Reward: <span id="qc6effdesc"></span> Currently: <span id="qc6reward"></span>x
 								</div>
 							</div>
 						</td>
@@ -3828,13 +3828,13 @@
 									<br>
 									<span id="qc7cost"></span><br>
 									<span id="qc7goal"></span><br>
-									Reward: The free tickspeed upgrade threshold increases slower. Currently: <span id="qc7reward"></span>% slower
+									Reward: <span id="qc7effdesc"></span> Currently: <span id="qc7reward"></span>% slower
 								</div>
 							</div>
 						</td>
 						<td>
 							<div class="quantumchallengediv" id="qc8div">
-								<span>Infinity and Time Dimensions are disabled, and Meta-Dimension Boosts have no effect.</span>
+								<span id="qc8desc"></span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3842,7 +3842,7 @@
 									<br>
 									<span id="qc8cost"></span><br>
 									<span id="qc8goal"></span><br>
-									Reward: You gain extra replicated galaxies faster after 100. Currently: <span id="qc8reward"></span>x faster
+									Reward: <span id="qc8effdesc"></span> Currently: <span id="qc8reward"></span>
 								</div>
 							</div>
 						</td>

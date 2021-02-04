@@ -80,6 +80,7 @@ let tmp = {
 	rm: new Decimal(1),
 	it: 1,
 	rg4: false,
+	qcs: 8,
 	inQCs: [0],
 	pct: "",
 	ns: 1,
