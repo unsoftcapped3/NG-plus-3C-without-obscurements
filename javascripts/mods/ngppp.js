@@ -99,8 +99,8 @@ function respecOptions() {
 function toggleAutoQuantumContent(id) {
 	tmp.qu.autoOptions[id]=!tmp.qu.autoOptions[id]
 	if (id=='sacrifice') {
-		document.getElementById('sacrificeAuto').textContent = "Auto: " + (tmp.qu.autoOptions.sacrifice ? "ON" : "OFF")
-		if (tmp.qu.autoOptions.sacrifice) sacrificeGalaxy(6)
+		document.getElementById('sacrificeAuto').textContent = "Auto: " + ((tmp.qu.autoOptions.sacrifice||tmp.ngp3c) ? "ON" : "OFF")
+		if (tmp.qu.autoOptions.sacrifice||tmp.ngp3c) sacrificeGalaxy(6)
 	}
 }
 

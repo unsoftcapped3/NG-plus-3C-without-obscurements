@@ -38,7 +38,7 @@ function galaxyReset(bulk) {
 	if (!player.achievements.includes("r111")) setInitialMoney()
 	if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
 	if (tmp.ngp3 && bulk) {
-		if (tmp.qu.autoOptions.sacrifice) sacrificeGalaxy(6, true)
+		if (tmp.qu.autoOptions.sacrifice || tmp.ngp3c) sacrificeGalaxy(6, true)
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
 		if (ghostified && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	}
@@ -64,6 +64,7 @@ document.getElementById("secondSoftReset").onclick = function() {
 function getGalaxyRequirement(offset = 0, display) {
 	tmp.grd = {} //Galaxy requirement data
 	tmp.grd.galaxies = player.galaxies + offset
+	if (tmp.ngp3c) tmp.grd.darkStart = 3300
 	let mult = getGalaxyReqMultiplier()
 	let base = tmp.grd.galaxies * mult
 	let amount = 80 + base

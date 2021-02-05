@@ -706,6 +706,13 @@ var softcap_data = {
 			pow: 0.95,
 		},
 	},
+	ngp3cMDs: {
+		1: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/3,
+		},
+	},
 }
 
 var softcap_vars = {

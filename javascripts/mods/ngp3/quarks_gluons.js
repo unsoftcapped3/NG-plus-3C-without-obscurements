@@ -327,13 +327,15 @@ function getQuarkEnergyGain(ma) {
 	let x = (ma.log10() - Math.log10(Number.MAX_VALUE) * 1.4) / 280
 	if (x < 0) x = -Math.pow(-x, 1.5)
 	else x = Math.pow(x, 1.5)
-	if (x >= 1.5 && player.aarexModifications.ngp3c) x = Math.sqrt(x*1.5);
+	if (x >= 1.5 && tmp.ngp3c && !player.masterystudies.includes("t302")) x = Math.sqrt(x*1.5);
+	if (x >= 12 && tmp.ngp3c) x = Math.pow(x*144, 1/3)
 	return Decimal.pow(10, x)
 }
 
 function getQuarkEnergyGainMult() {
 	let mult = new Decimal(0.75)
 	if (player.masterystudies.includes("t270") && player.aarexModifications.ngp3c) mult = mult.times(getMTSMult(270));
+	if (tmp.ngp3c && QCIntensity(7)>=1) mult = mult.times(10);
 	return mult;
 }
 
@@ -349,12 +351,18 @@ function generateGluons(mix) {
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
+GUCosts_Condensed = [null, 1, 2, 4, 100, 7e18, 1e80, 1e180, "1e570"]
+
+function getGUCost(id) {
+	let costs = tmp.ngp3c?GUCosts_Condensed:GU_Costs
+	return costs[id]
+}
 
 function buyGluonUpg(color, id) {
 	var name = color + id
-	if (tmp.qu.upgrades.includes(name) || tmp.qu.gluons[color].plus(0.001).lt(GUCosts[id])) return
+	if (tmp.qu.upgrades.includes(name) || tmp.qu.gluons[color].plus(0.001).lt(getGUCost(id))) return
 	tmp.qu.upgrades.push(name)
-	tmp.qu.gluons[color] = tmp.qu.gluons[color].sub(GUCosts[id])
+	tmp.qu.gluons[color] = tmp.qu.gluons[color].sub(getGUCost(id))
 	updateGluonsTab("spend")
 	if (name == "gb3") {
 		var otherMults = 1
@@ -364,7 +372,7 @@ function buyGluonUpg(color, id) {
 		ipMultPower = 2.3
 		player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
 	}
-	if (name == "rg4" && !tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	if (name == "rg4" && !tmp.qu.autoOptions.sacrifice && !tmp.ngp3c) updateElectronsEffect()
 	if (name == "gb4") player.tickSpeedMultDecrease = player.aarexModifications.ngp3c?1.1:1.25
 	updateQuantumWorth()
 	updateGluonsTabOnUpdate()
@@ -597,9 +605,9 @@ function updateGluonsTabOnUpdate(mode) {
 			document.getElementById(name).textContent = shortenDimensions(tmp.qu.gluons[name])
 			for (u = 1; u <= (eightUpgrades ? 8 : sevenUpgrades ? 7 : 4); u++) {
 				var upg = name + "upg" + u
-				if (u > 4) document.getElementById(upg + "cost").textContent = shortenMoney(new Decimal(GUCosts[u]))
+				if (u > 4) document.getElementById(upg + "cost").textContent = shortenMoney(new Decimal(getGUCost(u)))
 				if (tmp.qu.upgrades.includes(name + u)) document.getElementById(upg).className="gluonupgradebought small "+name
-				else if (tmp.qu.gluons[name].lt(GUCosts[u])) document.getElementById(upg).className="gluonupgrade small unavailablebtn"
+				else if (tmp.qu.gluons[name].lt(getGUCost(u))) document.getElementById(upg).className="gluonupgrade small unavailablebtn"
 				else document.getElementById(upg).className="gluonupgrade small "+name
 			}
 			var upg = name + "qk"

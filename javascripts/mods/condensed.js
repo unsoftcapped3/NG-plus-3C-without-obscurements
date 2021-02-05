@@ -91,7 +91,8 @@ function getCondenserCost(x) {
 function getCondenserTarget(x) {
 	if (!player.aarexModifications.ngp3c) return new Decimal(0);
 	let res = getOrSubResource(x)
-	return Math.floor(Math.pow(res.times(getCondenserCostDiv()).div(CONDENSER_START[x]).max(1).log10()/Math.log10(CONDENSER_BASE[x]), 1/(1+1.5**getCondenserCostScaling()))+1)
+	let target = Math.pow(res.times(getCondenserCostDiv()).div(CONDENSER_START[x]).max(1).log10()/Math.log10(CONDENSER_BASE[x]), 1/(1+1.5**getCondenserCostScaling()))
+	return Math.floor(target+1)
 }
 
 function getCondenserPow() {
@@ -218,6 +219,7 @@ function maxInfCondense(x) {
 
 function getPostInfi70Mult() {
 	let mult = Decimal.pow(1.02, Math.sqrt(player.resets))
+	if (mult.gte(5e4)) mult = Decimal.mul(mult.log10()/Math.log10(5e4), 5e4)
 	return mult;
 }
 
@@ -267,6 +269,7 @@ document.getElementById("postinfi82").onclick = function() {
 function getReplCondenserCostSuperBase() {
 	let base = 2
 	if (player.eternityUpgrades.includes(12)) base -= .5
+	base *= 1-tmp.qcRewards[8]/3
 	return base;
 }
 
@@ -523,6 +526,12 @@ const OBSCUREMENTS = {
 		osID: "TP",
 		res() { return player.dilation.totalTachyonParticles },
 	},
+	md: {
+		title: "Meta Dimension Multipliers",
+		scID: "MDs",
+		osID: "MD",
+		res() { return getMetaDimensionMultiplier(1) },
+	},
 }
 
 function updateObscurements() {
@@ -669,6 +678,7 @@ function updateElecCond() {
 
 function getElecCondenseCost() {
 	let lvl = player.condensed.elec;
+	if (lvl>=15) lvl = Math.pow(lvl, Math.log(lvl)/Math.log(2)-2.9)
 	if (lvl>=3) lvl = Math.pow(lvl, Math.log(lvl)/Math.log(3))
 	return Math.floor(3000*Math.pow(lvl+1, 0.3))
 }

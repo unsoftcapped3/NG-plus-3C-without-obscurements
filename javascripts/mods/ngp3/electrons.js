@@ -4,7 +4,7 @@ function updateElectronsTab() {
 	document.getElementById("sacrificeGals").textContent = getFullExpansion(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0))
 	document.getElementById("electronsGain").textContent = getFullExpansion(Math.floor(Math.max(player.galaxies-tmp.qu.electrons.sacGals, 0) * getElectronGainFinalMult()))
 	for (var u = 1; u < 5; u++) document.getElementById("electronupg" + u).className = "gluonupgrade " + (canBuyElectronUpg(u) ? "stor" : "unavailabl") + "ebtn"
-	if (tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	if (tmp.qu.autoOptions.sacrifice || tmp.ngp3c) updateElectronsEffect()
 	document.getElementById("elecNGP3C").style.display = player.aarexModifications.ngp3c?"":"none"
 	if (player.aarexModifications.ngp3c) updateElecCond()
 }
@@ -17,7 +17,7 @@ function updateElectrons(retroactive) {
 	var mult = getElectronGainFinalMult()
 	document.getElementById("electronsGainMult").textContent = mult.toFixed(2)
 	if (retroactive) tmp.qu.electrons.amount = getElectronGainFinalMult() * tmp.qu.electrons.sacGals
-	if (!tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	if (!tmp.qu.autoOptions.sacrifice && !tmp.ngp3c) updateElectronsEffect()
 	for (var u = 1; u < 5; u++) {
 		var cost = getElectronUpgCost(u)
 		document.getElementById("electronupg" + u).innerHTML = "Increase the multiplier by " + (getElectronGainMult() * getElectronUpgIncrease(u)).toFixed(2) + "x.<br>" +
@@ -27,7 +27,7 @@ function updateElectrons(retroactive) {
 }
 
 function updateElectronsEffect() {
-	if (!tmp.qu.autoOptions.sacrifice) {
+	if (!tmp.qu.autoOptions.sacrifice && !tmp.ngp3c) {
 		tmp.mpte = getElectronBoost()
 		document.getElementById("electronsAmount2").textContent = "You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 	}
@@ -44,7 +44,7 @@ function sacrificeGalaxy(auto = false) {
 	if (player.options.sacrificeConfirmation && !auto) if (!confirm("You will perform a Galaxy reset, but you will exchange all your galaxies to electrons, which will give a boost to your Multiplier per Ten Dimensions.")) return
 	tmp.qu.electrons.sacGals = player.galaxies
 	tmp.qu.electrons.amount += getElectronGainFinalMult() * amount
-	if (!tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
+	if (!tmp.qu.autoOptions.sacrifice && !tmp.ngp3c) updateElectronsEffect()
 	if (!auto) galaxyReset(0)
 }
 

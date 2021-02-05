@@ -352,7 +352,7 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	if (player.masterystudies) if (player.masterystudies.includes('t311')) return tmp.rm.pow(17.3)
+	if (player.masterystudies) if (player.masterystudies.includes('t311')) return tmp.rm.pow(tmp.ngp3c?1.73:17.3)
 	return tmp.rm
 }
 

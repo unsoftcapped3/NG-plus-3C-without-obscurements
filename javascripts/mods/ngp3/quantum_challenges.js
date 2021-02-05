@@ -116,7 +116,15 @@ function getQCGoal(num, bigRip) {
 	if (cs.includes(2) && cs.includes(6)) mult *= 1.7
 	if (cs.includes(3) && cs.includes(7)) mult *= 2.68
 	if (!tmp.ngp3l && cs.includes(3) && cs.includes(6)) mult *= 3
-	return goalData[c1] * goalData[c2] / 1e11 * mult
+	let div = 1e11
+	if (tmp.ngp3c) {
+		div = 2e9;
+		if (cs.some(x => x>4)) {
+			if (c1>4) div /= 1.5
+			if (c2>4) div /= 1.5
+		}
+	}
+	return goalData[c1] * goalData[c2] / div * mult
 }
 
 function QCIntensity(num) {
@@ -232,7 +240,8 @@ let qcRewards = {
 		},
 		5: function(comps) {
 			if (comps == 0) return 0
-			return Math.log10(1 + player.resets) * Math.pow(comps, 0.4)
+			let r = player.resets
+			return Math.log10(1 + r) * Math.pow(comps, 0.4)
 		},
 		6: function(comps) {
 			if (comps == 0) return 1
@@ -248,7 +257,8 @@ let qcRewards = {
 			if (tmp.ngp3c) {
 				let br = player.quantum.gluons.br
 				if (br.gte(1e10)) br = Decimal.mul(br.log10(), 1e9)
-				let ret = 1-1/(br.plus(1).log10()*comps+1)
+				let ret = 1-1/(br.plus(1).log10()*comps*1.1+1)
+				if (ret>=0.95) ret = 0.95;
 				return ret;
 			} else return comps + 2
 		}

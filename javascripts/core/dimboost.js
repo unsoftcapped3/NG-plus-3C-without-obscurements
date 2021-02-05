@@ -19,6 +19,7 @@ function getDimensionBoostPower(next, focusOn) {
 	}
 	if (player.timestudy.studies.includes(152) && player.aarexModifications.ngp3c) ret = Decimal.mul(ret, ts152Eff())
 	if (player.dilation.studies.includes(6) && player.currentEternityChall != "eterc14" && !inQC(3) && !inQC(7)) ret = getExtraDimensionBoostPower().times(ret)
+
 	return new Decimal(ret)
 }
 

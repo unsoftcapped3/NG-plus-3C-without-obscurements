@@ -2038,7 +2038,7 @@ function updateNGp3DisplayStuff(){
         document.getElementById('rg4toggle').style.display=(!tmp.ngp3l||inQC(1)||QCIntensity(1))?"none":""
         document.getElementById('rg4toggle').textContent="Toggle: O"+(tmp.qu.rg4?"N":"FF")
         document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
-        document.getElementById('sacrificeAuto').textContent="Auto: O"+(tmp.qu.autoOptions.sacrifice?"N":"FF")
+        document.getElementById('sacrificeAuto').textContent="Auto: O"+((tmp.qu.autoOptions.sacrifice||tmp.ngp3c)?"N":"FF")
         document.getElementById("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
         document.getElementById("ratio_r").value = tmp.qu.assignAllRatios.r
         document.getElementById("ratio_g").value = tmp.qu.assignAllRatios.g
@@ -2049,8 +2049,8 @@ function updateNGp3DisplayStuff(){
 		document.getElementById("qc3effdesc").textContent = (player.aarexModifications.ngp3c ? "GB Gluons make make Infinity Power boost" : "Infinity Power boosts")+" Meta Dimensions"+(player.aarexModifications.ngp3c ? " & TP gain" : "")+" at greatly reduced rate."
 		document.getElementById("qc5effdesc").textContent = player.aarexModifications.ngp3c?'"Upgrade all the Quark boosts to Dimensions" uses a better formula, and Dimension Boosts boost the multiplier per ten Dimensions.':"Dimension Boosts boost the multiplier per ten Dimensions."
 		document.getElementById("qc6effdesc").textContent = (player.aarexModifications.ngp3c?"RG Gluons make y":"Y")+"our achievement bonus "+(player.aarexModifications.ngp3c?"boost":"boosts")+" Meta Dimensions."
-		document.getElementById("qc7effdesc").textContent = (tmp.ngp3c?"OS_TS_1-4 are 25% weaker, and t":"T")+"he free tickspeed upgrade threshold increases slower."
-		document.getElementById("qc8effdesc").textContent = tmp.ngp3c?"BR Gluons make Normal, Infinity, Time, & Meta Condenser costs scale slower.":"You gain extra replicated galaxies faster after 100."
+		document.getElementById("qc7effdesc").textContent = (tmp.ngp3c?"Quark Energy gain is multiplied by 10, OS_TS_1-4 are 25% weaker, and t":"T")+"he free tickspeed upgrade threshold increases slower."
+		document.getElementById("qc8effdesc").textContent = tmp.ngp3c?"BR Gluons make Normal, Infinity, Replicated, Time, & Meta Condenser costs scale slower.":"You gain extra replicated galaxies faster after 100."
         document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
         document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
         document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
