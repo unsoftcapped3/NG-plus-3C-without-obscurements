@@ -12,7 +12,7 @@ function updateQuantumChallenges() {
 		document.getElementById("qctabbtn").style.display = "none"
 		return
 	} else document.getElementById("qctabbtn").style.display = ""
-	var assigned = []
+	assigned = []
 	var assignedNums = {}
 	document.getElementById("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
 	document.getElementById("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
@@ -211,7 +211,7 @@ let qcRewards = {
 	effects: {
 		1: function(comps) {
 			if (comps == 0) return 1
-			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
+			let base = Decimal.mul(getDimensionFinalMultiplier(1), getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
 			let div = player.aarexModifications.ngp3c?(25/Math.pow(3, comps)):200
 			return Decimal.pow(10, Math.pow(base, exp) / div)

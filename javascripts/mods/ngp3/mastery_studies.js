@@ -69,7 +69,7 @@ var masteryStudies = {
 			return QCIntensity(8) >= 1 && (!tmp.ngp3c || tmp.qu.electrons.amount >= 17175)
 		},
 		10: function() {
-			return tmp.qu.pairedChallenges.completed == 4 && (!tmp.ngp3c || false)
+			return tmp.qu.pairedChallenges.completed == 4 && (!tmp.ngp3c || /*quantumWorth.gte(1e25)*/false)
 		},
 		11: function() {
 			return tmp.eds[1].perm == 10
@@ -95,7 +95,7 @@ var masteryStudies = {
 			return "Complete Quantum Challenge 8"+(tmp.ngp3c?(" & "+getFullExpansion(17175)+" electrons"):"")
 		},
 		10: function() {
-			return "Complete Paired Challenge 4"+(tmp.ngp3c?(" & wait for a future update..."):"")
+			return "Complete Paired Challenge 4"+(tmp.ngp3c?(" & wait for a future update"/*+shortenCosts(1e25)+" quantum worth"*/):"")
 		},
 		11: function() {
 			return getFullExpansion(10) + " worker replicants"

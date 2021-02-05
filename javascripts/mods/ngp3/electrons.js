@@ -39,6 +39,7 @@ function updateElectronsEffect() {
 }
 
 function sacrificeGalaxy(auto = false) {
+	if (!player.masterystudies.includes("d7")) return;
 	var amount = player.galaxies - tmp.qu.electrons.sacGals
 	if (amount < 1) return
 	if (player.options.sacrificeConfirmation && !auto) if (!confirm("You will perform a Galaxy reset, but you will exchange all your galaxies to electrons, which will give a boost to your Multiplier per Ten Dimensions.")) return

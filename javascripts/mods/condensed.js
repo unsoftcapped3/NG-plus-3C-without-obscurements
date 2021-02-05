@@ -554,6 +554,7 @@ function updateObscurements() {
 			}
 			html += "<li>OS_"+data.osID+"_"+(j+1)+": Starts at "+shorten(start)
 			if (newData.func=="pow") html += ", ^"+shorten((typeof newData.pow == "function") ? newData.pow() : newData.pow)
+			else if (newData.func=="expPow") html += ", exponent ^"+shorten((typeof newData.pow == "function") ? newData.pow() : newData.pow)
 			html += "</li>"
 		}
 		html += "</ul><br><br>"

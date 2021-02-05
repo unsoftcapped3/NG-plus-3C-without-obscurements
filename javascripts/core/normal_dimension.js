@@ -114,7 +114,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (!tmp.infPow) updateInfinityPowerEffects()
 	if (player.currentChallenge == "postcngc_2" || isIC10Trapped() || player.currentChallenge == "postcngm3_2" || player.currentEternityChall == "eterc11") {
 		let forcedMult = new Decimal(1);
-		if (player.currentChallenge == "postcngc_2" || isIC10Trapped()) forcedMult = ((player.aarexModifications.ngp3c?tmp.cnd.nrm[tier]:1)||1)
+		if (player.currentChallenge == "postcngc_2" || isIC10Trapped()) forcedMult = (((player.aarexModifications.ngp3c&&tmp.cnd)?tmp.cnd.nrm[tier]:1)||1)
 		else if (player.currentChallenge == "postcngm3_2") forcedMult = tmp.infPow.max(1e100)
 		else if (player.currentEternityChall == "eterc11") forcedMult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
 		if (player.aarexModifications.ngp3c) return softcap(forcedMult, "ngp3cNDs")
