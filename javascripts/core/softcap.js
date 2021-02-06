@@ -702,7 +702,11 @@ var softcap_data = {
 	ngp3cMPTD: {
 		1: {
 			func: "expPow",
-			start: new Decimal("1e8000000"),
+			start() {
+				let start = new Decimal("1e8000000");
+				if (player.masterystudies.includes("t332")) start = start.times(getMTSMult(332));
+				return start;
+			},
 			pow: 0.95,
 		},
 	},

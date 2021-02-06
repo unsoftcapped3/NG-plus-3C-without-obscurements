@@ -215,7 +215,7 @@ function ngP3AchieveCheck(){
 		if (player.masterystudies[id].split("t")[1]) checkEmpty = false
 	}
 	let ableToGetRid2 = checkEmpty && player.dilation.active
-	let ableToGetRid3 = ableToGetRid2 && (tmp.qu.electrons.amount == 0 && !tmp.ngp3c)
+	let ableToGetRid3 = ableToGetRid2 && (tmp.qu.electrons.amount == 0 || tmp.ngp3c)
 	let ableToGetRid4 = ableToGetRid2 && inQC(2)
 	let ableToGetRid5 = ableToGetRid4 && player.dontWant
 	let ableToGetRid6 = ableToGetRid2 && inQC(6) && inQC(8, true)
@@ -274,7 +274,7 @@ function ngP3AchieveCheck(){
 	if (masteryStudies.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
 	if (ranking >= 165) giveAchievement("Pulling an All-Nighter")
 	if (ranking >= 190) giveAchievement("Not-so-very-challenging") 
-	if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
+	if (tmp.pcc) if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
 	if (speedrunMilestonesReached >= 24) giveAchievement("And the winner is...")
 	if (speedrunMilestonesReached >= 28) giveAchievement("Special Relativity")
 	if (tmp.qu.best <= 10) giveAchievement("Quantum doesn't take so long")

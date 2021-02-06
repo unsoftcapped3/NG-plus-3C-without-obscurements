@@ -21,7 +21,8 @@ function NC10NDCostsOnReset(){
 }
 
 function replicantsResetOnQuantum(challid){
-	tmp.qu.replicants.requirement = new Decimal("1e3000000")
+	if (tmp.ngp3c) return;
+	tmp.qu.replicants.requirement = getReplicantBaseReq()
 	tmp.qu.replicants.quarks = (!(challid > 0) && player.achievements.includes("ng3p45") && !tmp.ngp3l) ? tmp.qu.replicants.quarks.pow(2/3) : new Decimal(0)
 	tmp.qu.replicants.eggonProgress = new Decimal(0)
 	tmp.qu.replicants.eggons = new Decimal(0)
@@ -260,7 +261,7 @@ function doGalaxyResetStuff(bulk){
 	completelyResetNormalDimensions()
 	player.sacrificed = new Decimal(0)
 	player.totalBoughtDims = resetTotalBought()
-	player.resets = player.achievements.includes("ng3p55") ? player.resets : 0
+	player.resets = player.achievements.includes("ng3p55")||(tmp.ngp3c ? player.masterystudies.includes("t331") : false) ? player.resets : 0
 	player.interval = null
 	player.tdBoosts = resetTDBoosts()
 	player.galaxies = player.galaxies + bulk
@@ -271,7 +272,7 @@ function doGalaxyResetStuff(bulk){
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
-	if (player.aarexModifications.ngp3c) loadCondensedData(2)
+	if (player.aarexModifications.ngp3c && !player.achievements.includes("ng3p55")) loadCondensedData(2)
 }
 
 
@@ -560,17 +561,17 @@ function doEternityResetStuff(){
 function getReplicantsOnGhostifyData(){
 	return {
 		amount: new Decimal(0),
-		requirement: new Decimal("1e3000000"),
+		requirement: getReplicantBaseReq(),
 		quarks: new Decimal(0),
 		quantumFood: 0,
-		quantumFoodCost: new Decimal(2e46),
+		quantumFoodCost: getQFBaseCost(),
 		limit: 1,
 		limitDim: 1,
-		limitCost: new Decimal(1e49),
+		limitCost: new Decimal(getReplicantLimitBaseCost()),
 		eggonProgress: new Decimal(0),
 		eggons: new Decimal(0),
 		hatchSpeed: 20,
-		hatchSpeedCost: new Decimal(1e49),
+		hatchSpeedCost: new Decimal(getHatchSpeedBaseCost()),
 		babyProgress: new Decimal(0),
 		babies: new Decimal(0),
 		ageProgress: new Decimal(0)
@@ -1001,7 +1002,7 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	if (!tmp.ngp3l) tmp.qu.quarkEnergy = new Decimal(0)
 	tmp.qu.qcsMods.current = []
 	tmp.qu.replicants.amount = new Decimal(0)
-	tmp.qu.replicants.requirement = new Decimal("1e3000000")
+	tmp.qu.replicants.requirement = getReplicantBaseReq()
 	tmp.qu.replicants.quarks = new Decimal(0)
 	tmp.qu.replicants.eggonProgress = new Decimal(0)
 	tmp.qu.replicants.eggons = new Decimal(0)
@@ -1020,8 +1021,8 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	}
 	if (bm > 6) {
 		tmp.qu.replicants.limit = 10
-		tmp.qu.replicants.limitCost = Decimal.pow(200, tmp.qu.replicants.limitDim * 9).times(1e49)
-		tmp.qu.replicants.quantumFoodCost = Decimal.pow(5, tmp.qu.replicants.limitDim * 30).times(2e46)
+		tmp.qu.replicants.limitCost = Decimal.pow(200, tmp.qu.replicants.limitDim * 9).times(getReplicantLimitBaseCost())
+		tmp.qu.replicants.quantumFoodCost = Decimal.pow(5, tmp.qu.replicants.limitDim * 30).times(getQFBaseCost())
 	}
 	if (bm > 3) {
 		var colors = ['r', 'g', 'b']

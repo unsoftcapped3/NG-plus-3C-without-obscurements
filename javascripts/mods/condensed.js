@@ -2,7 +2,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (!player.aarexModifications.ngp3c) return;
 	// Load Stuff
 	let preVer = player.aarexModifications.ngp3c||0
-	player.aarexModifications.ngp3c = 1.2;
+	player.aarexModifications.ngp3c = 1.21;
 	if (player.condensed === undefined) {
 		player.condensed = {
 			normal: [null, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -43,6 +43,12 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	
 	if (preVer<1.1) {
 		for (let i=5;i<=8;i++) player["timeDimension"+i].cost = timeDimCost(i, player["timeDimension"+i].bought)
+	}
+	if (preVer<1.21) {
+		player.quantum.replicants.requirement = getReplicantBaseReq();
+		player.quantum.replicants.quantumFoodCost = getQFBaseCost();
+		player.quantum.replicants.limitCost = getReplicantLimitBaseCost();
+		player.quantum.replicants.hatchSpeedCost = getHatchSpeedBaseCost();
 	}
 }
 
@@ -703,4 +709,11 @@ function getElecCondEff() {
 	let c = player.condensed.elec;
 	if (c<=2) return Math.pow(Math.log(e+1)/Math.log(2)+1, c)
 	else return Math.pow(Math.log(e+1)/Math.log(2)+1, 2)*Math.sqrt(c-1)
+}
+
+function getCondPreonEff() {
+	let mult = 5;
+	let preons = player.quantum.replicants.quarks;
+	if (preons.gte(1e10)) return Math.sqrt(preons.plus(1).log10()/Math.log10(2))*1.8/Math.log10(2) * mult
+	return preons.plus(1).log10()/Math.log10(2) * mult
 }

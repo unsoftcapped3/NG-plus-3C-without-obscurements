@@ -711,4 +711,7 @@ function updateCondenseTemp() {
 	
 	if (!tmp.cnd.elec) tmp.cnd.elec = {}
 	tmp.cnd.elec.eff = getElecCondEff()
+	
+	tmp.cnd.pe = 0
+	if (player.masterystudies.includes("d10")) tmp.cnd.pe = Math.min(Math.floor(getCondPreonEff()), player.quantum.electrons.sacGals)
 }

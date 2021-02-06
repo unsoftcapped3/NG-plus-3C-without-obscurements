@@ -31,7 +31,7 @@ function updateElectronsEffect() {
 		tmp.mpte = getElectronBoost()
 		document.getElementById("electronsAmount2").textContent = "You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 	}
-	document.getElementById("sacrificedGals").textContent = getFullExpansion(tmp.qu.electrons.sacGals)
+	document.getElementById("sacrificedGals").textContent = getFullExpansion(tmp.qu.electrons.sacGals)+(tmp.ngp3c?((tmp.cnd.pe>0)?(" - "+getFullExpansion(tmp.cnd.pe)):""):"")
 	document.getElementById("electronsAmount").textContent = getFullExpansion(Math.round(tmp.qu.electrons.amount))
 	document.getElementById("electronsTranslation").textContent = getFullExpansion(Math.round(tmp.mpte))
 	document.getElementById("electronsEffect").textContent = shorten(getDimensionPowerMultiplier("non-random"))

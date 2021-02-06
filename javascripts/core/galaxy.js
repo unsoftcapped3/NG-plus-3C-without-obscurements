@@ -42,7 +42,7 @@ function galaxyReset(bulk) {
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
 		if (ghostified && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	}
-	if (player.aarexModifications.ngp3c) loadCondensedData(2)
+	if (player.aarexModifications.ngp3c && !player.achievements.includes("ng3p55")) loadCondensedData(2)
 	hideDimensions()
 	tmp.tickUpdate = true;
 }

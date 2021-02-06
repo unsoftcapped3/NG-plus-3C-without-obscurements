@@ -692,17 +692,17 @@ function doNGP3NewPlayerStuff(){
         tmp.qu.autoOptions = {}
         tmp.qu.replicants = {
                 amount: 0,
-                requirement: "1e3000000",
+                requirement: getReplicantBaseReq(),
                 quarks: 0,
                 quantumFood: 0,
-                quantumFoodCost: 2e46,
+                quantumFoodCost: getQFBaseCost(),
                 limit: 1,
                 limitDim: 1,
-                limitCost: 1e49,
+                limitCost: getReplicantLimitBaseCost(),
                 eggonProgress: 0,
                 eggons: 0,
                 hatchSpeed: 20,
-                hatchSpeedCost: 1e49,
+                hatchSpeedCost: getHatchSpeedBaseCost(),
                 babyProgress: 0,
                 babies: 0,
                 ageProgress: 0
@@ -1059,18 +1059,18 @@ function doNGp3v199tov19995(){
                 tmp.qu.autoOptions = {}
                 tmp.qu.replicants = {
                         amount: 0,
-                        requirement: "1e3000000",
+                        requirement: getReplicantBaseReq(),
                         quarks: 0,
                         quantumFood: 0,
-                        quantumFoodCost: 1e46,
+                        quantumFoodCost: getQFBaseCost(),
                         workerProgress: 0,
                         workers: 0,
                         limit: 1,
-                        limitCost: 1e49,
+                        limitCost: getReplicantLimitBaseCost(),
                         eggonProgress: 0,
                         eggons: 0,
                         hatchSpeed: 20,
-                        hatchSpeedCost: 1e49,
+                        hatchSpeedCost: getHatchSpeedBaseCost(),
                         babyProgress: 0,
                         babies: 0,
                         ageProgress: 0
@@ -1090,13 +1090,13 @@ function doNGp3v199tov19995(){
         if (player.aarexModifications.newGame3PlusVersion < 1.9987) player.eternitiesBank=0
         if (player.aarexModifications.newGame3PlusVersion < 1.99871) {
                 tmp.qu.replicants.limit=Math.min(tmp.qu.replicants.limit,10)
-                tmp.qu.replicants.limitCost=Math.pow(200,tmp.qu.replicants.limit-1)*1e49
+                tmp.qu.replicants.limitCost=Math.pow(200,tmp.qu.replicants.limit-1)*getReplicantLimitBaseCost()
                 tmp.qu.replicants.workers=Decimal.min(tmp.qu.replicants.workers,10)
                 if (tmp.qu.replicants.workers.eq(10)) tmp.qu.replicants.workerProgress=0
         }
         if (player.aarexModifications.newGame3PlusVersion < 1.998711) {
                 tmp.qu.quantumFood=0
-                tmp.qu.quantumFoodCost=1e46*Math.pow(5,Math.round(new Decimal(tmp.qu.replicants.workers).toNumber()*3+new Decimal(tmp.qu.replicants.workerProgress).toNumber()))
+                tmp.qu.quantumFoodCost=getQFBaseCost()*Math.pow(5,Math.round(new Decimal(tmp.qu.replicants.workers).toNumber()*3+new Decimal(tmp.qu.replicants.workerProgress).toNumber()))
         }
         if (player.aarexModifications.newGame3PlusVersion < 1.99873) {
                 tmp.qu.pairedChallenges.completions = {}
@@ -1132,7 +1132,7 @@ function doNGp3v199tov19995(){
         if (player.aarexModifications.newGame3PlusVersion < 1.9995) {
                 if (tmp.qu.emperorDimensions[1].perm === undefined) {
                         tmp.qu.replicants.quantumFood = 0
-                        tmp.qu.replicants.quantumFoodCost = 1e46
+                        tmp.qu.replicants.quantumFoodCost = getQFBaseCost()
                         for (d=1;d<9;d++) tmp.qu.emperorDimensions[d] = {workers: 0, progress: 0, perm: 0}
                 }
                 player.meta.bestOverQuantums = player.meta.bestAntimatter
@@ -2035,6 +2035,7 @@ function updateNGp3DisplayStuff(){
         document.getElementById('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
         document.getElementById("gluonCharger1").style.display = tmp.ngp3l ? "none" : ""
         document.getElementById("gluonCharger2").style.display = tmp.ngp3l ? "none" : ""
+		document.getElementById("gluonCharger3").style.display = (tmp.ngp3l||!tmp.ngp3c) ? "none" : ""
         document.getElementById('rg4toggle').style.display=(!tmp.ngp3l||inQC(1)||QCIntensity(1))?"none":""
         document.getElementById('rg4toggle').textContent="Toggle: O"+(tmp.qu.rg4?"N":"FF")
         document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"

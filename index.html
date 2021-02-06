@@ -538,6 +538,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy331" style='font-size:9px' onclick='buyMasteryStudy("t", 331)'></button></td>
+						<td><button class="timestudylocked" id="timestudy333" onclick='buyMasteryStudy("t", 333)'></button></td>
 						<td><button class="timestudylocked" id="timestudy332" style='font-size:10px' onclick='buyMasteryStudy("t", 332)'></button></td>
 					</tr>
 				</table>
@@ -551,7 +552,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button class="timestudylocked" id="timestudy352" onclick='buyMasteryStudy("t", 352)' style='font-size: 8px'></button></td>
 						<td><button class="timestudylocked" id="timestudy351" onclick='buyMasteryStudy("t", 351)'></button></td>
+						<td><button class="timestudylocked" id="timestudy353" onclick='buyMasteryStudy("t", 353)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -4933,6 +4936,8 @@
 					<td colspan=2><button class="gluonupgrade rg" id="generateRGGluons" onclick="generateGluons('rg')">Generate <span id="generateRGGluonsAmount">0</span> red-green gluons from red quarks</button></td>
 					<td colspan=2><button class="gluonupgrade gb" id="generateGBGluons" onclick="generateGluons('gb')">Generate <span id="generateGBGluonsAmount">0</span> green-blue gluons from green quarks</button></td>
 					<td colspan=2><button class="gluonupgrade br" id="generateBRGluons" onclick="generateGluons('br')">Generate <span id="generateBRGluonsAmount">0</span> blue-red gluons from blue quarks</button></td>
+				</tr><tr id="gluonCharger3">
+					<td colspan=6><button class="gluonupgrade rainbow" id="generateAllGluons" onclick="generateAllGluons()">Generate all Gluons</button></td>
 				</tr><tr>
 					<td><button id='rgupg1' onclick='buyGluonUpg("rg",1)'>Remote Antimatter Galaxy cost scaling is approximately 2x slower.<br>Cost: 1 RG gluons</button></td>
 					<td><button id='rgupg2' onclick='buyGluonUpg("rg",2)'>Galaxies are more effective based on your free galaxies.<br><span id='rgupg2current'></span><br>Cost: 2 RG gluons</button></td>
@@ -5050,7 +5055,7 @@
 					<button class="storebtn" id="replicantReset" style="width: 220px; height: 60px; font-size: 11px" onclick='replicantReset()'></button><br><button class="storebtn" id="autoReset" style="width: 220px" onclick='toggleAutoReset()'></button>
 				</td><td>
 					You have <span id="workerReplAmount" style="font-size:35px">0</span> total worker replicants.<br>
-					They are gathering <span id="workerReplGatherRate" style="font-size:25px">0</span> preons per second and producing <span id="eggonRate" style="font-size:25px">0</span> <span id="workerReplWhat">eggons</span> per <span id="eggonRateTimeframe">minute</span>.<br>
+					They are gathering <span id="workerReplGatherRate" style="font-size:25px">0</span> preons per second and producing <span id="eggonRate" style="font-size:25px">0</span> <span id="workerReplWhat">eggons</span> per <span id="eggonRateTimeframe">minute</span>. <span id="eggonGainRate" style="font-size:15px">0.0%</span><br>
 					Feed your normal replicant to become a worker. <span id="workerProgress" style="font-size:15px">0.0%</span><br>
 					<button class='storebtn' id='feedNormal' style='width: 280px' onclick="feedReplicant(1)">Feed one with quantum food</button><br>
 					<button id='breakLimit' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
@@ -5061,7 +5066,8 @@
 					They will become normal replicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
 				</td></tr><tr><td>
 					You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span><br>
-					Translated to +<span id="quarkTranslation" style="font-size:35px">0</span>% added to green power.</p>
+					Translated to +<span id="quarkTranslation" style="font-size:35px">0</span>% added to green power.
+					<span id="quarkTranslationCondensed"><br>Translated to sacrificed galaxies cancelling <span id="quarkTranslation2" style="font-size:35px">0</span> less galaxies</span></p>
 				</td><td>
 					You have <span id="quantumFoodAmount" style="font-size:35px">0</span> quantum food.<br>
 					<button class='gluonupgrade storebtn' id='buyQuantumFood' onclick='buyQuantumFood()'></button><br>

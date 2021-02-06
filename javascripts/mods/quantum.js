@@ -539,9 +539,11 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 			tmp.qu.pairedChallenges.current = pc
 		}
 		updateInQCs()
-		if ((!challid && player.ghostify.milestones < 6) || bigRip != tmp.qu.bigRip.active) tmp.qu.replicants.amount = new Decimal(0)
-		replicantsResetOnQuantum(challid)
-		nanofieldResetOnQuantum()
+		if (!tmp.ngp3c) {
+			if ((!challid && player.ghostify.milestones < 6) || bigRip != tmp.qu.bigRip.active) tmp.qu.replicants.amount = new Decimal(0)
+			replicantsResetOnQuantum(challid)
+			nanofieldResetOnQuantum()
+		}
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
 		if (tmp.qu.bigRip.active != bigRip) {

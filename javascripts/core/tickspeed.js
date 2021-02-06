@@ -11,7 +11,8 @@ function initialGalaxies() {
 	if (tmp.ngp3 && !tmp.be) {
 		g = Math.max(g-player.quantum.electrons.sacGals, 0)
 		g *= Math.max(Math.min(10 - (player.quantum.electrons.amount + g * getElectronGainFinalMult()) / 16857, 1), 0)
-		if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
+		if (tmp.ngp3c ? player.masterystudies.includes("d10") : false) if (tmp.cnd) g = Math.max(Math.min(player.galaxies, tmp.cnd.pe), g);
+		if (hasBosonicUpg(14) && !tmp.ngp3c) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
 	}
 	if (tmp.rg4 && !player.aarexModifications.ngp3c) g *= 0.4
 	if (player.aarexModifications.ngp3c) g *= 2

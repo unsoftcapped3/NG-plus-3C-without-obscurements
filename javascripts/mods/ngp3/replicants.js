@@ -1,5 +1,7 @@
+var eggonRate;
+
 function babyRateUpdating(){
-	var eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed())
+	eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed()).times(tmp.ngp3c?5:1)
 	if (eggonRate.lt(3)){
 		document.getElementById("eggonRate").textContent = shortenDimensions(eggonRate.times(60))
 		document.getElementById("eggonRateTimeframe").textContent = "hour"
@@ -10,6 +12,7 @@ function babyRateUpdating(){
 		document.getElementById("eggonRate").textContent = shortenMoney(eggonRate.div(60))
 		document.getElementById("eggonRateTimeframe").textContent = "second"
 	}
+	document.getElementById("eggonGainRate").textContent = Math.round(tmp.qu.replicants.eggonProgress.toNumber() * 100) + "%"
 }
 
 function preonGatherRateUpdating(){
@@ -21,7 +24,7 @@ function preonGatherRateUpdating(){
 }
 
 function getGrowupRatePerMinute(){
-	return tmp.twr.plus(tmp.qu.replicants.amount).times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed())
+	return tmp.twr.plus(tmp.qu.replicants.amount).times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed()).times(tmp.ngp3c?5:1)
 }
 
 function growupRateUpdating(){
@@ -53,6 +56,8 @@ function updateReplicantsTab(){
 
 	document.getElementById("gatheredQuarks").textContent = shortenDimensions(tmp.qu.replicants.quarks.floor())
 	document.getElementById("quarkTranslation").textContent = getFullExpansion(Math.round(tmp.pe * 100))
+	document.getElementById("quarkTranslationCondensed").style.display = tmp.ngp3c?"":"none"
+	if (tmp.ngp3c && tmp.cnd) document.getElementById("quarkTranslation2").textContent = getFullExpansion(tmp.cnd.pe)
 
 	babyRateUpdating()
 	document.getElementById("feedNormal").className = (canFeedReplicant(1) ? "stor" : "unavailabl") + "ebtn"
@@ -148,7 +153,7 @@ function hatchSpeedDisplay(next) {
 	var speed = getHatchSpeed()
 	if (next) speed /= 1.1
 	if (speed < 1e-24) return shorten(1/speed) + "/s"
-	return timeDisplayShort(speed * 10, true, 1)
+	return timeDisplayShort(speed * 100, true, 1)
 }
 
 function getTotalReplicants(data) {
@@ -276,6 +281,7 @@ function getHatchSpeed() {
 	if (player.masterystudies.includes("t391")) speed /= getMTSMult(391)
 	if (player.masterystudies.includes("t402")) speed /= 30
 	if (isNanoEffectUsed("hatch_speed")) speed /= tmp.nf.effects.hatch_speed
+	if (tmp.ngp3c) speed /= 5;
 	return speed
 }
 
@@ -396,3 +402,18 @@ function getSpinToReplicantiSpeed(){
 	return r * g * b
 }
 
+function getReplicantBaseReq() {
+	return new Decimal(tmp.ngp3c?"1e7400000":"1e3000000")
+}
+
+function getQFBaseCost() {
+	return new Decimal(tmp.ngp3c?1e20:2e46)
+}
+
+function getReplicantLimitBaseCost() {
+	return new Decimal(tmp.ngp3c?1e22:1e49)
+}
+
+function getHatchSpeedBaseCost() {
+	return new Decimal(tmp.ngp3c?1e22:1e49)
+}

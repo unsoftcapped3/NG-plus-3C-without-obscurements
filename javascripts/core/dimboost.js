@@ -217,7 +217,7 @@ function getSupersonicStart() {
 	if (player.aarexModifications.ngp3c) r = 1
 	else if (player.aarexModifications.nguspV && !player.aarexModifications.nguepV) r = 1e5
 	if (tmp.ngp3) {
-		if (player.masterystudies.includes("t331")) r += 24e4
+		if (player.masterystudies.includes("t331") && !tmp.ngp3c) r += 24e4
 		if (isNanoEffectUsed("supersonic_start")) if (tmp.nf.effects.supersonic_start) r += tmp.nf.effects.supersonic_start 
 	}
 	return r

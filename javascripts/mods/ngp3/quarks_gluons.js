@@ -336,6 +336,8 @@ function getQuarkEnergyGainMult() {
 	let mult = new Decimal(0.75)
 	if (player.masterystudies.includes("t270") && player.aarexModifications.ngp3c) mult = mult.times(getMTSMult(270));
 	if (tmp.ngp3c && QCIntensity(7)>=1) mult = mult.times(10);
+	if (player.masterystudies.includes("t333") && tmp.ngp3c) mult = mult.times(getMTSMult(333))
+	if (tmp.ngp3c && player.masterystudies.includes("t353")) mult = mult.times(3)
 	return mult;
 }
 
@@ -348,13 +350,31 @@ function generateGluons(mix) {
 	tmp.qu.gluons[mix] = tmp.qu.gluons[mix].add(toConsume).round()
 	updateColorCharge()
 	updateGluonsTabOnUpdate()
+	if (player.masterystudies.includes("d10")) updateReplicants()
+}
+
+function generateAllGluons() {
+	let rgConsume = tmp.qu.usedQuarks.r.min(tmp.qu.quarkEnergy.div(3).floor())
+	let gbConsume = tmp.qu.usedQuarks.g.min(tmp.qu.quarkEnergy.div(3).floor())
+	let brConsume = tmp.qu.usedQuarks.b.min(tmp.qu.quarkEnergy.div(3).floor())
+	if (rgConsume.eq(0)&&gbConsume.eq(0)&&brConsume.eq(0)) return;
+	tmp.qu.usedQuarks.r = tmp.qu.usedQuarks.r.sub(rgConsume).round();
+	tmp.qu.gluons.rg = tmp.qu.gluons.rg.plus(rgConsume).round();
+	tmp.qu.usedQuarks.g = tmp.qu.usedQuarks.g.sub(gbConsume).round();
+	tmp.qu.gluons.gb = tmp.qu.gluons.gb.plus(gbConsume).round();
+	tmp.qu.usedQuarks.b = tmp.qu.usedQuarks.b.sub(brConsume).round();
+	tmp.qu.gluons.br = tmp.qu.gluons.br.plus(brConsume).round();
+	tmp.qu.quarkEnergy = tmp.qu.quarkEnergy.sub(rgConsume.plus(gbConsume).plus(brConsume)).max(0);
+	updateColorCharge()
+	updateGluonsTabOnUpdate()
+	if (player.masterystudies.includes("d10")) updateReplicants()
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
-GUCosts_Condensed = [null, 1, 2, 4, 100, 7e18, 1e80, 1e180, "1e570"]
+GUCosts_Condensed = [null, 1, 2, 4, 100, 7e18, 1e24, 1e180, "1e570"]
 
 function getGUCost(id) {
-	let costs = tmp.ngp3c?GUCosts_Condensed:GU_Costs
+	let costs = tmp.ngp3c?GUCosts_Condensed:GUCosts
 	return costs[id]
 }
 
@@ -519,6 +539,7 @@ function updateGluonsTab() {
 		document.getElementById("generateGBGluonsAmount").textContent=shortenDimensions(gbGain)
 		document.getElementById("generateBRGluons").className = "gluonupgrade " + (brGain.gt(0) ? "br" : "unavailablebtn")
 		document.getElementById("generateBRGluonsAmount").textContent=shortenDimensions(brGain)
+		document.getElementById("generateAllGluons").className = "gluonupgrade " + (rgGain.max(gbGain).max(brGain).gt(0) ? "br" : "unavailablebtn")
 	}
 	if (player.ghostify.milestones > 7) {
 		updateQuantumWorth("display")

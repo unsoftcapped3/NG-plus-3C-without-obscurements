@@ -397,6 +397,7 @@ function getRebuyableDilUpgCost(id) {
 	var costGroup = DIL_UPG_COSTS["r"+id]
 	if (id == 4 && player.galacticSacrifice !== undefined && !tmp.ngp3l) costGroup = DIL_UPG_COSTS.r4_ngmm
 	var amount = player.dilation.rebuyables[id] || 0
+	if (tmp.ngp3c && id==6) if (player.masterystudies.includes("t352")) amount *= 1-getMTSMult(352)
 	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1],amount))
 	if (player.aarexModifications.nguspV) {
 		if (id > 3) cost = cost.times(1e7)
@@ -459,7 +460,7 @@ function buyDilationUpgrade(pos, max, isId) {
 
 function getPassiveTTGen() {
 	let r = nP(getTTGenPart(player.dilation.tachyonParticles))
-	if (player.achievements.includes("ng3p18") && !tmp.qu.bigRip.active) r += nD(getTTGenPart(player.dilation.bestTP), 50)
+	if (player.achievements.includes("ng3p18") && !tmp.qu.bigRip.active) r = nP(r, nD(getTTGenPart(player.dilation.bestTP), 50))
 	if (tmp.ngex) r = nM(r, .8)
 	r = nD(r, (player.achievements.includes("ng3p51") ? 200 : 2e4))
 	if (tmp.ngp3c && QCIntensity(8)>=1) r = nM(r, 100)
