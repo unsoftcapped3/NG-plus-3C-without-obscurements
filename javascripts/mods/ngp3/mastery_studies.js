@@ -2,31 +2,32 @@ var masteryStudies = {
 	initCosts: {
 		time: {241: 2e71, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76, 291: 2.143347050754458e77, 292: 2.143347050754458e77, 301: 8.573388203017832e77, 302: 2.6791838134430725e78, 303: 8.573388203017832e77, 311: 8.573388203017832e77, 312: 8.573388203017832e77, 321: 2.6791838134430727e76, 322: 9.324815538194444e77, 323: 2.6791838134430727e76, 331: 1.0172526041666666e79, 332: 1.0172526041666666e79, 341: 9.5367431640625e78, 342: 1.0172526041666666e79, 343: 1.0172526041666666e79, 344: 9.5367431640625e78, 351: 2.1192762586805557e79, 361: 1.5894571940104167e79, 362: 1.5894571940104167e79, 371: 2.1192762586805557e79, 372: 6.622738308376736e79, 373: 2.1192762586805557e79, 381: 6.622738308376736e79, 382: 6.622738308376736e79, 383: 6.622738308376736e79, 391: 8.27842288547092e79, 392: 8.27842288547092e79, 393: 8.27842288547092e79, 401: 4.967053731282552e80, 402: 8.278422885470921e80, 411: 1.3245476616753473e71, 412: 1.655684577094184e71, 421: 1.9868214925130208e72, 431: 1.1037897180627893e75},
 		time_legacy: {241: 1e71, 251: 2e71, 252: 2e71, 253: 2e71, 261: 5e71, 262: 5e71, 263: 5e71, 264: 5e71, 265: 5e71, 266: 5e71},
-		time_cond: {241: 1e75, 251: 5e75, 252: 5e75, 253: 5e75, 260: 1e76, 261: 5e75, 262: 5e75, 263: 1e76, 264: 1e76, 265: 5e75, 266: 5e75, 267: 1e76, 270: 1e81, 271: 5e76, 272: 2e77, 273: 5e76, 281: 1e77, 282: 1e77, 291: 2e78, 292: 2e78, 301: 5e78, 302: 1e79, 303: 5e78, 311: 5e79, 312: 5e79, 321: 2.7e79, 322: 1e80, 323: 2.7e79, 331: 1e80, 332: 1e80, 333: 2e80, 341: 5e79, 342: 1e80, 343: 1e80, 344: 5e79, 351: 2e80, 352: 2e80, 353: 2e80},
+		time_cond: {241: 1e75, 251: 5e75, 252: 5e75, 253: 5e75, 260: 1e76, 261: 5e75, 262: 5e75, 263: 1e76, 264: 1e76, 265: 5e75, 266: 5e75, 267: 1e76, 270: 1e81, 271: 5e76, 272: 2e77, 273: 5e76, 281: 1e77, 282: 1e77, 291: 2e78, 292: 2e78, 301: 5e78, 302: 1e79, 303: 5e78, 311: 5e79, 312: 5e79, 321: 2.7e79, 322: 1e80, 323: 2.7e79, 331: 1e80, 332: 1e80, 333: 2e80, 341: 5e79, 342: 1e80, 343: 1e80, 344: 5e79, 345: 1e82, 351: 2e80, 352: 2e80, 353: 2e80, 354: 4e81, 355: 4e81},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		ec_legacy: {13: 1e72, 14: 1e72},
 		ec_cond: {13: 2.5e75, 14: 2.5e75},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e94, 14: 1e97},
 		dil_legacy: {7: 2e82, 8: 2e84, 9: 4e85, 10: 4e87, 11: 3e90, 12: 3e92, 13: 1e95, 14: 1e98},
-		dil_cond: {7: 1e82, 8: 1e83, 9: 5e84, 11: 2e92},
+		dil_cond: {7: 1e82, 8: 1e83, 9: 5e84, 11: 2e93},
 	},
 	costs: {
 		time: {},
 		time_mults: {241: 1, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4, 291: 1, 292: 1, 301: 2, 302: 131072, 303: 2, 311: 64, 312: 64, 321: 2, 322: 2, 323: 2, 331: 2, 332: 2, 341: 1, 342: 1, 343: 1, 344: 1, 351: 4, 361: 1, 362: 1, 371: 2, 372: 2, 373: 2, 381: 1, 382: 1, 383: 2, 391: 1, 392: 1, 393: 1, 401: 1e10, 402: 1e10, 411: 1, 412: 1, 421: 1, 431: 1},
 		time_mults_legacy: {},
-		time_mults_cond: {251: 1.5, 252: 1.5, 253: 1.5, 260: 5, 261: 3, 262: 3, 263: 3, 264: 3, 265: 3, 266: 3, 267: 5, 270: 1.5, 271: 1.5, 273: 1.5, 281: 1.5, 282: 1.5, 302: 2, 311: 2, 312: 2, 321: 1, 323: 1, 333: 1, 351: 1, 352: 250, 353: 1},
+		time_mults_cond: {251: 1.5, 252: 1.5, 253: 1.5, 260: 5, 261: 3, 262: 3, 263: 3, 264: 3, 265: 3, 266: 3, 267: 5, 270: 1.5, 271: 1.5, 273: 1.5, 281: 1.5, 282: 1.5, 302: 2, 311: 2, 312: 2, 321: 1, 323: 1, 333: 1, 345: 1, 351: 1, 352: 250, 353: 1, 354: 2, 355: 2},
 		ec: {},
 		dil: {}
 	},
 	costMult: 1,
-	condensedOnly: [260, 267, 270, 333, 352, 353],
-	hasStudyReq: [252, 260, 267, 270, 272, 352, 353],
+	condensedOnly: [260, 267, 270, 333, 345, 352, 353, 354, 355],
+	hasStudyReq: [252, 260, 267, 270, 272, 345, 352, 353],
 	studyReqDisplays: {
 		252: function() { return "3 Normal Mastery Studies bought" },
 		260: function() { return "7 Normal Mastery Studies bought" },
 		267: function() { return "7 Normal Mastery Studies bought" },
 		270: function() { return "10 quantum worth" },
 		272: function() { return "12 Normal Mastery Studies bought" },
+		345: function() { return shortenCosts(Decimal.pow(10, 250e9))+" best antimatter" },
 		352: function() { return "35 Normal Mastery Studies bought" },
 		353: function() { return "35 Normal Mastery Studies bought" },
 	},
@@ -36,6 +37,7 @@ var masteryStudies = {
 		267: function() { return masteryStudies.bought>=7 },
 		270: function() { return quantumWorth.gte(10) },
 		272: function() { return masteryStudies.bought>=12 },
+		345: function() { return player.totalmoney.gte(Decimal.pow(10, 250e9)) },
 		352: function() { return masteryStudies.bought>=35 },
 		353: function() { return masteryStudies.bought>=35 },
 	},
@@ -73,7 +75,7 @@ var masteryStudies = {
 			return QCIntensity(8) >= 1 && (!tmp.ngp3c || tmp.qu.electrons.amount >= 17175)
 		},
 		10: function() {
-			return tmp.qu.pairedChallenges.completed == 4 && (!tmp.ngp3c || player.replicanti.amount.gte("1e7400000"))
+			return tmp.qu.pairedChallenges.completed == 4 && (!tmp.ngp3c || player.replicanti.amount.gte("1e7000000"))
 		},
 		11: function() {
 			return tmp.eds[1].perm == 10 && (!tmp.ngp3c || false)
@@ -99,7 +101,7 @@ var masteryStudies = {
 			return "Complete Quantum Challenge 8"+(tmp.ngp3c?(" & "+getFullExpansion(17175)+" electrons"):"")
 		},
 		10: function() {
-			return "Complete Paired Challenge 4"+(tmp.ngp3c?(" & "+shortenCosts(new Decimal("1e7400000"))+" replicanti"):"")
+			return "Complete Paired Challenge 4"+(tmp.ngp3c?(" & "+shortenCosts(new Decimal("1e7000000"))+" replicanti"):"")
 		},
 		11: function() {
 			return getFullExpansion(10) + " worker replicants"+(tmp.ngp3c?" & wait for a future update":"")
@@ -213,6 +215,11 @@ var masteryStudies = {
 			if (ret > 4) ret = 3 + Math.log10(ret + 6)
 			return ret
 		},
+		345: function() {
+			let mult = Math.pow(2, Math.sqrt(Math.log10(player.money.plus(1).log10()/250e9+1)))
+			if (tmp.twr.gte(9)) mult *= 1.1;
+			return mult*Math.sqrt(player.galaxies/20)/10+1
+		},
 		351: function(){ //maybe use softcap.js
 			let mult = tmp.ngp3c?41e-7:14e-7
 			let log = player.timeShards.max(1).log10()*mult
@@ -222,6 +229,19 @@ var masteryStudies = {
 		},
 		352: function() {
 			return 1-1/(Math.log10(player.replicanti.galaxies+1)/4+1)
+		},
+		354: function() {
+			if (!tmp.ngp3c) return 1;
+			return Decimal.pow(1.5, Math.sqrt(player.condensed.meta[7]+player.condensed.meta[8]))
+		},
+		355: function() {
+			let base = new Decimal(10)
+			if (tmp.twr.lt(10)) {
+				base = base.times(Decimal.pow(1.25, Decimal.pow(tmp.twr, 1.225)))
+				if (tmp.twr.gte(8)) base = base.times(tmp.twr.sub(5))
+				if (tmp.twr.gte(9)) base = base.times(2)
+			} else base = base.times(Decimal.pow(1.25, tmp.twr.log10()+Math.pow(10, 1.225)-1)).times(10)
+			return Decimal.pow(base, Math.sqrt(tmp.qu.replicants.quarks.div(10).plus(1).log10()))
 		},
 		361: function(){
 			return player.dilation.tachyonParticles.max(1).pow(0.01824033924212366)
@@ -353,9 +373,12 @@ var masteryStudies = {
 		342: "All replicated galaxies are stronger and use the same formula.",
 		343: "Free galaxies are as strong as a normal replicated galaxy.",
 		344: "Replicated galaxies are more effective based on your preons.",
+		345: "The Meta Dimension Boost cost scales 50% slower, and the second preon effect is multiplied based on your antimatter & normal galaxies.",
 		351: "Time Shards boost all Meta Dimensions.",
 		352: "Non-extra Replicated Galaxies make the Dilation Condenser cost scale slower.",
 		353: "Triple Quark Energy gain.",
+		354: "Seventh & Eighth Meta Condensers speed up Replicants.",
+		355: "Preons & Total Worker Replicants boost Quark Energy gain.",
 		361: "Hatch speed is faster based on your tachyon particles.",
 		362: function() {
 			return "Reduce the softcap for the preon boost"+(player.aarexModifications.ngumuV?", but preons reduce the green power effect.":".")
@@ -380,7 +403,7 @@ var masteryStudies = {
 		421: "Tickspeed boosts preon energy production.",
 		431: "DT production and branches are faster based on your free galaxies."
 	},
-	hasStudyEffect: [251, 252, 253, 262, 263, 264, 270, 273, 281, 282, 301, 303, 322, 332, 333, 341, 344, 351, 352, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 262, 263, 264, 270, 273, 281, 282, 301, 303, 322, 332, 333, 341, 344, 345, 351, 352, 354, 355, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251: function(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -421,7 +444,7 @@ var masteryStudies = {
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
 	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: [291, 292, 302], 291: [301], 292: [303], 301: [311], 302: ["d10"], 303: [312], 311: [321], 312: [323], d10: [322], 322: [331, 332], 331: [342], 332: [343], 342: [341], 343: [344], 344: [351], 351: ["d11"], d11: [361, 362], 361: [371], 362: [373], 371: [372], 372: [381], 373: [382], 381: [391], 382: [383], 383: [393], 391: [392], 393: [392], 392: ["d12"], d12: [401, 402], 401: [411], 402: [412], 411: [421], 412: ["d13"], 421: ["d13"], d13: [431], 431: ["d14"]},
-	condensedConnections: {251: [260, 261, 262], 253: [265, 266, 267], ec13: [270], ec14: ["d7"], 322: [331, 332, 333], 341: [352], 344: [351, 353]},
+	condensedConnections: {251: [260, 261, 262], 253: [265, 266, 267], ec13: [270], ec14: ["d7"], 322: [331, 332, 333], 333: [345], 341: [352], 342: [341, 351], 343: [344, 351], 344: [353], 352: [354], 353: [355]},
 	allConnections_legacy: {252: [263, 264, "d7"], ec13: [], ec14: []},
 	allUnlocks: {
 		d7: function() {

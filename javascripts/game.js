@@ -5306,7 +5306,7 @@ function emperorDimUpdating(diff){
 }
 
 function replicantEggonUpdating(diff){
-	var newBabies = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(getSpinToReplicantiSpeed()).times(tmp.ngp3c?5:1).times(diff/200)
+	var newBabies = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(getReplicantSpeed()).times(tmp.ngp3c?5:1).times(diff/200)
 	if (player.achievements.includes("ng3p35")) newBabies = newBabies.times(10)
 	tmp.qu.replicants.eggonProgress = tmp.qu.replicants.eggonProgress.add(newBabies)
 	var toAdd = tmp.qu.replicants.eggonProgress.floor()

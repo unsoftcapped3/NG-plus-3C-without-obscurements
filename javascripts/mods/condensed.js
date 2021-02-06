@@ -2,7 +2,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (!player.aarexModifications.ngp3c) return;
 	// Load Stuff
 	let preVer = player.aarexModifications.ngp3c||0
-	player.aarexModifications.ngp3c = 1.21;
+	player.aarexModifications.ngp3c = 1.22;
 	if (player.condensed === undefined) {
 		player.condensed = {
 			normal: [null, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -45,10 +45,12 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 		for (let i=5;i<=8;i++) player["timeDimension"+i].cost = timeDimCost(i, player["timeDimension"+i].bought)
 	}
 	if (preVer<1.21) {
-		player.quantum.replicants.requirement = getReplicantBaseReq();
 		player.quantum.replicants.quantumFoodCost = getQFBaseCost();
 		player.quantum.replicants.limitCost = getReplicantLimitBaseCost();
 		player.quantum.replicants.hatchSpeedCost = getHatchSpeedBaseCost();
+	}
+	if (preVer<1.22) {
+		player.quantum.replicants.requirement = getReplicantBaseReq();
 	}
 }
 
@@ -638,6 +640,7 @@ function getMetaCondenserPow() {
 	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
 	ret = ret.times(getECReward(14, true))
 	if (inQC("8c")) ret = ret.times(2.15)
+	if (tmp.twr.gte(9)) ret = ret.times(1.1)
 	return ret;
 }
 
@@ -712,8 +715,14 @@ function getElecCondEff() {
 }
 
 function getCondPreonEff() {
-	let mult = 5;
+	let mult = getCondPreonEffMult();
 	let preons = player.quantum.replicants.quarks;
 	if (preons.gte(1e10)) return Math.sqrt(preons.plus(1).log10()/Math.log10(2))*1.8/Math.log10(2) * mult
 	return preons.plus(1).log10()/Math.log10(2) * mult
+}
+
+function getCondPreonEffMult() {
+	let mult = 5;
+	if (player.masterystudies.includes("t345")) mult *= getMTSMult(345)
+	return mult;
 }

@@ -144,7 +144,7 @@ function getMetaShiftRequirement() {
 	var data = {tier: Math.min(8, mdb + 4), amount: 20}
 	var inQC4 = inQC(4)
 	data.mult = inQC4 ? 5.5 : 15
-	if (player.aarexModifications.ngp3c) data.mult *= 1.5
+	if (player.aarexModifications.ngp3c && !player.masterystudies.includes("t345")) data.mult *= 1.5
 	if (tmp.ngp3) if (player.masterystudies.includes("t312")) data.mult -= 1
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (tmp.ngp3) if (player.masterystudies.includes("d13")) data.amount -= getTreeUpgradeEffect(1)

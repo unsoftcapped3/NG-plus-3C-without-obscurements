@@ -338,6 +338,7 @@ function getQuarkEnergyGainMult() {
 	if (tmp.ngp3c && QCIntensity(7)>=1) mult = mult.times(10);
 	if (player.masterystudies.includes("t333") && tmp.ngp3c) mult = mult.times(getMTSMult(333))
 	if (tmp.ngp3c && player.masterystudies.includes("t353")) mult = mult.times(3)
+	if (tmp.ngp3c && player.masterystudies.includes("t355")) mult = mult.times(getMTSMult(355))
 	return mult;
 }
 
@@ -371,7 +372,7 @@ function generateAllGluons() {
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
-GUCosts_Condensed = [null, 1, 2, 4, 100, 7e18, 1e24, 1e180, "1e570"]
+GUCosts_Condensed = [null, 1, 2, 4, 100, 7e18, 1e24, 1e28, "1e570"]
 
 function getGUCost(id) {
 	let costs = tmp.ngp3c?GUCosts_Condensed:GUCosts

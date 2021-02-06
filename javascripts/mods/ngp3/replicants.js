@@ -1,7 +1,7 @@
 var eggonRate;
 
 function babyRateUpdating(){
-	eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed()).times(tmp.ngp3c?5:1)
+	eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getReplicantSpeed()).times(tmp.ngp3c?5:1)
 	if (eggonRate.lt(3)){
 		document.getElementById("eggonRate").textContent = shortenDimensions(eggonRate.times(60))
 		document.getElementById("eggonRateTimeframe").textContent = "hour"
@@ -24,7 +24,7 @@ function preonGatherRateUpdating(){
 }
 
 function getGrowupRatePerMinute(){
-	return tmp.twr.plus(tmp.qu.replicants.amount).times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed()).times(tmp.ngp3c?5:1)
+	return tmp.twr.plus(tmp.qu.replicants.amount).times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getReplicantSpeed()).times(tmp.ngp3c?5:1)
 }
 
 function growupRateUpdating(){
@@ -109,7 +109,8 @@ function updateReplicants(mode) {
 
 function getGatherRate() {
 	var mult = new Decimal(1)
-	if (player.masterystudies.includes("t373")) mult = getMTSMult(373)
+	if (tmp.ngp3c) mult = getReplicantSpeed()
+	if (player.masterystudies.includes("t373")) mult = mult.times(getMTSMult(373))
 	var data = {
 		normal: tmp.qu.replicants.amount.times(mult),
 		babies: tmp.qu.replicants.babies.times(mult).div(20),
@@ -281,7 +282,7 @@ function getHatchSpeed() {
 	if (player.masterystudies.includes("t391")) speed /= getMTSMult(391)
 	if (player.masterystudies.includes("t402")) speed /= 30
 	if (isNanoEffectUsed("hatch_speed")) speed /= tmp.nf.effects.hatch_speed
-	if (tmp.ngp3c) speed /= 5;
+	if (tmp.ngp3c) speed /= 5 * getReplicantSpeed().toNumber();
 	return speed
 }
 
@@ -402,8 +403,15 @@ function getSpinToReplicantiSpeed(){
 	return r * g * b
 }
 
+function getReplicantSpeed() {
+	let speed = new Decimal(1)
+	if (tmp.ngp3c && player.masterystudies.includes("t354")) speed = speed.times(getMTSMult(354))
+	if (player.achievements.includes("ng3p54")) speed = speed.times(getSpinToReplicantiSpeed())
+	return speed;
+}
+
 function getReplicantBaseReq() {
-	return new Decimal(tmp.ngp3c?"1e7400000":"1e3000000")
+	return new Decimal(tmp.ngp3c?"1e7000000":"1e3000000")
 }
 
 function getQFBaseCost() {
