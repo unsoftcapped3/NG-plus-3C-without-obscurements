@@ -640,7 +640,7 @@ function getMetaCondenserPow() {
 	if (player.masterystudies.includes("t267")) ret = ret.times(1.5)
 	ret = ret.times(getECReward(14, true))
 	if (inQC("8c")) ret = ret.times(2.15)
-	if (tmp.twr.gte(9)) ret = ret.times(1.1)
+	if (tmp.twr) if (tmp.twr.gte(9)) ret = ret.times(1.1)
 	return ret;
 }
 
