@@ -155,7 +155,8 @@ function maxAllDilUpgs() {
 					if (speedrunMilestonesReached > 21) {
 						var cost = Decimal.pow(10,player.dilation.rebuyables[2] * 2 + 6)
 						if (player.dilation.dilatedTime.gte(cost)) {
-							var toBuy = Math.min(Math.floor(player.dilation.dilatedTime.div(cost).times(99).add(1).log(100)), 60 - player.dilation.rebuyables[2])
+							var toBuy = Math.floor(player.dilation.dilatedTime.div(cost).times(99).add(1).log(100))
+							if (!(tmp.ngp3c && player.masterystudies.includes("t394"))) toBuy = Math.min(toBuy, 60 - player.dilation.rebuyables[2])
 							var toSpend = Decimal.pow(100,toBuy).sub(1).div(99).times(cost)
 							player.dilation.dilatedTime = player.dilation.dilatedTime.sub(player.dilation.dilatedTime.min(cost))
 							player.dilation.rebuyables[2] += toBuy
@@ -826,6 +827,7 @@ function getGHPMultCost(offset=0) {
 
 //v2.2
 function canBuyGalaxyThresholdUpg() {
+	if (tmp.ngp3c && player.masterystudies.includes("t394")) return true;
 	return !tmp.ngp3 || player.dilation.rebuyables[2] < 60
 }
 

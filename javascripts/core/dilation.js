@@ -548,8 +548,16 @@ function updateDilationUpgradeCosts() {
 	}
 }
 
+function getFreeGalaxyThresholdUpgEff() {
+	let pow = getDilUpgPower(2);
+	if (tmp.ngp3c && player.masterystudies.includes("t394")) {
+		if (pow<=60) return 1.35 + 3.65 * Math.pow(0.8, pow);
+		return Math.pow(1.35, 1/Math.sqrt(Math.log10(Math.log10(pow / 60)+1)+1))
+	} else return 1.35 + 3.65 * Math.pow(0.8, pow);
+}
+
 function getFreeGalaxyThresholdIncrease(){
-	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : !canBuyGalaxyThresholdUpg() ? 1.35 : 1.35 + 3.65 * Math.pow(0.8, getDilUpgPower(2))
+	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : !canBuyGalaxyThresholdUpg() ? 1.35 : getFreeGalaxyThresholdUpgEff()
 	if (hasBosonicUpg(12)) {
 		thresholdMult -= tmp.blu[12]
 		if (!tmp.ngp3l && thresholdMult < 1.2) thresholdMult = 1.1 + 0.1 / Math.sqrt(2.2 - thresholdMult)

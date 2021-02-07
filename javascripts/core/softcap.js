@@ -484,6 +484,12 @@ var softcap_data = {
 			pow() { return QCIntensity(7)?0.16556:1/11 },
 			derv: false,
 		},
+		5: {
+			func: "pow",
+			start: Decimal.pow(10, 250e9),
+			pow: 1/13,
+			derv: false,
+		},
 	},
 	ngp3cIP: {
 		1: {

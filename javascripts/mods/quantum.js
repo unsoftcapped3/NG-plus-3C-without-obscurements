@@ -162,6 +162,7 @@ function getQuarkMult() {
 	x = Decimal.pow(2, tmp.qu.multPower.total)
 	if (player.achievements.includes("ng3p93")) x = x.times(500)
 	if (player.masterystudies.includes("t270") && player.aarexModifications.ngp3c) x = x.times(2)
+	if (tmp.ngp3c && player.masterystudies.includes("t373")) x = x.times(getMTSMult(373));
 	return x
 }
 

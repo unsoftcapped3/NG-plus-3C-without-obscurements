@@ -9,6 +9,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 			inf: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			time: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			meta: [null, 0, 0, 0, 0, 0, 0, 0, 0],
+			emp: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			repl: 0,
 			elec: 0,
 			obsc: {},
@@ -19,6 +20,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (player.condensed.time === undefined) player.condensed.time = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.condensed.meta === undefined) player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.condensed.elec === undefined) player.condensed.elec = 0
+	if (player.condensed.emp === undefined) player.condensed.emp = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.infchallengeTimes[9] === undefined) {
 		player.infchallengeTimes.push(600*60*24*31)
 		player.infchallengeTimes.push(600*60*24*31)
@@ -39,6 +41,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	}
 	if (resetNum>=6) {
 		player.condensed.elec = 0
+		player.condensed.emp = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	}
 	
 	if (preVer<1.1) {
@@ -725,4 +728,89 @@ function getCondPreonEffMult() {
 	let mult = 5;
 	if (player.masterystudies.includes("t345")) mult *= getMTSMult(345)
 	return mult;
+}
+
+const EMP_CONDENSER_START = {
+	1: 1e3,
+	2: 1e5,
+	3: 1e8,
+	4: 1e12,
+	5: 1e17,
+	6: 1e23,
+	7: 1e30,
+	8: 1e40,
+}
+
+const EMP_CONDENSER_BASE = {
+	1: 10,
+	2: 25,
+	3: 100,
+	4: 1e4,
+	5: 1e7,
+	6: 1e9,
+	7: 1e12,
+	8: 1e15,
+}
+
+function getEmpCondenserCostScaling() {
+	let s = 1
+	return s
+}
+
+function getEmpCondenserCostDiv() {
+	let div = new Decimal(1)
+	return div;
+}
+
+function getEmpCondenserCost(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(1/0);
+	let bought = player.condensed.emp[x]
+	return Decimal.pow(EMP_CONDENSER_BASE[x], Decimal.pow(bought, 1+1.5**getEmpCondenserCostScaling())).times(EMP_CONDENSER_START[x]).div(getEmpCondenserCostDiv())
+}
+
+function getEmpCondenserTarget(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(0);
+	let res = tmp.qu.replicants.amount;
+	let target = Math.pow(res.times(getEmpCondenserCostDiv()).div(EMP_CONDENSER_START[x]).max(1).log10()/Math.log10(EMP_CONDENSER_BASE[x]), 1/(1+1.5**getEmpCondenserCostScaling()))
+	return Math.floor(target+1)
+}
+
+function getEmpCondenserPow() {
+	let pow = new Decimal(1)
+	return pow
+}
+
+function getEmpCondenserEff(x) {
+	return Decimal.pow(tmp.qu.replicants.amount.plus(1).log10()+1, Decimal.mul(player.condensed.emp[x], getEmpCondenserPow()))
+}
+
+function updateEmpCondenser(x) {
+	document.getElementById("empCondenseDiv"+x).style.display = tmp.ngp3c ? "" : "none"
+	if (!player.aarexModifications.ngp3c) return;
+	let costPart = ghostified ? '' : 'Condense: '
+	let cost = getEmpCondenserCost(x)
+	let resource = tmp.qu.replicants.amount;
+	document.getElementById("empCondense"+x).textContent = costPart + shorten(cost) + " Replicants"
+	document.getElementById("empCondense"+x).className = (resource.gte(cost)&&tmp.eds[x].perm>0) ? 'storebtn' : 'unavailablebtn'
+}
+
+function condenseEmpDimension(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	if (tmp.eds[x].perm<=0) return;
+	let res = tmp.qu.replicants.amount;
+	let cost = getEmpCondenserCost(x)
+	if (res.lt(cost)) return;
+	tmp.qu.replicants.amount = tmp.qu.replicants.amount.sub(cost);
+	player.condensed.emp[x]++;
+	updateReplicants();
+}
+
+function maxEmpCondense(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	if (tmp.eds[x].perm<=0) return;
+	let res = tmp.qu.replicants.amount;
+	let cost = getEmpCondenserCost(x)
+	if (res.lt(cost)) return;
+	player.condensed.emp[x] = Math.max(player.condensed.emp[x], getEmpCondenserTarget(x))
+	tmp.qu.replicants.amount = tmp.qu.replicants.amount.sub(cost);
 }

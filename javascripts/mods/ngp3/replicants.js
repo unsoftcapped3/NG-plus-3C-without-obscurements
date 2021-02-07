@@ -119,6 +119,7 @@ function getGatherRate() {
 	data.total = data.normal.add(data.babies)
 	data.workersTotal = new Decimal(0)
 	for (var d = 1; d < 9; d++) {
+		if (tmp.ngp3c) mult = mult.times(getEmperorDimensionMultiplier(d));
 		data.workers[d] = tmp.eds[d].workers.times(mult).times(Decimal.pow(20, d))
 		data.workersTotal = data.workersTotal.add(data.workers[d])
 	}
@@ -167,6 +168,7 @@ function getEmperorDimensionMultiplier(dim) {
 	if (player.currentEternityChall == "eterc11") return ret
 	ret = tmp.edgm //Global multiplier of all Emperor Dimensions
 	if (hasNU(7) && dim % 2 == 1) ret = ret.times(tmp.nu[3])
+	if (tmp.ngp3c && tmp.cnd) ret = ret.times(tmp.cnd.emp[dim])
 	//player.quantum.emperorDimensions[8].perm-10 
 	if (!tmp.ngp3l && dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 8))))
 	return dilates(ret, 1)
@@ -247,7 +249,7 @@ function canFeedReplicant(tier, auto) {
 	if (tmp.qu.replicants.quantumFood < 1 && !auto) return false
 	if (tier > 1) {
 		if (tmp.eds[tier].workers.gte(tmp.eds[tier - 1].workers)) return auto && hasNU(2)
-		if (tmp.eds[tier - 1].workers.lte(10)) return false
+		if (tmp.eds[tier - 1].workers.lt(10)) return false
 	} else {
 		if (tmp.eds[1].workers.gte(tmp.qu.replicants.amount)) return auto && hasNU(2)
 		if (tmp.qu.replicants.amount.eq(0)) return false
@@ -306,6 +308,7 @@ function updateEmperorDimensions() {
 			document.getElementById("empFeed" + d).textContent = "Feed (" + (d == limitDim || mults[d + 1].times(tmp.eds[d + 1].workers).div(20).lt(1e3) ? Math.round(tmp.eds[d].progress.toNumber() * 100) + "%, " : "") + getFullExpansion(tmp.eds[d].perm) + " kept)"
 			document.getElementById("empFeedMax" + d).className = (canFeedReplicant(d) ? "stor" : "unavailabl") + "ebtn"
 		}
+		updateEmpCondenser(d);
 	}
 	document.getElementById("totalWorkers").textContent = shortenDimensions(tmp.twr)
 	document.getElementById("totalQuarkProduction").textContent = shorten(production.workersTotal)

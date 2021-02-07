@@ -68,7 +68,7 @@ function getMetaDimensionGlobalMultiplier() {
 		if (player.masterystudies.includes("t382")) ret = ret.times(getMTSMult(382))
 		if (player.masterystudies.includes("t383")) ret = ret.times(getMTSMult(383))
 		if (player.masterystudies.includes("t393")) ret = ret.times(getMTSMult(393))
-		//Qunatum Upgrades
+		//Quantum Upgrades
 		if (GUBought("br4")) ret = ret.times(getBR4Effect())
 		//QC Rewards
 		ret = ret.times(tmp.qcRewards[3])

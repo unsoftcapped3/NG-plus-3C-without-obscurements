@@ -2884,7 +2884,7 @@ function conToDeciMS(){
                 }
                 if (tmp.qu ? (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] : false) : false) for (d=1;d<9;d++) {
                         tmp.qu.emperorDimensions[d].workers = Decimal.round(tmp.qu.emperorDimensions[d].workers)
-                        tmp.qu.emperorDimensions[d].progress = Decimal.round(tmp.qu.emperorDimensions[d].progress)
+                        tmp.qu.emperorDimensions[d].progress = new Decimal(tmp.qu.emperorDimensions[d].progress)
                 }
                 if (tmp.qu ? tmp.qu.nanofield : false) {
                         tmp.qu.nanofield.charge = new Decimal(tmp.qu.nanofield.charge)

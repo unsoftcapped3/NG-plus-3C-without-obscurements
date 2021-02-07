@@ -315,7 +315,7 @@ function setR16Tooltip(){
 	// Row 16 (ng3p2) (5/8)
 	let special = document.getElementById("Special Relativity")
 	let squared = document.getElementById("We are not going squared.")
-	//ng3p23/////
+	let exist3 = document.getElementById("This achievement doesn't exist 3")
 	let memories = document.getElementById("Old memories come true")
 	//ng3p25/////
 	let morals = document.getElementById("Infinity Morals")
@@ -325,6 +325,7 @@ function setR16Tooltip(){
 	//ACHIEVEMENT ROW 16
 	special.setAttribute('ach-tooltip', "Quantum in under 5 seconds." + (tmp.ngp3l ? "" : " Reward: Start with all Infinity Dimensions unlocked if you have at least 25 eternities."))
 	memories.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e1700")) + " MA without ever buying 5th-8th Normal Dimensions or having more than 4 Dimension Boosts in this quantum."  + (tmp.ngp3l ? "" : " Reward: The 4 RG upgrade is stronger based on your Meta-Dimension Boosts."))
+	exist3.setAttribute('ach-tooltip', "Reach "+(tmp.ngp3c?"9e99999":"9e99,999,999")+" EP. Reward: Gain more EP based on the amount of IP you had on Eternity.")
 	squared.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e1500"))+" MA with exactly 8 Meta-Dimension Boosts." + (tmp.ngp3l?"":" Reward: Get a multiplier to the 8th Meta Dimension based on your 1st Meta Dimension."))
 	morals.setAttribute('ach-tooltip', "Quantum without any Meta-Dimension Boosts." + (tmp.ngp3l ? "" : " Reward: Meta-Dimension Boosts boost itself at a reduced rate."))
 	seriously.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e354000")) + " IP without having time studies, while dilated and running QC2." + (tmp.ngp3l ? "" : " Reward: The Eternity Points boost to Quark gain is 1% stronger."))
@@ -452,7 +453,7 @@ function setR21Tooltip(){
 	let wd = document.getElementById("Weak Decay")
 	let radioDecay = document.getElementById("Radioactive Decaying to the max!")
 	//ng3p76/////
-	//ng3p77/////
+	let ultimate = document.getElementById("The Theory of Ultimate Studies")
 	let arent = document.getElementById("Aren't you already dead?")
 
 	//ACHIEVEMENT ROW 21
@@ -460,6 +461,7 @@ function setR21Tooltip(){
 	mi.setAttribute('ach-tooltip', "Get "+shorten(Number.MAX_VALUE)+" infinities. Reward: You gain banked infinites and eternities when going Quantum or Big Ripping the universe.")
 	wd.setAttribute('ach-tooltip', "Get "+shortenCosts(Decimal.pow(10, 1e12))+" Infinity Unstable Quarks for each Branch without Big Ripping in this Ghostify." + (tmp.ngp3l ? "" : " Reward: Normal replicant autobuyer buys max."))
 	radioDecay.setAttribute('ach-tooltip', "Get 10 total Radioactive Decays." + (!tmp.ngp3l ? " Reward: You get 1 galaxy worth of generated neutrinos per second." : ""))
+	ultimate.setAttribute('ach-tooltip', (tmp.ngp3c?"???":"Have at least 48 Mastery Studies")+". Reward: When you become a ghost, you start with all Eternity Challenges and all Time Studies bought.")
 	arent.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1.8e6)) + " IP while dilated and Big Ripped and without having studies, EP mult upgrades, Tree Upgrades, and Break Eternity within this Ghostify." + (tmp.ngp3l ? "" : " Reward: Your 8th Tree Upgrade's level speeds up Nanofield."))
 }
 

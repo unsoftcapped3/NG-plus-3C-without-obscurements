@@ -226,7 +226,7 @@ let qcRewards = {
 			let ipow = player.infinityPower.plus(1).log10()
 			let log = Math.sqrt(ipow / 2e8) 
 			if (comps >= 2) log += Math.pow(ipow / 1e9, 4/9 + comps/9)
-			log *= exp;
+			if (tmp.ngp3c) log *= exp;
 			
 			log = softcap(log, "qc3reward")
 			return Decimal.pow(10, log)

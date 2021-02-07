@@ -687,11 +687,13 @@ function updateCondenseTemp() {
 	if (!tmp.cnd.inf) tmp.cnd.inf = {}
 	if (!tmp.cnd.time) tmp.cnd.time = {}
 	if (!tmp.cnd.meta) tmp.cnd.meta = {}
+	if (!tmp.cnd.emp) tmp.cnd.emp = {}
 	for (let i=1;i<=8;i++) {
 		tmp.cnd.nrm[i] = getCondenserEff(i)
 		tmp.cnd.inf[i] = getInfCondenserEff(i)
 		tmp.cnd.time[i] = getTimeCondenserEff(i)
 		tmp.cnd.meta[i] = getMetaCondenserEff(i)
+		tmp.cnd.emp[i] = getEmpCondenserEff(i)
 	}
 	
 	if (!tmp.cnd.repl) tmp.cnd.repl = {}

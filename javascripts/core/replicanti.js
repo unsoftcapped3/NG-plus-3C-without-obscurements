@@ -71,6 +71,7 @@ function getReplicantiCap() {
 		if (player.dilation.upgrades.includes("ngp3c4")) lim = Decimal.mul(lim, player.dilation.dilatedTime.plus(1).pow(2500))
 		if (player.dilation.upgrades.includes("ngp3c9")) lim = Decimal.mul(lim, getDil56Mult())
 		lim = Decimal.mul(lim, getECReward(13, true));
+		if (tmp.ngp3c && player.masterystudies.includes("t390")) lim = Decimal.mul(lim, getMTSMult(390));
 		return lim;
 	}
 	return getReplicantiLimit();

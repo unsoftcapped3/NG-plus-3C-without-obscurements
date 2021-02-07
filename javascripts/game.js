@@ -246,6 +246,7 @@ function setupPCTableHTMLandData(){
 		html += '<td><span class="empQuarks" id="empQuarks' + d + '">0</span> preons/s</td>'
 		html += '<td align="right" width="2.5%"><button id="empFeedMax' + d + '" style="color:black; width:70px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+', true)">Max</button></td>'
 		html += '<td align="right" width="7.5%"><button id="empFeed' + d + '" style="color:black; width:195px; height:25px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+')">Feed (0%)</button></td>'
+		html += '<td id="empCondenseDiv'+d+'" style="display: none;" align="right" width="10%"><button id="empCondense' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="condenseEmpDimension(' + d + ')"></button></td>'
 		row.innerHTML = html
 	}
 }
@@ -5284,6 +5285,7 @@ function treeOfDecayUpdating(diff){
 
 function emperorDimUpdating(diff){
 	for (dim=8;dim>1;dim--) {
+		if (dim>tmp.qu.replicants.limitDim) continue;
 		var promote = hasNU(2) ? 1/0 : getWorkerAmount(dim-2)
 		if (canFeedReplicant(dim-1,true)) {
 			if (dim>2) promote = tmp.eds[dim-2].workers.sub(10).round().min(promote)

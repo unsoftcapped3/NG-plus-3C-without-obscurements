@@ -88,7 +88,7 @@ function checkUniversalHarmony() {
 function checkEPReqAchieve(){
 	if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
 	if (player.eternityPoints.gte(player.aarexModifications.ngp3c?"1e2550":"1e40000")) giveAchievement("In the grim darkness of the far endgame")
-	if (player.eternityPoints.gte("9e99999999")) giveAchievement("This achievement doesn't exist 3")
+	if (player.eternityPoints.gte(tmp.ngp3c?"9e99999":"9e99999999")) giveAchievement("This achievement doesn't exist 3")
 }
 
 function checkIPReqAchieve(){
@@ -230,7 +230,7 @@ function ngP3AchieveCheck(){
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 	if (player.meta.resets == 8 && player.meta.antimatter.log10() >= 1500) giveAchievement("We are not going squared.")
-	if (player.eightBought >= 4e6 && (getTotalRG() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
+	if (player.eightBought >= 4e6 && ((tmp.ngp3c?player.replicanti.galaxies:getTotalRG()) + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
 	if (player.old && player.meta.antimatter.log10() >= 1700) giveAchievement("Old memories come true")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 	if (player.meta.antimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
@@ -271,7 +271,7 @@ function ngP3AchieveCheck(){
 	if (nG(getEternitied(), Number.MAX_VALUE)) giveAchievement("Everlasting Eternities")
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (tmp.qu.breakEternity.did) giveAchievement("Time Breaker")
-	if (masteryStudies.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
+	if (masteryStudies.bought >= 48 && !tmp.ngp3c) giveAchievement("The Theory of Ultimate Studies")
 	if (ranking >= 165) giveAchievement("Pulling an All-Nighter")
 	if (ranking >= 190) giveAchievement("Not-so-very-challenging") 
 	if (tmp.pcc) if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
