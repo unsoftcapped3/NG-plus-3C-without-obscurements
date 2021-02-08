@@ -127,7 +127,6 @@ function getGalaxyTickSpeedMultiplier() {
 	let perGalaxy = player.infinityUpgradesRespecced != undefined ? 0.98 : 0.965
 
 	var log = Math.log10(perGalaxy)*(galaxies-linearGalaxies)+Math.log10(baseMultiplier)
-	if (!tmp.ngp3l && log < 0) log = -softcap(-log, "ts_reduce_log")
 	return Decimal.pow(10, log)
 }
 
@@ -303,7 +302,6 @@ function buyMaxTickSpeed() {
 
 function getWorkingTickspeed(){
 	var log = -player.tickspeed.log10()
-	if (tmp.ngp3) log = softcap(log, "working_ts")
 	tick = Decimal.pow(10, -log)
 	if (player.aarexModifications.ngp3c) {
 		for (let i=1;i<=4;i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
@@ -315,7 +313,6 @@ function getWorkingTickspeed(){
 			if (r>=9e4) r = Math.log10(r)*9e4/Math.log10(9e4)
 			tick = tick.div(Decimal.pow(pow, r))
 		}
-		tick = softcap(tick.pow(-1), "ngp3cTS").pow(-1)
 		if (player.currentEternityChall=="eterc7") return new Decimal(1000)
 	}
 	return tick
