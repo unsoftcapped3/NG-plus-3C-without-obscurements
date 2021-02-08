@@ -107,7 +107,6 @@ function getTimeDimensionPower(tier) {
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
 	
 	if (player.aarexModifications.ngp3c) {
-		ret = softcap(ret, "ngp3cTDs");
 		if (player.dilation.upgrades.includes("ngpp5")) ret = ret.times(getExtraDimensionBoostPower());
 	}
 
