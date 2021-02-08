@@ -4,7 +4,6 @@ function getR84or73Mult(){
 	else if (player.achievements.includes("r73")) mult = player.money.pow(player.galacticSacrifice?0.0001:0.00002).plus(1);
 	
 	var log = mult.log10()
-	if (log > 1e12) log = 1e12 * Math.pow(log / 1e12, .5)
 	
 	if (log < 0) log = 0
 	return Decimal.pow(10, log)
@@ -117,7 +116,7 @@ function getDimensionFinalMultiplier(tier) {
 		if (player.currentChallenge == "postcngc_2" || isIC10Trapped()) forcedMult = (((player.aarexModifications.ngp3c&&tmp.cnd)?tmp.cnd.nrm[tier]:1)||1)
 		else if (player.currentChallenge == "postcngm3_2") forcedMult = tmp.infPow.max(1e100)
 		else if (player.currentEternityChall == "eterc11") forcedMult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
-		if (player.aarexModifications.ngp3c) return softcap(forcedMult, "ngp3cNDs")
+		if (player.aarexModifications.ngp3c) return forcedMult
 		else return forcedMult;
 	}
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {
@@ -168,8 +167,6 @@ function getDimensionFinalMultiplier(tier) {
 	if (quantumed && !tmp.ngp3l) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
-	
-	if (player.aarexModifications.ngp3c) mult = softcap(mult, "ngp3cNDs")
 	if (player.aarexModifications.ngp3c) mult = mult.times(getIDReplMult())
 
 	return mult
@@ -256,7 +253,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 		ret = Decimal.times(ret, Math.log10(player.resets + 1) + 1)
 		ret = Decimal.times(ret, Math.log10(Math.max(player.galaxies, 0) + 1) * 5 + 1)
 	}
-	return player.aarexModifications.ngp3c?softcap(ret, "ngp3cMPTD"):ret
+	return ret
 }
 	
 function getMPTBase(focusOn) {
