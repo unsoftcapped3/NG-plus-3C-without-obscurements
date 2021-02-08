@@ -580,6 +580,7 @@ function updateObscurements() {
 		html += "</ul><br><br>"
 	}
 	if (html=="") html+="Oh hey there's nothing here yet... you need to make more progress first, so check in later!"
+	html="there are none, I deleted them all"
 	document.getElementById("obscurements").innerHTML = html;
 }
 
