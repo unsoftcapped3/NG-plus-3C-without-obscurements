@@ -882,8 +882,6 @@ let tsMults = {
 		
 		if (player.galacticSacrifice) return Decimal.pow(10, log)
 		if (tmp.ngp3l || !bigRipped) return Decimal.pow(10, log)
-		log = softcap(log, "ts11_log_big_rip", 1)
-		
 		return Decimal.pow(10, log)
 	},
 	32: function() {
