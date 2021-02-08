@@ -326,7 +326,7 @@ var masteryStudies = {
 			return ret
 		},
 		422: function() {
-			let div = 10/(Math.max(Math.sqrt(tmp.qu.nanofield.rewards-10), 1)*Math.max(Math.sqrt(tmp.qu.nanofield.rewards-11), 1)*Math.max(Math.sqrt(tmp.qu.nanofield.rewards-13), 1))
+			let div = 10/(Math.sqrt(Math.max(tmp.qu.nanofield.rewards-10, 1))*Math.sqrt(Math.max(tmp.qu.nanofield.rewards-11, 1))*Math.sqrt(Math.max(tmp.qu.nanofield.rewards-13, 1)))
 			return 15-8/(Math.log10(tmp.qu.electrons.amount+1)/div+1)
 		},
 		431: function(){
