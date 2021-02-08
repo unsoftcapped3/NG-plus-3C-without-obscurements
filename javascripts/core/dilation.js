@@ -131,12 +131,8 @@ function getDilGain() {
 		return new Decimal(0)
 	}
 	var log = Math.log10(player.money.log10() / 400) * getDilExp() + getDilPower().log10()
-	if (tmp.ngp3) if (!tmp.be && player.quantum.bigRip.active) {
-		if (log > 100) log = Math.sqrt(100 * log)
-	}
+
 	let gain = Decimal.pow(10, log)
-	
-	if (player.aarexModifications.ngp3c) gain = softcap(gain, "ngp3cTP")
 	if (player.dilation.upgrades.includes("ngp3c3") && player.aarexModifications.ngp3c) gain = gain.times(10)
 	if (player.dilation.upgrades.includes("ngp3c6") && player.aarexModifications.ngp3c) gain = gain.times(getDil83Mult())
 	return gain;
