@@ -118,11 +118,6 @@ function getInfDimPathIDMult(tier){
 function getStartingIDPower(tier){
 	var dim = player["infinityDimension" + tier]
 	var mult = dim.power
-	if (mult.gt(1)){
-		var log = mult.log10()
-		log = softcap(log, "idbase")
-		mult = Decimal.pow(10, log)
-	}
 	return mult
 }
 
@@ -133,7 +128,6 @@ function DimensionPower(tier) {
   	if (player.currentEternityChall == 'eterc14') return player.aarexModifications.ngp3c?new Decimal(1):getIDReplMult()
   	if (inQC(3)) {
 		let ret = getExtraDimensionBoostPower()
-		if (player.aarexModifications.ngp3c) ret = softcap(ret, "ngp3cIDs")
 		return ret;
 	}
   	
@@ -174,7 +168,6 @@ function DimensionPower(tier) {
   	if (quantumed && !tmp.ngp3l) mult = mult.times(colorBoosts.dim.g)
 	
 	if (player.aarexModifications.ngp3c) {
-		mult = softcap(mult, "ngp3cIDs")
 		if (player.dilation.upgrades.includes("ngpp5")) mult = mult.times(getExtraDimensionBoostPower());
 	}
   	return mult
