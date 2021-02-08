@@ -10,6 +10,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 			time: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			meta: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			emp: [null, 0, 0, 0, 0, 0, 0, 0, 0],
+			nano: [null, 0, 0, 0, 0, 0, 0, 0, 0],
 			repl: 0,
 			elec: 0,
 			obsc: {},
@@ -21,6 +22,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (player.condensed.meta === undefined) player.condensed.meta = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.condensed.elec === undefined) player.condensed.elec = 0
 	if (player.condensed.emp === undefined) player.condensed.emp = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+	if (player.condensed.nano === undefined) player.condensed.nano = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	if (player.infchallengeTimes[9] === undefined) {
 		player.infchallengeTimes.push(600*60*24*31)
 		player.infchallengeTimes.push(600*60*24*31)
@@ -42,6 +44,7 @@ function loadCondensedData(resetNum=0) { // 1: DimBoost, 2: Galaxy, 3: Infinity,
 	if (resetNum>=6) {
 		player.condensed.elec = 0
 		player.condensed.emp = [null, 0, 0, 0, 0, 0, 0, 0, 0]
+		player.condensed.nano = [null, 0, 0, 0, 0, 0, 0, 0, 0]
 	}
 	
 	if (preVer<1.1) {
@@ -543,6 +546,12 @@ const OBSCUREMENTS = {
 		osID: "MD",
 		res() { return getMetaDimensionMultiplier(1) },
 	},
+	qk: {
+		title: "Quark Gain",
+		scID: "QK",
+		osID: "QK",
+		res() { return getQuarkGain() },
+	},
 }
 
 function updateObscurements() {
@@ -813,4 +822,89 @@ function maxEmpCondense(x) {
 	if (res.lt(cost)) return;
 	player.condensed.emp[x] = Math.max(player.condensed.emp[x], getEmpCondenserTarget(x))
 	tmp.qu.replicants.amount = tmp.qu.replicants.amount.sub(cost);
+}
+
+const NANO_CONDENSER_START = {
+	1: 80,
+	2: 5e3,
+	3: 1e5,
+	4: 4e6,
+	5: 2e8,
+	6: 5e9,
+	7: 1e11,
+	8: 2.5e11,
+}
+
+const NANO_CONDENSER_BASE = {
+	1: 5,
+	2: 25,
+	3: 125,
+	4: 3125,
+	5: 78125,
+	6: 390625,
+	7: 9765625,
+	8: 244140625,
+}
+
+function getNanoCondenserCostScaling() {
+	let s = 1
+	return s
+}
+
+function getNanoCondenserCostDiv() {
+	let div = new Decimal(1)
+	return div;
+}
+
+function getNanoCondenserCost(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(1/0);
+	let bought = player.condensed.nano[x]
+	return Decimal.pow(NANO_CONDENSER_BASE[x], Decimal.pow(bought, 1+2**getNanoCondenserCostScaling())).times(NANO_CONDENSER_START[x]).div(getNanoCondenserCostDiv())
+}
+
+function getNanoCondenserTarget(x) {
+	if (!player.aarexModifications.ngp3c) return new Decimal(0);
+	let res = tmp.qu.nanofield.energy;
+	let target = Math.pow(res.times(getNanoCondenserCostDiv()).div(NANO_CONDENSER_START[x]).max(1).log10()/Math.log10(NANO_CONDENSER_BASE[x]), 1/(1+2**getNanoCondenserCostScaling()))
+	return Math.floor(target+1)
+}
+
+function getNanoCondenserPow() {
+	let pow = new Decimal(1)
+	return pow
+}
+
+function getNanoCondenserEff(x) {
+	return Decimal.pow(tmp.qu.nanofield.energy.plus(1).log10()+1, Decimal.mul(player.condensed.nano[x], getNanoCondenserPow())).max(1).log10()
+}
+
+function updateNanoCondenser(x) {
+	document.getElementById("nfCond"+x).style.display = tmp.ngp3c ? "" : "none"
+	if (!player.aarexModifications.ngp3c) return;
+	let costPart = ghostified ? '' : 'Condense: '
+	let endPart = ' Preon Energy'
+	let cost = getNanoCondenserCost(x)
+	let resource = tmp.qu.nanofield.energy;
+	document.getElementById("nfCond"+x).textContent = costPart + shorten(cost) + endPart
+	document.getElementById("nfCond"+x).className = (resource.gte(cost)&&tmp.qu.nanofield.rewards>=x) ? 'nfCond' : 'nfCondlocked'
+}
+
+function condenseNanoReward(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	if (tmp.qu.nanofield.rewards<x) return;
+	let res = tmp.qu.nanofield.energy;
+	let cost = getNanoCondenserCost(x)
+	if (res.lt(cost)) return;
+	tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.sub(cost);
+	player.condensed.nano[x]++;
+}
+
+function maxNanoCondense(x) {
+	if (!player.aarexModifications.ngp3c) return;
+	if (tmp.qu.nanofield.rewards<x) return;
+	let res = tmp.qu.nanofield.energy;
+	let cost = getNanoCondenserCost(x)
+	if (res.lt(cost)) return;
+	player.condensed.nano[x] = Math.max(player.condensed.nano[x], getNanoCondenserTarget(x))
+	tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.sub(cost);
 }

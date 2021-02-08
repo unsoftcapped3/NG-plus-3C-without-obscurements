@@ -308,7 +308,10 @@ function getInfinityPowerEffectExp() {
 		if (player.timestudy.studies.includes(191)) x += ts191Eff()
 	}
 	if (player.dilation.upgrades.includes("ngmm5")) x += getDil44Mult()
-	if (player.aarexModifications.ngp3c) x += getECReward(13)
+	if (player.aarexModifications.ngp3c) {
+		x += getECReward(13)
+		if (isNanoEffectUsed("infdim_eff_exp")) x += tmp.nf.effects.infdim_eff_exp
+	}
 
 	return x
 }

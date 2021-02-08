@@ -28,10 +28,13 @@ function updateTemp() {
 			var x = getNanoRewardPowerEff()
 			var y = tmp.qu.nanofield.rewards
 			tmp.ns = getNanofieldSpeed()
+			let uns = tmp.ngp3c;
 			if (tmp.nf.powerEff !== x || tmp.nf.rewards !== y) {
 				tmp.nf.powerEff = x
 				tmp.nf.rewards = y
-
+				uns = true;
+			}
+			if (uns) {
 				updateNanoRewardPowers()
 				updateNanoRewardEffects()
 			}
@@ -633,8 +636,8 @@ function updateNanoEffectUsages() {
 	nanoRewards.effectsUsed[1] = data2
 
 	//Fifth reward
-	var data2 = ["dil_effect_exp"]
-	if (!tmp.ngp3l) data2.push("light_threshold_speed")
+	var data2 = [tmp.ngp3c ? "infdim_eff_exp" : "dil_effect_exp"]
+	if (!tmp.ngp3l && !tmp.ngp3c) data2.push("light_threshold_speed")
 	nanoRewards.effectsUsed[5] = data2
 
 	//Seventh reward
@@ -688,12 +691,14 @@ function updateCondenseTemp() {
 	if (!tmp.cnd.time) tmp.cnd.time = {}
 	if (!tmp.cnd.meta) tmp.cnd.meta = {}
 	if (!tmp.cnd.emp) tmp.cnd.emp = {}
+	if (!tmp.cnd.nano) tmp.cnd.nano = {}
 	for (let i=1;i<=8;i++) {
 		tmp.cnd.nrm[i] = getCondenserEff(i)
 		tmp.cnd.inf[i] = getInfCondenserEff(i)
 		tmp.cnd.time[i] = getTimeCondenserEff(i)
 		tmp.cnd.meta[i] = getMetaCondenserEff(i)
 		tmp.cnd.emp[i] = getEmpCondenserEff(i)
+		tmp.cnd.nano[i] = getNanoCondenserEff(i)
 	}
 	
 	if (!tmp.cnd.repl) tmp.cnd.repl = {}
@@ -716,4 +721,6 @@ function updateCondenseTemp() {
 	
 	tmp.cnd.pe = 0
 	if (player.masterystudies.includes("d10")) tmp.cnd.pe = Math.min(Math.floor(getCondPreonEff()), player.quantum.electrons.sacGals)
+	
+	tmp.ts413 = getMTSMult(413);
 }

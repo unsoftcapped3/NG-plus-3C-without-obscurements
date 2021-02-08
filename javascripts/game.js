@@ -297,6 +297,10 @@ function setupNanofieldHTMLandData(){
 			"<td><button class='nfRewardlocked' id='nfReward" + r + "'></button></td>" +
 			"<td><button class='nfRewardlocked' id='nfReward" + (r + 1) + "'></button></td>"
 		row++
+		nfRewards.insertRow(row).innerHTML = 
+			"<td><button class='nfCondlocked' id='nfCond" + r +"' style='display: none' onclick='condenseNanoReward(" + r + ")'></button></td>" + 
+			"<td><button class='nfCondlocked' id='nfCond" + (r + 1) +"' style='display: none' onclick='condenseNanoReward(" + (r + 1) + ")'></button></td>"
+		row++
 	}
 	document.getElementById("nfReward7").style["font-size"] = "10px"
 	document.getElementById("nfReward8").style["font-size"] = "10px"

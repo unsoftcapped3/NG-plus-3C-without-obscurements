@@ -155,7 +155,10 @@ function quarkGain() {
 
 	log += getQuarkMult().log10()
 
-	return Decimal.pow(10, log).floor()
+	let gain = Decimal.pow(10, log)
+	
+	if (tmp.ngp3c) gain = softcap(gain, "ngp3cQK")
+	return gain.floor()
 }
 
 function getQuarkMult() {

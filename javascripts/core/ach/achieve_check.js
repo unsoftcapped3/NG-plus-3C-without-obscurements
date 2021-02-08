@@ -88,7 +88,7 @@ function checkUniversalHarmony() {
 function checkEPReqAchieve(){
 	if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
 	if (player.eternityPoints.gte(player.aarexModifications.ngp3c?"1e2550":"1e40000")) giveAchievement("In the grim darkness of the far endgame")
-	if (player.eternityPoints.gte(tmp.ngp3c?"9e99999":"9e99999999")) giveAchievement("This achievement doesn't exist 3")
+	if (player.eternityPoints.gte(tmp.ngp3c?"9.999e99999":"9e99999999")) giveAchievement("This achievement doesn't exist 3")
 }
 
 function checkIPReqAchieve(){
@@ -234,7 +234,7 @@ function ngP3AchieveCheck(){
 	if (player.old && player.meta.antimatter.log10() >= 1700) giveAchievement("Old memories come true")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 	if (player.meta.antimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
-	if (player.money.log10() >= 7.88e13 && tmp.qu.pairedChallenges.completed == 0) giveAchievement("The truth of anti-challenged")
+	if (player.money.log10() >= (tmp.ngp3c?7.88e11:7.88e13) && tmp.qu.pairedChallenges.completed == 0) giveAchievement("The truth of anti-challenged")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
 	if (player.replicanti.amount.log10() >= 2e6 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")

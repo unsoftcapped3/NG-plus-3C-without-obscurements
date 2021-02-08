@@ -414,6 +414,7 @@ function buyQuarkMult(name) {
 		document.getElementById("priorityquantum").value = formatValue("Scientific", tmp.qu.autobuyer.limit, 2, 0);
 	}
 	updateGluonsTabOnUpdate("spend")
+	if (player.masterystudies.includes("d10")) updateReplicants("spend")
 }
 
 function maxQuarkMult() {

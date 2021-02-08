@@ -1,6 +1,6 @@
 function getNanospeedText(){
 	s = getNanofieldSpeedText()
-	if (!shiftDown) s = ghostified || nanospeed != 1 ? "Your Nanofield speed is currently " + (nanospeed == 1 ? "" : shorten(tmp.ns) + " * " + shorten(nanospeed) + " = ") + shorten(getNanofieldFinalSpeed()) + "x (hold shift for details)" : ""
+	if (!shiftDown) s = ghostified || nanospeed != 1 || !tmp.ns.eq(1) ? "Your Nanofield speed is currently " + (nanospeed == 1 ? "" : shorten(tmp.ns) + " * " + shorten(nanospeed) + " = ") + shorten(getNanofieldFinalSpeed()) + "x (hold shift for details)" : ""
 	return s
 }
 
@@ -24,8 +24,9 @@ function updateNanoverseTab(){
 		document.getElementById("nfReward" + reward).textContent = wordizeList(nanoRewards.effectsUsed[reward].map(x => nanoRewards.effectDisplays[x](tmp.nf.effects[x])), true) + "."
 		document.getElementById("nfRewardHeader" + reward).textContent = (rewards % 8 + 1 == reward ? "Next" : DISPLAY_NAMES[reward]) + " reward"
 		document.getElementById("nfRewardTier" + reward).textContent = "Tier " + getFullExpansion(Math.ceil((rewards + 1 - reward) / 8)) + " / Power: " + tmp.nf.powers[reward].toFixed(1)
+		updateNanoCondenser(reward)
 	}
-	document.getElementById("nfReward5").textContent = (!tmp.ngp3l && tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) : nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp)) + "."
+	if (!tmp.ngp3c) document.getElementById("nfReward5").textContent = (!tmp.ngp3l && tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) : nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp)) + "."
 	document.getElementById("ns").textContent = getNanospeedText()
 }
 
@@ -58,10 +59,11 @@ function startProduceQuarkCharge() {
 }
 
 function getQuarkLossProduction() {
+	let baseLoss = tmp.ngp3c?1e29:4e25
 	let ret = getQuarkChargeProduction(true)
 	let retCube = ret.pow(3)
 	if (retCube.gte("1e180")) retCube = retCube.pow(Math.pow(180 / retCube.log10(), 2 / 3))
-	ret = ret.times(retCube).times(4e25)
+	ret = ret.times(retCube).times(baseLoss)
 	if (hasNU(3)) ret = ret.div(10)
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.pow((tmp.qu.nanofield.power - tmp.apgw) / 5 + 1)
 	ret = ret.times(getNanofieldFinalSpeed())
@@ -86,7 +88,9 @@ function getQuarkAntienergyProduction() {
 }
 
 function getQuarkChargeProductionCap() {
-	return tmp.qu.nanofield.charge.times(2500).sqrt()
+	let cap = tmp.qu.nanofield.charge.times(2500).sqrt()
+	if (tmp.ngp3c && player.masterystudies.includes("t403")) cap = cap.times(getMTSMult(403))
+	return cap;
 }
 
 var nanoRewards = {
@@ -103,11 +107,14 @@ var nanoRewards = {
 			return x + 1
 		},
 		dt_to_ma_exp: function(x) {
-			return Math.sqrt(x) * 0.021 + 1
+			return Math.sqrt(x) * 0.021 + (player.aarexModifications.ngp3c?0.04:0.1)
 		},
 		dil_effect_exp: function(x) {
 			if (!tmp.ngp3l && x > 15) tier = Math.log10(x - 5) * 15
 			return x * 0.36 + 1
+		},
+		infdim_eff_exp: function(x) {
+			return x * 8
 		},
 		meta_boost_power: function(x) {
 			let y = 2
@@ -143,7 +150,7 @@ var nanoRewards = {
 			return "eggons hatch " + shorten(x) + "x faster"
 		},
 		ma_effect_exp: function(x) {
-			return "meta-antimatter effect is buffed to ^" + x.toFixed(2)
+			return "meta-antimatter effect exponent is increased by " + x.toFixed(2)
 		},
 		dil_gal_gain: function(x) {
 			return "you gain " + (x * 100 - 100).toFixed(2) + "% more free galaxies"
@@ -153,6 +160,9 @@ var nanoRewards = {
 		},
 		dil_effect_exp: function(x) {
 			return "in dilation, Normal Dimension multipliers and Tickspeed are raised by ^" + x.toFixed(2)
+		},
+		infdim_eff_exp: function(x) {
+			return "infinity dimension effect exponent is increased by " + x.toFixed(2)
 		},
 		meta_boost_power: function(x) {
 			return "each meta-Dimension Boost gives " + x.toFixed(2) + "x boost"
@@ -198,6 +208,7 @@ function isNanoEffectUsed(x) {
 
 function getNanofieldSpeedText(){
 	text = ""
+	if (tmp.ngp3c && player.masterystudies.includes("t403")) text += "TS403: " + shorten(getMTSMult(403))+"x, "
 	if (ghostified) text += "Ghostify Bonus: " + shorten(tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)) + "x, "
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[6]) + "x, "
@@ -206,9 +217,10 @@ function getNanofieldSpeedText(){
 }
 
 function getNanofieldSpeed() {
-	let x = 1
-	if (ghostified) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
-	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
+	let x = new Decimal(1)
+	if (tmp.ngp3c && player.masterystudies.includes("t403")) x = getMTSMult(403)
+	if (ghostified) x = x.times(tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3))
+	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x = x.times(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1))
 	if (hasNU(15)) x = tmp.nu[6].times(x)
 	return x
 }
@@ -225,7 +237,9 @@ function getNanoRewardPower(reward, rewards) {
 		x = Math.sqrt((x / 2 + sbsc / 2) * sbsc)
 		if (reward == (rewards - 1) % 8 + 1) x += 0.5
 	}
-	return x * tmp.nf.powerEff
+	let pow = x * tmp.nf.powerEff
+	if (tmp.ngp3c && tmp.cnd) pow += tmp.cnd.nano[reward];
+	return pow;
 }
 
 function getNanoRewardPowerEff() {
@@ -246,22 +260,33 @@ function getActiveNanoScalings(){
 }
 
 function getNanoScalingsStart(){
-	ret = [0, 15, 125, 150, 160, 170, 180]
+	let ret = [0, 15, 125, 150, 160, 170, 180]
+	if (tmp.ngp3c) {
+		ret = [0, 7, 45, 75, 150, 165, 180]
+		if (player.masterystudies.includes("t422")) ret[1] = getMTSMult(422)
+	}
 	return ret
+}
+
+function getNanoScalingsBases() {
+	let ret = [4, 2, 2, 1.1, 1.3, 1.6, 2]
+	if (tmp.ngp3c) ret = [8, 4, 4, 1.2, 1.6, 2.5, 4]
+	return ret;
 }
 
 function getNanoRewardReqFixed(n){
 	let x = new Decimal(50)
 	let a = getActiveNanoScalings()
 	let s = getNanoScalingsStart()
-	if (n >= s[0] && a[0]) x = x.times(Decimal.pow(4.0, (n - s[0])))
-	if (n >= s[1] && a[1]) x = x.times(Decimal.pow(2.0, (n - s[1]) * (n - s[1] + 3)))
-	if (n >= s[2] && a[2]) x = x.times(Decimal.pow(2.0, (n - s[2]) * (n - s[2] + 1)))
-	if (n >= s[3] && a[3]) x = x.times(Decimal.pow(1.1, (n - s[3]) * (n - s[3] + 1) * (n - s[3] + 2) / 3 + (n - s[3]) * (n - s[3] + 1) / 2 * 19))
-	if (n >= s[4] && a[4]) x = x.times(Decimal.pow(1.3, (n - s[4]) * (n - s[4] + 1) * (n - s[4] + 2) / 3 + (n - s[4]) * (n - s[4] + 1) / 2 * 39))
-	if (n >= s[5] && a[5]) x = x.times(Decimal.pow(1.6, (n - s[5]) * (n - s[5] + 1) * (n - s[5] + 2) / 3 + (n - s[5]) * (n - s[5] + 1) / 2 * 59))
-	if (n >= s[6] && a[6]) x = x.times(Decimal.pow(2.0, (n - s[6]) * (n - s[6] + 1) * (n - s[6] + 2) / 3 + (n - s[6]) * (n - s[6] + 1) / 2 * 79))
-	if (!player.ghostify.ghostlyPhotons.unl) return x
+	let b = getNanoScalingsBases()
+	if (n >= s[0] && a[0]) x = x.times(Decimal.pow(b[0], (n - s[0])))
+	if (n >= s[1] && a[1]) x = x.times(Decimal.pow(b[1], (n - s[1]) * (n - s[1] + 3)))
+	if (n >= s[2] && a[2]) x = x.times(Decimal.pow(b[2], (n - s[2]) * (n - s[2] + 1)))
+	if (n >= s[3] && a[3]) x = x.times(Decimal.pow(b[3], (n - s[3]) * (n - s[3] + 1) * (n - s[3] + 2) / 3 + (n - s[3]) * (n - s[3] + 1) / 2 * 19))
+	if (n >= s[4] && a[4]) x = x.times(Decimal.pow(b[4], (n - s[4]) * (n - s[4] + 1) * (n - s[4] + 2) / 3 + (n - s[4]) * (n - s[4] + 1) / 2 * 39))
+	if (n >= s[5] && a[5]) x = x.times(Decimal.pow(b[5], (n - s[5]) * (n - s[5] + 1) * (n - s[5] + 2) / 3 + (n - s[5]) * (n - s[5] + 1) / 2 * 59))
+	if (n >= s[6] && a[6]) x = x.times(Decimal.pow(b[6], (n - s[6]) * (n - s[6] + 1) * (n - s[6] + 2) / 3 + (n - s[6]) * (n - s[6] + 1) / 2 * 79))
+	if (!player.ghostify.ghostlyPhotons.unl) return x.pow(tmp.ppti || 1)
 	return x.pow(tmp.ppti || 1)
 }
 

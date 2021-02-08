@@ -723,6 +723,14 @@ var softcap_data = {
 			pow: 1/3,
 		},
 	},
+	ngp3cQK: {
+		1: {
+			func: "pow",
+			start: new Decimal(1e100),
+			pow: 1/3,
+			derv: false,
+		},
+	},
 }
 
 var softcap_vars = {
